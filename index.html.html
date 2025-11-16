@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>OffGrid Rooms – Energy-Independent Spaces Delivered Anywhere</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Solar-powered, fully furnished container rooms with AC, heating, and lighting for construction sites, Airbnb rentals, and private retreats." />
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.6;
+      color: #111827;
+      background-color: #f9fafb;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(249, 250, 251, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .container {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 0;
+    }
+
+    .logo {
+      font-weight: 700;
+      font-size: 1.2rem;
+      letter-spacing: 0.05em;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 1.5rem;
+      font-size: 0.95rem;
+    }
+
+    nav li a {
+      padding-bottom: 0.1rem;
+      border-bottom: 2px solid transparent;
+    }
+
+    nav li a:hover {
+      border-bottom-color: #111827;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 0.8rem 1.4rem;
+      border-radius: 999px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      border: 1px solid #111827;
+      background: #111827;
+      color: #f9fafb;
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+    }
+
+    .btn.outline {
+      background: transparent;
+      color: #111827;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.15);
+      background: #000000;
+      border-color: #000000;
+      color: #f9fafb;
+    }
+
+    .btn.outline:hover {
+      background: #111827;
+      color: #f9fafb;
+    }
+
+    /* HERO */
+    .hero {
+      padding: 4rem 0 3rem 0;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+      gap: 3rem;
+      align-items: center;
+    }
+
+    .eyebrow {
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #6b7280;
+      margin-bottom: 0.8rem;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.1rem, 4vw, 2.9rem);
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      margin-bottom: 1rem;
+      color: #020617;
+    }
+
+    .hero p {
+      font-size: 1.02rem;
+      color: #4b5563;
+      margin-bottom: 1.5rem;
+      max-width: 32rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-bullets {
+      display: grid;
+      gap: 0.3rem;
+      font-size: 0.9rem;
+      color: #4b5563;
+    }
+
+    .hero-bullets span::before {
+      content: "• ";
+    }
+
+    .hero-card {
+      background: #111827;
+      color: #f9fafb;
+      border-radius: 1.1rem;
+      padding: 1.8rem 1.5rem;
+      font-size: 0.9rem;
+      box-shadow: 0 20px 40px rgba(15, 23, 42, 0.35);
+    }
+
+    .hero-card h3 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      margin-bottom: 0.6rem;
+      color: #e5e7eb;
+    }
+
+    .hero-card p {
+      margin-bottom: 0.9rem;
+      color: #e5e7eb;
+    }
+
+    .hero-card ul {
+      list-style: none;
+      display: grid;
+      gap: 0.4rem;
+      margin-top: 0.6rem;
+    }
+
+    .hero-card li::before {
+      content: "✓ ";
+    }
+
+    /* SECTIONS */
+    section {
+      padding: 3.5rem 0;
+      border-top: 1px solid #e5e7eb;
+    }
+
+    .section-header {
+      max-width: 640px;
+      margin-bottom: 2rem;
+    }
+
+    .section-title {
+      font-size: 1.6rem;
+      font-weight: 700;
+      margin-bottom: 0.4rem;
+    }
+
+    .section-subtitle {
+      font-size: 0.98rem;
+      color: #6b7280;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1.5rem;
+    }
+
+    .card {
+      background: #ffffff;
+      border-radius: 0.9rem;
+      border: 1px solid #e5e7eb;
+      padding: 1.3rem 1.2rem;
+      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.03);
+      font-size: 0.95rem;
+    }
+
+    .card h3 {
+      font-size: 1rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .card p {
+      color: #4b5563;
+      font-size: 0.92rem;
+    }
+
+    .usecases-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1.5rem;
+    }
+
+    .usecase h3 {
+      font-size: 1.02rem;
+      margin-bottom: 0.3rem;
+    }
+
+    .usecase p {
+      font-size: 0.93rem;
+      color: #4b5563;
+      margin-bottom: 0.5rem;
+    }
+
+    .usecase ul {
+      list-style: none;
+      font-size: 0.9rem;
+      color: #6b7280;
+      display: grid;
+      gap: 0.25rem;
+    }
+
+    .usecase ul li::before {
+      content: "– ";
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 1.3rem;
+    }
+
+    .features-grid h3 {
+      font-size: 0.98rem;
+      margin-bottom: 0.3rem;
+    }
+
+    .features-grid ul {
+      list-style: none;
+      font-size: 0.9rem;
+      color: #4b5563;
+      display: grid;
+      gap: 0.25rem;
+    }
+
+    .specs {
+      margin-top: 1.8rem;
+      padding: 1.1rem 1.2rem;
+      border-radius: 0.8rem;
+      border: 1px dashed #cbd5f5;
+      background: #eef2ff;
+      font-size: 0.92rem;
+      color: #374151;
+      display: grid;
+      gap: 0.2rem;
+    }
+
+    /* FAQ */
+    .faq-list {
+      display: grid;
+      gap: 1rem;
+      font-size: 0.94rem;
+    }
+
+    .faq-item h3 {
+      font-size: 0.98rem;
+      margin-bottom: 0.2rem;
+    }
+
+    .faq-item p {
+      color: #4b5563;
+    }
+
+    /* CONTACT */
+    .contact-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+      gap: 2.2rem;
+      align-items: flex-start;
+    }
+
+    form {
+      display: grid;
+      gap: 0.9rem;
+    }
+
+    label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #4b5563;
+      display: block;
+      margin-bottom: 0.15rem;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 0.65rem 0.7rem;
+      border-radius: 0.55rem;
+      border: 1px solid #d1d5db;
+      font-size: 0.95rem;
+      font-family: inherit;
+      outline: none;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: #111827;
+    }
+
+    textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    footer {
+      border-top: 1px solid #e5e7eb;
+      padding: 1.5rem 0;
+      font-size: 0.85rem;
+      color: #6b7280;
+      text-align: center;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 960px) {
+      nav ul {
+        display: none;
+      }
+      .hero-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .hero-card {
+        margin-top: 1rem;
+      }
+      .grid-3,
+      .usecases-grid,
+      .features-grid,
+      .contact-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    @media (max-width: 640px) {
+      .hero {
+        padding-top: 3rem;
+      }
+
+      .hero-actions {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="container nav">
+    <div class="logo">OffGrid Rooms</div>
+    <nav>
+      <ul>
+        <li><a href="#how">How It Works</a></li>
+        <li><a href="#usecases">Use Cases</a></li>
+        <li><a href="#specs">Specs</a></li>
+        <li><a href="#faq">FAQ</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+    <a href="#contact" class="btn" style="font-size:0.85rem;">Get a Quote</a>
+  </div>
+</header>
+
+<main>
+  <!-- HERO -->
+  <section class="hero">
+    <div class="container hero-grid">
+      <div>
+        <div class="eyebrow">Solar-Powered Container Rooms</div>
+        <h1>Energy-Independent Spaces Delivered Anywhere</h1>
+        <p>
+          Fully furnished container units with solar power, AC, heating, and lighting — ready to use for construction sites, Airbnb rentals, and private retreats.
+        </p>
+        <div class="hero-actions">
+          <a href="#contact" class="btn">Request My Quote</a>
+          <a href="#usecases" class="btn outline">See Use Cases</a>
+        </div>
+        <div class="hero-bullets">
+          <span>Solar + battery included</span>
+          <span>AC, heater, outlets, and lighting pre-installed</span>
+          <span>Secure steel container – movable and durable</span>
+        </div>
+      </div>
+      <div class="hero-card">
+        <h3>Turn-Key Off-Grid Rooms</h3>
+        <p>
+          Stop waiting on permits, wiring, and contractors. Drop a complete room on your land or job site and start using it the same day.
+        </p>
+        <ul>
+          <li>Construction offices & break rooms</li>
+          <li>Airbnb & short-term rentals</li>
+          <li>Backyard offices & guest rooms</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY -->
+  <section id="why">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Why OffGrid Rooms?</h2>
+        <p class="section-subtitle">
+          Not just containers — complete micro-buildings that generate their own power. Each unit arrives with solar, battery, AC, heating, lighting, and outlets already installed.
+        </p>
+      </div>
+
+      <div class="grid-3">
+        <div class="card">
+          <h3>Off-Grid Power</h3>
+          <p>
+            Roof-mounted solar panels and battery storage power lights, outlets, AC, and heating — without noisy generators or utility hookups.
+          </p>
+        </div>
+        <div class="card">
+          <h3>Turn-Key Comfort</h3>
+          <p>
+            Insulated, climate-controlled interiors with finished walls, flooring, and optional furnishings so you can move in or rent out immediately.
+          </p>
+        </div>
+        <div class="card">
+          <h3>Built to Move</h3>
+          <p>
+            Steel container construction is secure, durable, and easy to relocate between job sites or properties as your needs change.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section id="how">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">How It Works</h2>
+        <p class="section-subtitle">
+          From idea to a fully powered room on your land in four simple steps.
+        </p>
+      </div>
+
+      <div class="grid-3">
+        <div class="card">
+          <h3>1. Define Your Use Case</h3>
+          <p>
+            Tell us whether you need a construction office, Airbnb unit, backyard studio, or remote retreat so we can recommend the right configuration.
+          </p>
+        </div>
+        <div class="card">
+          <h3>2. Customize Your Layout</h3>
+          <p>
+            Choose from options like bed, desk, storage, extra outlets, and added insulation to match how the room will be used.
+          </p>
+        </div>
+        <div class="card">
+          <h3>3. Build & Deliver</h3>
+          <p>
+            We pre-install solar, battery, electrical, lighting, AC, and heater. Your unit arrives on a truck, ready for placement and immediate use.
+          </p>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:1.5rem;">
+        <h3>4. Drop, Unlock, Use</h3>
+        <p>
+          Once placed on your site, your OffGrid Room is ready the same day. In many areas, no permanent utility connection or major permits are required.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- USE CASES -->
+  <section id="usecases">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Built for Real-World Use</h2>
+        <p class="section-subtitle">
+          From job sites to rentals to personal retreats, OffGrid Rooms adapt to the way you work and live.
+        </p>
+      </div>
+
+      <div class="usecases-grid">
+        <div class="usecase">
+          <h3>Construction Companies</h3>
+          <p>
+            Give your teams climate-controlled, secure spaces on any job site. Cut downtime and fuel costs while improving comfort and productivity.
+          </p>
+          <ul>
+            <li>Superintendent & foreman offices</li>
+            <li>Break rooms with AC & heat</li>
+            <li>Lockable storage for tools & plans</li>
+            <li>Move units from project to project</li>
+          </ul>
+        </div>
+        <div class="usecase">
+          <h3>Airbnb & Short-Term Rentals</h3>
+          <p>
+            Turn underused land into a high-demand, eco-friendly listing with almost no ongoing utility costs.
+          </p>
+          <ul>
+            <li>“Off-grid eco stay” marketing angle</li>
+            <li>Modern interiors for standout photos</li>
+            <li>Fast payback through nightly bookings</li>
+            <li>No major construction required</li>
+          </ul>
+        </div>
+        <div class="usecase">
+          <h3>Landowners & Homeowners</h3>
+          <p>
+            Create a private, fully powered space without touching your main house — perfect for work, guests, or escape.
+          </p>
+          <ul>
+            <li>Backyard office or studio</li>
+            <li>Guest room or in-law suite</li>
+            <li>Remote cabin or retreat</li>
+            <li>Teen lounge or game room</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES & SPECS -->
+  <section id="specs">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Features & Specifications</h2>
+        <p class="section-subtitle">
+          Every OffGrid Room is built as a complete, self-powered micro-building with comfort and durability in mind.
+        </p>
+      </div>
+
+      <div class="features-grid">
+        <div>
+          <h3>Power System</h3>
+          <ul>
+            <li>Roof-mounted solar panels</li>
+            <li>Battery storage for night use</li>
+            <li>Pre-wired inverter and safety systems</li>
+          </ul>
+        </div>
+        <div>
+          <h3>Climate & Comfort</h3>
+          <ul>
+            <li>High-efficiency mini-split AC + heater</li>
+            <li>Insulated walls and ceiling</li>
+            <li>LED lighting throughout</li>
+          </ul>
+        </div>
+        <div>
+          <h3>Interior</h3>
+          <ul>
+            <li>Finished walls and durable flooring</li>
+            <li>Multiple 110–120V outlets & USB ports</li>
+            <li>Optional bed, desk, and shelving</li>
+          </ul>
+        </div>
+        <div>
+          <h3>Exterior</h3>
+          <ul>
+            <li>Secure steel container shell</li>
+            <li>Lockable doors and windows</li>
+            <li>Optional exterior paint & branding</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="specs">
+        <strong>Example Specs (Customizable):</strong>
+        <span>• Sizes: 20 ft and 40 ft containers</span>
+        <span>• Power: Solar + battery system sized to your usage and climate</span>
+        <span>• Voltage: Standard 110–120V interior outlets</span>
+        <span>• Setup: Delivered by truck; placed with crane or forklift</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Frequently Asked Questions</h2>
+        <p class="section-subtitle">
+          Answers to common questions about regulations, power, and mobility.
+        </p>
+      </div>
+
+      <div class="faq-list">
+        <div class="faq-item">
+          <h3>Do I need permits?</h3>
+          <p>
+            In many areas, container-based temporary structures under certain sizes are treated differently from permanent buildings. Regulations vary by city and county. We help you understand local rules and provide documentation for your unit if needed.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h3>How long does installation take?</h3>
+          <p>
+            Once your OffGrid Room arrives, placement usually takes a few hours. Because the unit is pre-wired and pre-configured, you can typically start using it the same day.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h3>How much power do the solar panels provide?</h3>
+          <p>
+            We size each system according to your intended use (office, living, rental) and typical weather conditions in your area, ensuring sufficient power for lighting, outlets, and climate control under normal use.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h3>Can I move the unit later?</h3>
+          <p>
+            Yes. OffGrid Rooms are designed to be relocatable. They can be moved between sites with a truck and the appropriate lifting equipment.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h3>Do you offer customization?</h3>
+          <p>
+            We offer multiple layouts, finishes, and furnishing packages. For fleet or park orders, we can also add your company branding and custom configurations.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Get a Quote</h2>
+        <p class="section-subtitle">
+          Tell us about your project and we’ll send you a custom quote with recommended configuration and lead times.
+        </p>
+      </div>
+
+      <div class="contact-grid">
+        <form>
+          <div>
+            <label for="name">Name</label>
+            <input id="name" type="text" placeholder="Your name" />
+          </div>
+          <div>
+            <label for="company">Company (optional)</label>
+            <input id="company" type="text" placeholder="Company name" />
+          </div>
+          <div>
+            <label for="email">Email</label>
+            <input id="email" type="email" placeholder="you@example.com" />
+          </div>
+          <div>
+            <label for="phone">Phone</label>
+            <input id="phone" type="tel" placeholder="+1 (555) 123-4567" />
+          </div>
+          <div>
+            <label for="usecase">Primary Use Case</label>
+            <select id="usecase">
+              <option>Construction / Job Site</option>
+              <option>Airbnb / Short-Term Rental</option>
+              <option>Backyard Office / Studio</option>
+              <option>Remote Cabin / Land</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div>
+            <label for="location">Location (City, State)</label>
+            <input id="location" type="text" placeholder="City, State" />
+          </div>
+          <div>
+            <label for="message">Project Details</label>
+            <textarea id="message" placeholder="Tell us about your project, timeline, and how many units you’re considering."></textarea>
+          </div>
+          <div>
+            <button type="submit" class="btn">Request My Custom Quote</button>
+          </div>
+        </form>
+
+        <div>
+          <div class="card">
+            <h3>What Happens Next?</h3>
+            <p style="margin-bottom:0.5rem;">
+              Once we receive your request, we’ll review your use case and location and follow up with:
+            </p>
+            <ul style="list-style:none;font-size:0.9rem;color:#4b5563;display:grid;gap:0.25rem;">
+              <li>• Recommended container size and configuration</li>
+              <li>• Estimated pricing and delivery timeline</li>
+              <li>• Answers to any permitting or site questions</li>
+            </ul>
+          </div>
+          <p style="font-size:0.88rem;color:#6b7280;margin-top:1rem;">
+            Prefer to talk directly? Add your phone number and the best time to reach you and we’ll call to discuss your project.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="container">
+    © <span id="year"></span> OffGrid Rooms. All rights reserved.
+  </div>
+</footer>
+
+<script>
+  // Simple dynamic year
+  document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+
+</body>
+</html>
