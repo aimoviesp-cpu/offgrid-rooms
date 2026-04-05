@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Life OS</title>
+<script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:#0a0a0a;font-family:-apple-system,BlinkMacSystemFont,sans-serif;color:#e8e8e8}
+  input,textarea{outline:none;font-family:inherit}
+  ::-webkit-scrollbar{width:4px;height:4px}
+  ::-webkit-scrollbar-track{background:#111}
+  ::-webkit-scrollbar-thumb{background:#333;border-radius:2px}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState, useEffect, useRef } = React;
+
+const DOMAINS = [
+  { id:"mental",    label:"Mental",    emoji:"🧠", habits:["Deep work block (2+ hrs)","Learned or created something","Low screen time"] },
+  { id:"recovery",  label:"Recovery",  emoji:"💤", habits:["Slept 7-8 hrs","No overload / rest if needed","Slept on time"] },
+  { id:"beauty",    label:"Beauty",    emoji:"✨", habits:["Full grooming done","Skincare done","Dressed intentionally","Dental hygiene"] },
+  { id:"nutrition", label:"Nutrition", emoji:"🥗", habits:["Hit calorie target","Hit protein target","No junk food"] },
+  { id:"fitness",   label:"Fitness",   emoji:"🏆", habits:["Walk 8-10k steps","Went to the gym","Completed full workout","Hit intensity / PR attempt"] },
+  { id:"financial", label:"Financial", emoji:"💰", habits:["Worked on an asset","Tracked net worth","Saved money"] },
+  { id:"charisma",  label:"Charisma",  emoji:"🗣", habits:["Initiated a conversation","Was fully present","Led an interaction"] },
+  { id:"seduction", label:"Seduction", emoji:"🔥", habits:["Approached someone","Flirted intentionally","Trained a seduction skill"] },
+];
+
+const DOMAIN_PROTOCOLS = [
+  { id:"resources", label:"Resources", color:"#1a3a2a", border:"#2d6b4a", items:[
+    "Layer 1 — Immediate Survival (0-3 months): Lead income (job, freelance), Weekly income target",
+    "Layer 2 — Foundation (3-12 months): Save $5k as a war chest, Pick ONE business model and commit, Learn one monetizable skill obsessively",
+    "Layer 3 — Business Build (12+ months): Launch the side hustle, Define revenue targets, Scale or replace job income",
+    "Mission: I sell the system that makes transformation obvious — not because he's trying, but because he has a system.",
+  ]},
+  { id:"mental", label:"Mental", color:"#1a1a3a", border:"#3a3a8a", items:[
+    "OODA Protocol: Every morning 5 minutes decides your main objectives for the day right after waking up.",
+    "Master Mind Protocol: Read or listen for 30 minutes any kind of non-fiction book.",
+    "Mental Clarity — Minimum Digital Noise: Must be educational, No multitasking dynamics, No red pill, Only algo tips allow",
+    "Hard Limits: No movies, No scrolling, No series, No adult content",
+    "Lite System: Read 3 sentences from a book.",
+  ]},
+  { id:"physical", label:"Physical", color:"#1a2a1a", border:"#3a6a3a", items:[
+    "Fitness: Workout 5 times a week — Push: Shoulder, upper chest / Pull: Biceps, forearms, back / Lower: Legs and glutes / Rest / Calisthenics / 8-10k steps",
+    "Nutrition: Daily: Eat clean 2130 cals / 200g protein / 70g fat",
+    "Lite version: 20 min walk / 20-30 min light workout",
+    "Stats: Shoulder side cable raise: 20lb 12-15 reps / Shoulder back split pull cable: 45lb 13 reps",
+  ]},
+  { id:"charisma", label:"Charisma", color:"#1a2a3a", border:"#2a5a7a", items:[
+    "Every day Mon-Fri: Talk to one stranger or say hi, nothing special and go with the flow.",
+    "Saturday: Approach and flirt with one girl you find attractive.",
+    "Posture and expression review: Record yourself for 5 minutes talking about any subject, review and calibrate.",
+    "Lite Version: If very tired — Greet someone who doesn't live inside home. Mon-Fri: Greet a girl you don't know that well.",
+  ]},
+  { id:"beauty", label:"Beauty", color:"#3a1a2a", border:"#7a2a4a", items:[
+    "Facial Grooming — Daily / Nail clipping — Weekly / Shower — Daily / Face wash — Daily / Teeth Hygiene — Daily",
+    "Eye bags reduction — Event / Face moisturizer — Daily / Ear hygiene — Every other Day / Hair style — Daily / Cologne — Daily",
+    "Style: Plan in advance your clothes for the week. Every week plan your clothes.",
+  ]},
+];
+
+const WORKOUT_TYPES = ["Push","Pull","Lower","Calisthenics","Rest"];
+
+// Calorie burn calculations for male, 200lb (90.7kg), 25y, 5'10" (178cm)
+// BMR (Mifflin-St Jeor): 10*90.7 + 6.25*178 - 5*25 + 5 = 1969 kcal
+const BMR = 1969;
+// TDEE at sedentary (1.2) = base daily burn without exercise
+const BASE_DAILY_BURN = Math.round(BMR * 1.2); // ~2363 kcal
+
+// MET-based workout burn (per 45min session, 90.7kg)
+// burn = MET * weight_kg * duration_hrs
+const WORKOUT_BURNS = {
+  Push:        Math.round(6.0  * 90.7 * 0.75), // ~408 kcal
+  Pull:        Math.round(6.0  * 90.7 * 0.75),
+  Lower:       Math.round(7.0  * 90.7 * 0.75), // ~476 kcal
+  Calisthenics:Math.round(8.0  * 90.7 * 0.75), // ~544 kcal
+  Rest:        0,
+};
+
+// Steps burn: ~0.045 kcal per step for 200lb person (ACSM estimate)
+const KCAL_PER_STEP = 0.045;
+
+const calcTotalBurn = (workoutType, steps) => {
+  const stepBurn = Math.round((Number(steps)||0) * KCAL_PER_STEP);
+  const workoutBurn = WORKOUT_BURNS[workoutType] || 0;
+  return BASE_DAILY_BURN + workoutBurn + stepBurn;
+};
+
+const todayStr = () => new Date().toISOString().slice(0,10);
+const maxXP = DOMAINS.length * 3;
+
+const loadData = () => { try { return JSON.parse(localStorage.getItem("lifeOS_days")||"{}"); } catch { return {}; } };
+const saveData = (d) => { try { localStorage.setItem("lifeOS_days", JSON.stringify(d)); } catch {} };
+
+const calcScore = (checks, habits) => {
+  if (!checks||!habits.length) return 0;
+  const done = habits.filter((_,i)=>checks[i]).length;
+  if (done===0) return 0;
+  if (done<Math.ceil(habits.length/2)) return 1;
+  if (done<habits.length) return 2;
+  return 3;
+};
+const calcXP = (d) => { if (!d) return 0; return DOMAINS.reduce((a,dm)=>a+calcScore(d.checks?.[dm.id],dm.habits),0); };
+
+function BarLineChart({ data, barKey1, barKey2, lineKey, label1, label2, label3, color1, color2, color3 }) {
+  const ref = useRef(null); const chart = useRef(null);
+  useEffect(() => {
+    if (!ref.current) return;
+    if (chart.current) chart.current.destroy();
+    chart.current = new Chart(ref.current, {
+      data: {
+        labels: data.map(d=>d.date.slice(5)),
+        datasets: [
+          { type:"bar", label:label1, data:data.map(d=>d[barKey1]||0), backgroundColor:color1+"88", borderColor:color1, borderWidth:1 },
+          { type:"bar", label:label2, data:data.map(d=>d[barKey2]||0), backgroundColor:color2+"88", borderColor:color2, borderWidth:1 },
+          { type:"line", label:label3, data:data.map(d=>d[lineKey]||0), borderColor:color3, backgroundColor:color3+"22", tension:0.3, fill:false, pointRadius:3, pointBackgroundColor:color3 },
+        ]
+      },
+      options: {
+        responsive:true, maintainAspectRatio:false,
+        plugins:{ legend:{display:false}, tooltip:{ callbacks:{ label: ctx=>`${ctx.dataset.label}: ${ctx.parsed.y.toLocaleString()} kcal` } } },
+        scales:{
+          x:{ ticks:{color:"#666",font:{size:10}}, grid:{color:"#1e1e1e"} },
+          y:{ ticks:{color:"#666",font:{size:10}}, grid:{color:"#1e1e1e"} }
+        }
+      }
+    });
+    return () => { if(chart.current) chart.current.destroy(); };
+  }, [data]);
+  return <canvas ref={ref} style={{width:"100%",height:"100%"}}/>;
+}
+
+function WeightChart({ data }) {
+  const ref = useRef(null); const chart = useRef(null);
+  useEffect(() => {
+    if (!ref.current) return;
+    if (chart.current) chart.current.destroy();
+    const filtered = data.filter(d=>d.weight);
+    if (!filtered.length) return;
+    chart.current = new Chart(ref.current, {
+      type:"line",
+      data:{
+        labels:filtered.map(d=>d.date.slice(5)),
+        datasets:[{ label:"Weight (lbs)", data:filtered.map(d=>d.weight), borderColor:"#a78bfa", backgroundColor:"#a78bfa22", tension:0.3, pointRadius:4, pointBackgroundColor:"#a78bfa", fill:true }]
+      },
+      options:{
+        responsive:true, maintainAspectRatio:false,
+        plugins:{ legend:{display:false} },
+        scales:{
+          x:{ ticks:{color:"#666",font:{size:10}}, grid:{color:"#1e1e1e"} },
+          y:{ ticks:{color:"#666",font:{size:10}}, grid:{color:"#1e1e1e"} }
+        }
+      }
+    });
+    return () => { if(chart.current) chart.current.destroy(); };
+  }, [data]);
+  return <canvas ref={ref} style={{width:"100%",height:"100%"}}/>;
+}
+
+function App() {
+  const [tab, setTab] = useState("daily");
+  const [days, setDays] = useState(loadData);
+  const [today] = useState(todayStr());
+  const [expanded, setExpanded] = useState({});
+  const [calIn, setCalIn] = useState("");
+  const [steps, setSteps] = useState("");
+  const [weight, setWeight] = useState("");
+  const [workoutType, setWorkoutType] = useState("");
+  const [workoutNotes, setWorkoutNotes] = useState("");
+  const [deficitRange, setDeficitRange] = useState("weekly");
+  const [activeDomain, setActiveDomain] = useState(null);
+
+  const updateDays = (nd) => { setDays(nd); saveData(nd); };
+
+  const toggleHabit = (domainId, idx) => {
+    const d = days[today]||{checks:{}};
+    const checks = {...d.checks};
+    const domain = DOMAINS.find(x=>x.id===domainId);
+    const arr = [...(checks[domainId]||domain.habits.map(()=>false))];
+    arr[idx] = !arr[idx];
+    checks[domainId] = arr;
+    updateDays({...days,[today]:{...d,checks}});
+  };
+
+  const saveDaily = () => {
+    const d = days[today]||{checks:{}};
+    const stepsNum = Number(steps)||0;
+    const autoBurn = calcTotalBurn(workoutType, stepsNum);
+    updateDays({...days,[today]:{...d,
+      calIn: Number(calIn)||0,
+      calBurn: autoBurn,
+      stepsNum,
+      weight: Number(weight)||0,
+      workoutType, workoutNotes
+    }});
+    alert("Saved!");
+  };
+
+  const getLast7 = () => Array.from({length:7},(_,i)=>{ const d=new Date(); d.setDate(d.getDate()-(6-i)); return d.toISOString().slice(0,10); });
+  const getLast30 = () => Array.from({length:30},(_,i)=>{ const d=new Date(); d.setDate(d.getDate()-(29-i)); return d.toISOString().slice(0,10); });
+
+  const getStreak = () => {
+    let streak=0; const d=new Date();
+    while(true){ const k=d.toISOString().slice(0,10); if(calcXP(days[k])>0){streak++;d.setDate(d.getDate()-1);}else break; }
+    return streak;
+  };
+
+  const getMonthDays = () => {
+    const now=new Date(),y=now.getFullYear(),m=now.getMonth();
+    return Array.from({length:new Date(y,m+1,0).getDate()},(_,i)=>`${y}-${String(m+1).padStart(2,"0")}-${String(i+1).padStart(2,"0")}`);
+  };
+
+  const exportData = () => {
+    const blob=new Blob([JSON.stringify(days,null,2)],{type:"application/json"});
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement("a"); a.href=url; a.download=`lifeOS_backup_${today}.json`; a.click();
+    URL.revokeObjectURL(url);
+  };
+  const importData = (e) => {
+    const file=e.target.files[0]; if(!file) return;
+    const reader=new FileReader();
+    reader.onload=(ev)=>{ try{ const p=JSON.parse(ev.target.result); if(typeof p==="object"&&p!==null){updateDays(p);alert("Import successful!");} else alert("Invalid file."); } catch{ alert("Could not read file."); } };
+    reader.readAsText(file); e.target.value="";
+  };
+
+  const s = { bg:"#0a0a0a",card:"#111",border:"#222",text:"#e8e8e8",muted:"#666",accent:"#4a9eff",dim:"#1e1e1e" };
+  const card = (extra={}) => ({background:s.card,border:`1px solid ${s.border}`,borderRadius:10,...extra});
+
+  const todayData = days[today]||{checks:{}};
+  const todayXP = calcXP(todayData);
+  const streak = getStreak();
+  const last7 = getLast7();
+  const last30 = getLast30();
+
+  // Deficit range data
+  const deficitDays = deficitRange==="weekly" ? last7 : getMonthDays();
+  const rangeCalIn   = deficitDays.reduce((a,dt)=>a+(days[dt]?.calIn||0),0);
+  const rangeCalBurn = deficitDays.reduce((a,dt)=>a+(days[dt]?.calBurn||0),0);
+  const rangeDeficit = rangeCalBurn - rangeCalIn;
+  const rangeSteps   = deficitDays.reduce((a,dt)=>a+(days[dt]?.stepsNum||0),0);
+  const chartData    = deficitDays.map(dt=>({ date:dt, calIn:days[dt]?.calIn||0, calBurn:days[dt]?.calBurn||0, deficit:Math.max(0,(days[dt]?.calBurn||0)-(days[dt]?.calIn||0)) }));
+
+  const weekGymDays = last7.filter(dt=>days[dt]?.workoutType&&days[dt].workoutType!=="Rest");
+  const weekWorkoutSummary = last7.map(dt=>({date:dt,type:days[dt]?.workoutType||"",notes:days[dt]?.workoutNotes||"",steps:days[dt]?.stepsNum||0})).filter(d=>d.type);
+  const latestWeight = [...last30].reverse().find(dt=>days[dt]?.weight);
+  const weightChartData = last30.map(dt=>({date:dt,weight:days[dt]?.weight||0}));
+
+  // Today's estimated burn preview
+  const previewBurn = calcTotalBurn(workoutType, steps);
+  const previewDeficit = previewBurn - (Number(calIn)||0);
+
+  const tabs = [
+    {id:"daily",label:"Daily"},{id:"dashboard",label:"Dashboard"},
+    {id:"monthly",label:"Monthly"},{id:"weekly",label:"Weekly"},
+    {id:"body",label:"Body"},{id:"domains",label:"Domains"}
+  ];
+
+  return (
+    <div style={{background:s.bg,minHeight:"100vh",color:s.text,paddingBottom:80}}>
+
+      {/* Header */}
+      <div style={{background:s.card,borderBottom:`1px solid ${s.border}`,padding:"12px 16px",position:"sticky",top:0,zIndex:10}}>
+        <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+          <div style={{fontSize:12,color:s.muted}}>{today}</div>
+          <div style={{display:"flex",alignItems:"center",gap:6}}><span>⚡</span><span style={{fontSize:13,fontWeight:500}}>{streak}d streak</span></div>
+          <div style={{fontSize:13,color:s.accent,fontWeight:500}}>{todayXP}/{maxXP} XP</div>
+        </div>
+        <div style={{height:3,background:s.border,borderRadius:2,marginTop:8}}>
+          <div style={{height:"100%",width:`${(todayXP/maxXP)*100}%`,background:s.accent,borderRadius:2,transition:"width 0.3s"}}/>
+        </div>
+      </div>
+
+      {/* Nav */}
+      <div style={{display:"flex",background:s.card,borderBottom:`1px solid ${s.border}`,overflowX:"auto"}}>
+        {tabs.map(t=>(
+          <button key={t.id} onClick={()=>setTab(t.id)}
+            style={{flex:1,minWidth:56,padding:"10px 2px",border:"none",background:"none",
+              color:tab===t.id?s.accent:s.muted,fontSize:11,fontWeight:tab===t.id?600:400,
+              borderBottom:tab===t.id?`2px solid ${s.accent}`:"2px solid transparent",cursor:"pointer",whiteSpace:"nowrap"}}>
+            {t.label}
+          </button>
+        ))}
+      </div>
+
+      {/* Export/Import */}
+      <div style={{display:"flex",gap:8,padding:"10px 16px",background:s.card,borderBottom:`1px solid ${s.border}`}}>
+        <button onClick={exportData} style={{flex:1,background:"transparent",border:`1px solid ${s.border}`,borderRadius:6,padding:"7px 0",color:s.accent,fontSize:12,fontWeight:500,cursor:"pointer"}}>⬇ Export backup</button>
+        <label style={{flex:1,background:"transparent",border:`1px solid ${s.border}`,borderRadius:6,padding:"7px 0",color:s.muted,fontSize:12,fontWeight:500,cursor:"pointer",textAlign:"center"}}>
+          ⬆ Import backup<input type="file" accept=".json" onChange={importData} style={{display:"none"}}/>
+        </label>
+      </div>
+
+      <div style={{padding:16}}>
+
+        {/* DAILY */}
+        {tab==="daily" && (
+          <div>
+            {DOMAINS.map(domain=>{
+              const checks=todayData.checks?.[domain.id]||domain.habits.map(()=>false);
+              const score=calcScore(checks,domain.habits);
+              const isOpen=expanded[domain.id]!==false;
+              const scoreColors=["#444","#f59e0b","#60a5fa","#34d399"];
+              return (
+                <div key={domain.id} style={{...card(),marginBottom:10,overflow:"hidden"}}>
+                  <div onClick={()=>setExpanded(e=>({...e,[domain.id]:!isOpen}))} style={{display:"flex",alignItems:"center",padding:"12px 14px",cursor:"pointer"}}>
+                    <span style={{fontSize:16,marginRight:10}}>{domain.emoji}</span>
+                    <span style={{flex:1,fontWeight:500,fontSize:15}}>{domain.label}</span>
+                    <div style={{display:"flex",gap:3,marginRight:10}}>
+                      {[1,2,3].map(n=><div key={n} style={{width:7,height:7,borderRadius:"50%",background:score>=n?scoreColors[score]:"#333"}}/>)}
+                    </div>
+                    <span style={{color:s.muted,fontSize:11}}>{isOpen?"▲":"▼"}</span>
+                  </div>
+                  {isOpen&&(
+                    <div style={{borderTop:`1px solid ${s.border}`,padding:"8px 14px"}}>
+                      {domain.habits.map((h,i)=>(
+                        <div key={i} onClick={()=>toggleHabit(domain.id,i)}
+                          style={{display:"flex",alignItems:"center",gap:10,padding:"8px 0",cursor:"pointer",borderBottom:i<domain.habits.length-1?`1px solid ${s.dim}`:"none"}}>
+                          <div style={{width:18,height:18,border:`1.5px solid ${checks[i]?s.accent:s.muted}`,borderRadius:4,background:checks[i]?s.accent:"transparent",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
+                            {checks[i]&&<span style={{color:"#000",fontSize:11,fontWeight:700}}>✓</span>}
+                          </div>
+                          <span style={{fontSize:14,color:checks[i]?s.muted:s.text,textDecoration:checks[i]?"line-through":"none"}}>{h}</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+
+            {/* Body inputs */}
+            <div style={{...card(),padding:14,marginBottom:10}}>
+              <div style={{fontSize:14,fontWeight:500,marginBottom:14}}>🍽 Nutrition & Body</div>
+
+              {/* Calories in */}
+              <div style={{marginBottom:12}}>
+                <div style={{fontSize:11,color:s.muted,marginBottom:4}}>Calories eaten</div>
+                <input value={calIn} onChange={e=>setCalIn(e.target.value)} type="number" placeholder="e.g. 2000"
+                  style={{width:"100%",background:s.bg,border:`1px solid ${s.border}`,borderRadius:6,padding:"8px 10px",color:s.text,fontSize:14}}/>
+              </div>
+
+              {/* Steps */}
+              <div style={{marginBottom:12}}>
+                <div style={{fontSize:11,color:s.muted,marginBottom:4}}>Steps walked</div>
+                <input value={steps} onChange={e=>setSteps(e.target.value)} type="number" placeholder="e.g. 8500"
+                  style={{width:"100%",background:s.bg,border:`1px solid ${s.border}`,borderRadius:6,padding:"8px 10px",color:s.text,fontSize:14}}/>
+              </div>
+
+              {/* Workout type */}
+              <div style={{marginBottom:12}}>
+                <div style={{fontSize:11,color:s.muted,marginBottom:6}}>Workout type</div>
+                <div style={{display:"flex",flexWrap:"wrap",gap:6}}>
+                  {WORKOUT_TYPES.map(t=>(
+                    <button key={t} onClick={()=>setWorkoutType(workoutType===t?"":t)}
+                      style={{padding:"5px 12px",borderRadius:20,border:`1px solid ${workoutType===t?"#4a9eff":s.border}`,
+                        background:workoutType===t?"#4a9eff22":"transparent",color:workoutType===t?s.accent:s.muted,fontSize:12,cursor:"pointer"}}>
+                      {t}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Workout notes */}
+              <div style={{marginBottom:12}}>
+                <div style={{fontSize:11,color:s.muted,marginBottom:4}}>Workout notes / PRs</div>
+                <textarea value={workoutNotes} onChange={e=>setWorkoutNotes(e.target.value)} rows={2}
+                  placeholder="e.g. Bench 3x8 @ 185lbs, PR on cable row..."
+                  style={{width:"100%",background:s.bg,border:`1px solid ${s.border}`,borderRadius:6,padding:"8px 10px",color:s.text,fontSize:13,resize:"vertical"}}/>
+              </div>
+
+              {/* Weight */}
+              <div style={{marginBottom:14}}>
+                <div style={{fontSize:11,color:s.muted,marginBottom:4}}>Weight (lbs)</div>
+                <input value={weight} onChange={e=>setWeight(e.target.value)} type="number" placeholder="e.g. 200"
+                  style={{width:"100%",background:s.bg,border:`1px solid ${s.border}`,borderRadius:6,padding:"8px 10px",color:s.text,fontSize:14}}/>
+              </div>
+
+              {/* Live burn preview */}
+              {(calIn||steps||workoutType) && (
+                <div style={{background:s.dim,borderRadius:8,padding:"10px 12px",marginBottom:14,borderLeft:`3px solid ${previewDeficit>0?"#34d399":"#f87171"}`}}>
+                  <div style={{fontSize:11,color:s.muted,marginBottom:6}}>Today's estimated burn</div>
+                  <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:8}}>
+                    {[
+                      ["Base",BASE_DAILY_BURN+"","#666"],
+                      ["Workout",(WORKOUT_BURNS[workoutType]||0)+"","#60a5fa"],
+                      ["Steps",Math.round((Number(steps)||0)*KCAL_PER_STEP)+"","#34d399"],
+                    ].map(([l,v,c])=>(
+                      <div key={l}>
+                        <div style={{fontSize:10,color:s.muted}}>{l}</div>
+                        <div style={{fontSize:13,fontWeight:600,color:c}}>{v} kcal</div>
+                      </div>
+                    ))}
+                  </div>
+                  <div style={{marginTop:8,paddingTop:8,borderTop:`1px solid ${s.border}`,display:"flex",justifyContent:"space-between"}}>
+                    <span style={{fontSize:12,color:s.muted}}>Total burn: <span style={{color:s.text,fontWeight:600}}>{previewBurn.toLocaleString()} kcal</span></span>
+                    <span style={{fontSize:12,fontWeight:600,color:previewDeficit>0?"#34d399":"#f87171"}}>
+                      {previewDeficit>0?"✓ −":"↑ +"}{Math.abs(previewDeficit).toLocaleString()} kcal
+                    </span>
+                  </div>
+                </div>
+              )}
+
+              <button onClick={saveDaily} style={{background:s.accent,color:"#000",border:"none",borderRadius:6,padding:"8px 16px",fontSize:13,fontWeight:600,cursor:"pointer"}}>Save Day</button>
+            </div>
+          </div>
+        )}
+
+        {/* DASHBOARD */}
+        {tab==="dashboard" && (
+          <div>
+            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:10,marginBottom:16}}>
+              {[["⚡ Streak",`${streak}d`],["Today XP",`${todayXP}/${maxXP}`],["7d Avg",`${(last7.reduce((a,d)=>a+calcXP(days[d]),0)/7).toFixed(1)}`]].map(([l,v])=>(
+                <div key={l} style={{...card({borderRadius:8}),padding:"10px 12px"}}>
+                  <div style={{fontSize:10,color:s.muted,marginBottom:4}}>{l}</div>
+                  <div style={{fontSize:20,fontWeight:600}}>{v}</div>
+                </div>
+              ))}
+            </div>
+            <div style={{...card(),marginBottom:14,overflow:"hidden"}}>
+              <div style={{padding:"10px 14px",fontSize:13,fontWeight:500,borderBottom:`1px solid ${s.border}`}}>Last 7 Days</div>
+              <div style={{overflowX:"auto"}}>
+                <table style={{width:"100%",borderCollapse:"collapse",fontSize:12,minWidth:340}}>
+                  <thead>
+                    <tr style={{borderBottom:`1px solid ${s.border}`}}>
+                      <th style={{padding:"8px 10px",textAlign:"left",color:s.muted,fontWeight:500}}>Date</th>
+                      {DOMAINS.map(d=><th key={d.id} style={{padding:"8px 5px",color:s.muted,fontWeight:500,fontSize:11}}>{d.emoji}</th>)}
+                      <th style={{padding:"8px 8px",color:s.muted,fontWeight:500}}>XP</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {last7.map(dt=>{
+                      const dd=days[dt]||{}; const xp=calcXP(dd); const isToday=dt===today;
+                      return (
+                        <tr key={dt} style={{borderBottom:`1px solid ${s.dim}`,background:isToday?"#1a1a2a":"transparent"}}>
+                          <td style={{padding:"7px 10px",color:isToday?s.accent:s.muted,fontSize:11}}>{dt.slice(5)}</td>
+                          {DOMAINS.map(d=>{
+                            const sc=calcScore(dd.checks?.[d.id],d.habits);
+                            return <td key={d.id} style={{padding:"7px 5px",textAlign:"center",color:sc===3?"#34d399":sc===2?"#60a5fa":sc===1?"#f59e0b":s.dim}}>{sc>0?sc:"·"}</td>;
+                          })}
+                          <td style={{padding:"7px 8px",textAlign:"center",fontWeight:500,color:xp>0?s.text:s.muted}}>{xp}</td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div style={{...card(),overflow:"hidden"}}>
+              <div style={{padding:"10px 14px",fontSize:13,fontWeight:500,borderBottom:`1px solid ${s.border}`}}>7-Day Domain Totals</div>
+              {DOMAINS.map(d=>{
+                const total=last7.reduce((a,dt)=>a+calcScore(days[dt]?.checks?.[d.id],d.habits),0);
+                const pct=Math.round((total/21)*100);
+                return (
+                  <div key={d.id} style={{padding:"10px 14px",borderBottom:`1px solid ${s.dim}`}}>
+                    <div style={{display:"flex",justifyContent:"space-between",marginBottom:5}}>
+                      <span style={{fontSize:13}}>{d.emoji} {d.label}</span>
+                      <span style={{fontSize:12,color:s.muted}}>{total}/21 · {pct}%</span>
+                    </div>
+                    <div style={{height:3,background:s.border,borderRadius:2}}>
+                      <div style={{height:"100%",width:`${pct}%`,background:pct>66?"#34d399":pct>33?"#60a5fa":"#f59e0b",borderRadius:2}}/>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
+        {/* MONTHLY */}
+        {tab==="monthly" && (
+          <div>
+            <div style={{fontSize:15,fontWeight:500,marginBottom:14}}>{new Date().toLocaleString("default",{month:"long",year:"numeric"})}</div>
+            <div style={{...card(),overflow:"hidden",marginBottom:14}}>
+              <div style={{overflowX:"auto"}}>
+                <table style={{width:"100%",borderCollapse:"collapse",fontSize:11,minWidth:520}}>
+                  <thead>
+                    <tr style={{borderBottom:`1px solid ${s.border}`}}>
+                      <th style={{padding:"8px 10px",textAlign:"left",color:s.muted,whiteSpace:"nowrap"}}>Day</th>
+                      {DOMAINS.map(d=><th key={d.id} style={{padding:"8px 6px",color:s.muted,minWidth:28}}>{d.emoji}</th>)}
+                      <th style={{padding:"8px 8px",color:s.muted}}>XP</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {getMonthDays().map(dt=>{
+                      const dd=days[dt]||{}; const xp=calcXP(dd); const isToday=dt===today;
+                      return (
+                        <tr key={dt} style={{borderBottom:`1px solid ${s.dim}`,background:isToday?"#1a1a2a":"transparent"}}>
+                          <td style={{padding:"6px 10px",color:isToday?s.accent:s.muted}}>{dt.slice(8)}</td>
+                          {DOMAINS.map(d=>{
+                            const sc=calcScore(dd.checks?.[d.id],d.habits);
+                            return <td key={d.id} style={{padding:"6px 6px",textAlign:"center",color:sc===3?"#34d399":sc===2?"#60a5fa":sc===1?"#f59e0b":s.dim}}>{sc>0?sc:"·"}</td>;
+                          })}
+                          <td style={{padding:"6px 8px",textAlign:"center",color:xp>0?s.text:s.dim}}>{xp>0?xp:"·"}</td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div style={{...card(),overflow:"hidden"}}>
+              <div style={{padding:"10px 14px",fontSize:13,fontWeight:500,borderBottom:`1px solid ${s.border}`}}>Month Totals</div>
+              {DOMAINS.map(d=>{
+                const mDays=getMonthDays();
+                const total=mDays.reduce((a,dt)=>a+calcScore(days[dt]?.checks?.[d.id],d.habits),0);
+                const max=mDays.length*3; const pct=Math.round((total/max)*100);
+                return (
+                  <div key={d.id} style={{display:"flex",alignItems:"center",padding:"9px 14px",borderBottom:`1px solid ${s.dim}`}}>
+                    <span style={{fontSize:14,marginRight:8}}>{d.emoji}</span>
+                    <span style={{flex:1,fontSize:13}}>{d.label}</span>
+                    <span style={{fontSize:12,color:s.muted,marginRight:10}}>{total}/{max}</span>
+                    <span style={{fontSize:12,color:pct>50?"#34d399":"#f59e0b"}}>{pct}%</span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
+        {/* WEEKLY */}
+        {tab==="weekly" && (
+          <div>
+            <div style={{fontSize:13,color:s.muted,marginBottom:14}}>Week ending {today}</div>
+            {DOMAINS.map(d=>{
+              const total=last7.reduce((a,dt)=>a+calcScore(days[dt]?.checks?.[d.id],d.habits),0);
+              const pct=Math.round((total/21)*100);
+              return (
+                <div key={d.id} style={{...card({borderRadius:8}),padding:"12px 14px",marginBottom:8,display:"flex",alignItems:"center"}}>
+                  <span style={{fontSize:16,marginRight:10}}>{d.emoji}</span>
+                  <div style={{flex:1}}>
+                    <div style={{fontSize:13,fontWeight:500,marginBottom:5}}>{d.label}</div>
+                    <div style={{height:3,background:s.border,borderRadius:2}}>
+                      <div style={{height:"100%",width:`${pct}%`,background:pct>66?"#34d399":pct>33?"#60a5fa":"#f59e0b",borderRadius:2}}/>
+                    </div>
+                  </div>
+                  <div style={{textAlign:"right",marginLeft:14}}>
+                    <div style={{fontSize:18,fontWeight:600}}>{total}</div>
+                    <div style={{fontSize:10,color:s.muted}}>/ 21</div>
+                  </div>
+                </div>
+              );
+            })}
+            <div style={{...card(),padding:14,marginTop:6}}>
+              <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-end",marginBottom:14}}>
+                <div style={{fontSize:13,fontWeight:500}}>Weekly XP</div>
+                <div><span style={{fontSize:28,fontWeight:700}}>{last7.reduce((a,d)=>a+calcXP(days[d]),0)}</span>
+                  <span style={{fontSize:13,color:s.muted}}> / {maxXP*7}</span></div>
+              </div>
+              <div style={{fontSize:12,color:s.muted,marginBottom:6}}>Reflection</div>
+              <textarea rows={3} placeholder="What went well? What didn't?"
+                style={{width:"100%",background:s.bg,border:`1px solid ${s.border}`,borderRadius:6,padding:"10px 12px",color:s.text,fontSize:13,resize:"vertical",marginBottom:10}}/>
+              <div style={{fontSize:12,color:s.muted,marginBottom:6}}>Focus next week</div>
+              <textarea rows={2}
+                style={{width:"100%",background:s.bg,border:`1px solid ${s.border}`,borderRadius:6,padding:"10px 12px",color:s.text,fontSize:13,resize:"vertical"}}/>
+            </div>
+          </div>
+        )}
+
+        {/* BODY */}
+        {tab==="body" && (
+          <div>
+
+            {/* Range toggle */}
+            <div style={{display:"flex",gap:8,marginBottom:14}}>
+              {["weekly","monthly"].map(r=>(
+                <button key={r} onClick={()=>setDeficitRange(r)}
+                  style={{flex:1,padding:"8px 0",borderRadius:8,border:`1px solid ${deficitRange===r?s.accent:s.border}`,
+                    background:deficitRange===r?"#4a9eff22":"transparent",color:deficitRange===r?s.accent:s.muted,
+                    fontSize:13,fontWeight:deficitRange===r?600:400,cursor:"pointer",textTransform:"capitalize"}}>
+                  {r === "weekly" ? "7 Days" : "This Month"}
+                </button>
+              ))}
+            </div>
+
+            {/* Calories */}
+            <div style={{...card(),overflow:"hidden",marginBottom:14}}>
+              <div style={{padding:"10px 14px",fontSize:13,fontWeight:500,borderBottom:`1px solid ${s.border}`}}>🍽 Calories — {deficitRange==="weekly"?"7 Day":"Month"}</div>
+              <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:1,borderBottom:`1px solid ${s.border}`}}>
+                {[["Eaten",rangeCalIn,"#4a9eff"],["Burned",rangeCalBurn,"#34d399"],
+                  [rangeDeficit>=0?"Deficit":"Surplus",Math.abs(rangeDeficit),rangeDeficit>=0?"#34d399":"#f87171"]
+                ].map(([l,v,c])=>(
+                  <div key={l} style={{padding:"12px 10px",background:s.dim}}>
+                    <div style={{fontSize:10,color:s.muted,marginBottom:4}}>{l}</div>
+                    <div style={{fontSize:16,fontWeight:600,color:c}}>{Number(v).toLocaleString()}</div>
+                    <div style={{fontSize:10,color:s.muted}}>kcal</div>
+                  </div>
+                ))}
+              </div>
+              <div style={{padding:"10px 14px",borderBottom:`1px solid ${s.border}`,display:"flex",gap:20}}>
+                <div>
+                  <div style={{fontSize:10,color:s.muted,marginBottom:2}}>Total steps</div>
+                  <div style={{fontSize:15,fontWeight:600}}>{rangeSteps.toLocaleString()}</div>
+                </div>
+                <div>
+                  <div style={{fontSize:10,color:s.muted,marginBottom:2}}>Avg steps/day</div>
+                  <div style={{fontSize:15,fontWeight:600}}>{Math.round(rangeSteps/deficitDays.length).toLocaleString()}</div>
+                </div>
+                <div>
+                  <div style={{fontSize:10,color:s.muted,marginBottom:2}}>Days in deficit</div>
+                  <div style={{fontSize:15,fontWeight:600,color:"#34d399"}}>{deficitDays.filter(dt=>(days[dt]?.calBurn||0)>(days[dt]?.calIn||0)).length}</div>
+                </div>
+              </div>
+              <div style={{padding:14}}>
+                <div style={{display:"flex",gap:16,marginBottom:10}}>
+                  {[["■ Eaten","#4a9eff"],["■ Burned","#34d399"],["— Deficit","#f59e0b"]].map(([l,c])=>(
+                    <span key={l} style={{fontSize:11,color:c}}>{l}</span>
+                  ))}
+                </div>
+                <div style={{position:"relative",height:200}}>
+                  <BarLineChart data={chartData} barKey1="calIn" barKey2="calBurn" lineKey="deficit"
+                    label1="Eaten" label2="Burned" label3="Deficit"
+                    color1="#4a9eff" color2="#34d399" color3="#f59e0b"/>
+                </div>
+              </div>
+            </div>
+
+            {/* Workouts */}
+            <div style={{...card(),overflow:"hidden",marginBottom:14}}>
+              <div style={{padding:"10px 14px",fontSize:13,fontWeight:500,borderBottom:`1px solid ${s.border}`}}>🏋️ Workouts — 7 Day</div>
+              <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:1,borderBottom:`1px solid ${s.border}`}}>
+                {[
+                  ["Sessions",`${weekGymDays.length} / 7`],
+                  ["Avg steps",Math.round(last7.reduce((a,dt)=>a+(days[dt]?.stepsNum||0),0)/7).toLocaleString()],
+                  ["Step burn",Math.round(last7.reduce((a,dt)=>a+Math.round((days[dt]?.stepsNum||0)*KCAL_PER_STEP),0)).toLocaleString()+" kcal"],
+                ].map(([l,v])=>(
+                  <div key={l} style={{padding:"12px 10px",background:s.dim}}>
+                    <div style={{fontSize:10,color:s.muted,marginBottom:4}}>{l}</div>
+                    <div style={{fontSize:14,fontWeight:600,color:s.text}}>{v}</div>
+                  </div>
+                ))}
+              </div>
+              {weekWorkoutSummary.length > 0 ? (
+                <div style={{padding:"10px 14px"}}>
+                  {weekWorkoutSummary.map((w,i)=>(
+                    <div key={i} style={{padding:"8px 0",borderBottom:i<weekWorkoutSummary.length-1?`1px solid ${s.dim}`:"none"}}>
+                      <div style={{display:"flex",gap:10,alignItems:"center",marginBottom:w.notes?4:0}}>
+                        <div style={{fontSize:11,color:s.muted,minWidth:44}}>{w.date.slice(5)}</div>
+                        <div style={{padding:"2px 8px",background:"#4a9eff22",border:`1px solid #4a9eff44`,borderRadius:10,fontSize:11,color:s.accent}}>{w.type}</div>
+                        {w.steps>0&&<div style={{fontSize:11,color:s.muted}}>{w.steps.toLocaleString()} steps</div>}
+                      </div>
+                      {w.notes&&<div style={{fontSize:12,color:s.muted,paddingLeft:54,lineHeight:1.5}}>{w.notes}</div>}
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div style={{padding:14,fontSize:13,color:s.muted}}>No workouts logged this week.</div>
+              )}
+            </div>
+
+            {/* Weight */}
+            <div style={{...card(),overflow:"hidden"}}>
+              <div style={{padding:"10px 14px",fontSize:13,fontWeight:500,borderBottom:`1px solid ${s.border}`}}>⚖️ Weight — 30 Day</div>
+              <div style={{padding:"12px 14px",borderBottom:`1px solid ${s.border}`,display:"flex",gap:24,flexWrap:"wrap"}}>
+                <div>
+                  <div style={{fontSize:10,color:s.muted,marginBottom:4}}>Latest</div>
+                  <div style={{fontSize:22,fontWeight:600,color:"#a78bfa"}}>{latestWeight?`${days[latestWeight].weight} lbs`:"—"}</div>
+                </div>
+                {(()=>{
+                  const wDays=last30.filter(dt=>days[dt]?.weight);
+                  if(wDays.length<2) return null;
+                  const diff=(days[wDays[wDays.length-1]].weight-days[wDays[0]].weight).toFixed(1);
+                  return (
+                    <div>
+                      <div style={{fontSize:10,color:s.muted,marginBottom:4}}>30d change</div>
+                      <div style={{fontSize:22,fontWeight:600,color:Number(diff)<0?"#34d399":"#f87171"}}>{diff>0?"+":""}{diff} lbs</div>
+                    </div>
+                  );
+                })()}
+              </div>
+              <div style={{padding:14}}>
+                <div style={{position:"relative",height:160}}>
+                  <WeightChart data={weightChartData}/>
+                </div>
+                {!weightChartData.some(d=>d.weight)&&<div style={{fontSize:13,color:s.muted,textAlign:"center",paddingTop:20}}>Log your weight in Daily to see the chart.</div>}
+              </div>
+            </div>
+
+          </div>
+        )}
+
+        {/* DOMAINS */}
+        {tab==="domains" && !activeDomain && (
+          <div>
+            <div style={{fontSize:12,color:s.muted,marginBottom:14}}>Tap a domain to view its full protocol</div>
+            {DOMAIN_PROTOCOLS.map(dp=>(
+              <div key={dp.id} onClick={()=>setActiveDomain(dp.id)}
+                style={{background:s.card,border:`1px solid ${dp.border}`,borderRadius:10,marginBottom:12,overflow:"hidden",cursor:"pointer"}}>
+                <div style={{background:dp.color,padding:"12px 14px",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
+                  <div style={{fontSize:14,fontWeight:600}}>{dp.label}</div>
+                  <span style={{color:s.muted,fontSize:13}}>›</span>
+                </div>
+                <div style={{padding:"8px 14px",fontSize:12,color:s.muted}}>{dp.items[0].slice(0,72)}…</div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {tab==="domains" && activeDomain && (()=>{
+          const dp = DOMAIN_PROTOCOLS.find(d=>d.id===activeDomain);
+          return (
+            <div>
+              <button onClick={()=>setActiveDomain(null)}
+                style={{background:"transparent",border:`1px solid ${s.border}`,borderRadius:6,padding:"6px 12px",
+                  color:s.muted,fontSize:12,cursor:"pointer",marginBottom:14,display:"flex",alignItems:"center",gap:6}}>
+                ‹ Back
+              </button>
+              <div style={{background:s.card,border:`1px solid ${dp.border}`,borderRadius:10,overflow:"hidden"}}>
+                <div style={{background:dp.color,padding:"14px 16px",borderBottom:`1px solid ${dp.border}`}}>
+                  <div style={{fontSize:16,fontWeight:600}}>{dp.label}</div>
+                </div>
+                <div style={{padding:"12px 16px"}}>
+                  {dp.items.map((item,i)=>(
+                    <div key={i} style={{fontSize:13,color:s.muted,lineHeight:1.8,
+                      paddingBottom:i<dp.items.length-1?12:0,marginBottom:i<dp.items.length-1?12:0,
+                      borderBottom:i<dp.items.length-1?`1px solid ${s.dim}`:"none"}}>{item}</div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          );
+        })()}
+
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+</script>
+</body>
+</html>
