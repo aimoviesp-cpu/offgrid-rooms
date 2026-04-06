@@ -25,7 +25,6 @@ input,textarea{outline:none;font-family:inherit}
 <div id="root"></div>
 
 <script>
-// ── Flywheel plain JS ──────────────────────────────────────────────────────
 var FW_NODES={
   financial:{cx:340,cy:310,hw:70,hh:29},
   mental:   {cx:340,cy:50, hw:64,hh:26},
@@ -67,7 +66,6 @@ function buildFlywheel(){
   ['fw-arcs','fw-spokes'].forEach(function(id){var g=document.getElementById(id);if(g)g.innerHTML='';});
   var ag=document.getElementById('fw-arcs'),sg=document.getElementById('fw-spokes');
   if(!ag||!sg)return;
-
   for(var i=0;i<FW_RING.length;i++){
     var f=FW_RING[i],t=FW_RING[(i+1)%FW_RING.length],c=FW_COL[f];
     var p1=fwEdge(f,t),p2=fwEdge(t,f);
@@ -133,8 +131,14 @@ var PROTOCOLS=[
     {type:"nonneg",title:"Weekly Non-Negotiables",items:["Log bodyweight Monday morning","Review what worked and what didn't","Post 3x minimum on chosen platform","Document one system insight from the week"]},
     {type:"thisweek",title:"This Week",items:["Take current physique photo — document the system in progress","Find before photo at 250lbs — this is the proof","Write your 3 sentence story","Post first piece of content — introduce the system","Audit your current daily structure — is the system tight?"]},
   ]},
-  {id:"mental",   label:"Mental",   color:"#1a1a3a",border:"#3a3a8a",items:["OODA Protocol: Every morning 5 minutes decides your main objectives for the day.","Master Mind Protocol: Read or listen for 30 minutes any kind of non-fiction book.",    "Mental Clarity: Must be educational, No multitasking, No red pill, No only algorithm-recommended content","Hard Limits: No movies, No scrolling, No series, No adult content","Lite System: Read 3 sentences from a book."]},
-  {id:"energy",   label:"Energy",   color:"#412402",border:"#EF9F27",items:[
+  {id:"mental",label:"Mental",color:"#1a1a3a",border:"#3a3a8a",items:[
+    "OODA Protocol: Every morning 5 minutes decides your main objectives for the day.",
+    "Master Mind Protocol: Read or listen for 30 minutes any kind of non-fiction book.",
+    "Mental Clarity: Must be educational, No multitasking, No red pill, No only algorithm-recommended content",
+    "Hard Limits: No movies, No scrolling, No series, No adult content",
+    "Lite System: Read 3 sentences from a book.",
+  ]},
+  {id:"energy",label:"Energy",color:"#412402",border:"#EF9F27",items:[
     "Sleep 7-8 hrs — this is the primary energy lever. Everything else is secondary.",
     "Morning sunlight exposure within 30 mins of waking — sets circadian rhythm.",
     "Avoid caffeine after 2pm — protects sleep quality.",
@@ -148,7 +152,7 @@ var PROTOCOLS=[
     "Emotional transmutation — don't suppress emotion. Convert it. Feel it fully for 60 seconds, then direct it into a system action. Emotion is energy — it has to go somewhere.",
     "Lite version: If exhausted, nap 20 mins max before 3pm. Do not skip the walk.",
   ]},
-  {id:"fitness",  label:"Fitness",  color:"#042C53",border:"#378ADD",sections:[
+  {id:"fitness",label:"Fitness",color:"#042C53",border:"#378ADD",sections:[
     {type:"layers",title:"Training Split — 5x Week",layers:[
       {label:"Push",items:["Shoulder","Upper chest"]},
       {label:"Pull",items:["Biceps","Forearms","Back"]},
@@ -165,14 +169,41 @@ var PROTOCOLS=[
     {type:"nonneg",title:"Phase 2 — Clean Refeed (3 days)",items:["2,300 kcal","200g protein","200g carbs","Low fat"]},
     {type:"nonneg",title:"Lite Nutrition Version",items:["2,200 kcal","200g protein","200g carbs","100g fat"]},
   ]},
-  {id:"beauty",   label:"Beauty",   color:"#3a1a2a",border:"#7a2a4a",items:["Facial Grooming — Daily / Nail clipping — Weekly / Shower — Daily / Teeth Hygiene — Daily","Face moisturizer — Daily / Ear hygiene — Every other Day / Hair style — Daily / Cologne — Daily","Style: Plan your clothes for the week in advance."]},
-  {id:"charisma", label:"Charisma", color:"#412402",border:"#BA7517",items:["Mon-Fri: Talk to one stranger or say hi, go with the flow.","Saturday: Approach and flirt with one girl you find attractive.","Posture and expression review: Record yourself 5 minutes, review and calibrate.","Lite Version: If very tired — Greet someone who doesn't live inside home."]},
+  {id:"beauty",label:"Beauty",color:"#3a1a2a",border:"#7a2a4a",items:[
+    "Facial Grooming — Daily / Nail clipping — Weekly / Shower — Daily / Teeth Hygiene — Daily",
+    "Face moisturizer — Daily / Ear hygiene — Every other Day / Hair style — Daily / Cologne — Daily",
+    "Style: Plan your clothes for the week in advance.",
+  ]},
+  {id:"charisma",label:"Charisma",color:"#412402",border:"#BA7517",items:[
+    "Mon-Fri: Talk to one stranger or say hi, go with the flow.",
+    "Saturday: Approach and flirt with one girl you find attractive.",
+    "Posture and expression review: Record yourself 5 minutes, review and calibrate.",
+    "Lite Version: If very tired — Greet someone who doesn't live inside home.",
+  ]},
   {id:"seduction",label:"Seduction",color:"#4A1B0C",border:"#D85A30",sections:[
     {type:"priorities",title:"Daily",items:["Naturally greet women when you can — no agenda, just presence"]},
     {type:"priorities",title:"Weekly",items:["Approach and lead with one woman per week"]},
   ]},
-  {id:"recovery", label:"Recovery", color:"#1a1a1a",border:"#e8e8e8",items:["Slept 7-8 hrs — non-negotiable. Sleep is the system's reset button.","Slept on time — consistency matters more than duration. Same bedtime every night.","No overload — if mentally or physically drained, execute the lite system.","Weekly deload awareness — if performance drops across 3+ domains, reduce training volume for 1 week.","Lite recovery version: 20 min walk + early sleep. That is enough."]},
+  {id:"recovery",label:"Recovery",color:"#1a1a1a",border:"#e8e8e8",items:[
+    "Slept 7-8 hrs — non-negotiable. Sleep is the system's reset button.",
+    "Slept on time — consistency matters more than duration. Same bedtime every night.",
+    "No overload — if mentally or physically drained, execute the lite system.",
+    "Weekly deload awareness — if performance drops across 3+ domains, reduce training volume for 1 week.",
+    "Lite recovery version: 20 min walk + early sleep. That is enough.",
+  ]},
 ];
+</script>
+
+const PIN=“1234”; // change this to your pin
+const checkPin=()=>{
+const stored=sessionStorage.getItem(“oa_unlocked”);
+if(stored===“1”)return true;
+const input=prompt(“Enter PIN to access OperAxis:”);
+if(input===PIN){sessionStorage.setItem(“oa_unlocked”,“1”);return true;}
+document.body.innerHTML=’<div style="background:#000;height:100vh;display:flex;align-items:center;justify-content:center;color:#555;font-family:sans-serif;font-size:14px;">Access denied</div>’;
+return false;
+};
+if(!checkPin()){throw new Error(“locked”);}
 </script>
 
 <script type="text/babel">
@@ -181,6 +212,7 @@ const {useState,useRef,useEffect}=React;
 const DOMAINS=[
   {id:"mental",   label:"Mental",   habits:[{label:"Deep work block (2+ hrs)",w:3},{label:"Learned or created something",w:2},{label:"Low screen time",w:1}]},
   {id:"recovery", label:"Recovery", habits:[{label:"Slept 7-8 hrs",w:3},{label:"Slept on time",w:2},{label:"No overload / rest if needed",w:1}]},
+  {id:"energy",   label:"Energy",   habits:[{label:"No adult content",w:4},{label:"No fap",w:3},{label:"Redirected urge into a system action",w:3}]},
   {id:"beauty",   label:"Beauty",   habits:[{label:"Full grooming done",w:3},{label:"Skincare done",w:2},{label:"Dressed intentionally",w:2},{label:"Dental hygiene",w:1}]},
   {id:"nutrition",label:"Nutrition",habits:[{label:"Hit calorie target",w:3},{label:"Hit protein target",w:3},{label:"No junk food",w:2}]},
   {id:"fitness",  label:"Fitness",  habits:[{label:"Completed full workout",w:3},{label:"Hit intensity / PR attempt",w:3},{label:"Walk 8-10k steps",w:3},{label:"Went to the gym",w:1}]},
@@ -236,7 +268,6 @@ function Flywheel({onSelect}){
     if(svg&&!_fwBuilt){_fwBuilt=true;buildFlywheel();}
     return()=>{window._fwOnSelect=null;};
   },[onSelect]);
-
   return (
     <div style={{background:"#0a0a0a",border:"1px solid #1a1a1a",borderRadius:10,padding:14}}>
       <svg id="fw-svg" width="100%" viewBox="0 0 680 640" style={{display:"block"}}>
@@ -301,9 +332,7 @@ function ProtocolDetail({id,onBack}){
   const S={bg:"#000",card:"#0a0a0a",border:"#1a1a1a",text:"#e8e8e8",muted:"#555",accent:"#4a9eff",dim:"#111"};
   const dp=PROTOCOLS.find(d=>d.id===id);
   if(!dp)return null;
-
   const hdr=(title)=><div style={{fontSize:11,fontWeight:600,color:"#777",textTransform:"uppercase",letterSpacing:1,marginBottom:8,marginTop:4}}>{title}</div>;
-
   const renderSec=(sec,i)=>{
     if(sec.type==="layers") return(
       <div key={i} style={{marginBottom:16}}>
@@ -398,7 +427,6 @@ function ProtocolDetail({id,onBack}){
     );
     return null;
   };
-
   return (
     <div>
       <button onClick={onBack} style={{background:"transparent",border:"1px solid #1a1a1a",borderRadius:6,padding:"6px 12px",color:"#555",fontSize:12,cursor:"pointer",marginBottom:14}}>‹ Back</button>
@@ -407,7 +435,7 @@ function ProtocolDetail({id,onBack}){
           <div style={{fontSize:16,fontWeight:600}}>{dp.label}</div>
         </div>
         <div style={{padding:"14px 16px"}}>
-          {dp.sections ? dp.sections.map((sec,i)=>renderSec(sec,i)) :
+          {dp.sections?dp.sections.map((sec,i)=>renderSec(sec,i)):
             dp.items.map((item,i)=>(
               <div key={i} style={{fontSize:13,color:"#e8e8e8",lineHeight:1.8,paddingBottom:i<dp.items.length-1?12:0,marginBottom:i<dp.items.length-1?12:0,borderBottom:i<dp.items.length-1?"1px solid #111":"none"}}>{item}</div>
             ))
@@ -422,6 +450,7 @@ function App(){
   const [tab,setTab]=useState("daily");
   const [days,setDays]=useState(ld);
   const [today]=useState(toDay());
+  const [logDate,setLogDate]=useState(toDay());
   const [exp,setExp]=useState({});
   const [calIn,setCalIn]=useState("");
   const [steps,setSteps]=useState("");
@@ -434,15 +463,15 @@ function App(){
 
   const upd=(nd)=>{setDays(nd);sv(nd);};
   const toggle=(domId,idx)=>{
-    const d=days[today]||{checks:{}},checks={...d.checks};
+    const d=days[logDate]||{checks:{}},checks={...d.checks};
     const domain=DOMAINS.find(x=>x.id===domId);
     const arr=[...(checks[domId]||domain.habits.map(()=>false))];
     arr[idx]=!arr[idx];checks[domId]=arr;
-    upd({...days,[today]:{...d,checks}});
+    upd({...days,[logDate]:{...d,checks}});
   };
   const saveDay=()=>{
-    const d=days[today]||{checks:{}};
-    upd({...days,[today]:{...d,calIn:Number(calIn)||0,calBurn:calcBurn(wType,steps),stepsNum:Number(steps)||0,weight:Number(wt)||0,workoutType:wType,workoutNotes:wNotes}});
+    const d=days[logDate]||{checks:{}};
+    upd({...days,[logDate]:{...d,calIn:Number(calIn)||0,calBurn:calcBurn(wType,steps),stepsNum:Number(steps)||0,weight:Number(wt)||0,workoutType:wType,workoutNotes:wNotes}});
     alert("Saved!");
   };
 
@@ -453,13 +482,13 @@ function App(){
   const streak=()=>{let s=0;const d=new Date();while(true){const k=d.toISOString().slice(0,10);if(dayPct(days[k])>0){s++;d.setDate(d.getDate()-1);}else break;}return s;};
   const avg7=(d)=>Math.round(L7().reduce((a,dt)=>a+dPct(days[dt]?.checks?.[d.id],d.habits),0)/7);
 
-  const exportD=()=>{const b=new Blob([JSON.stringify(days,null,2)],{type:"application/json"});const u=URL.createObjectURL(b);const a=document.createElement("a");a.href=u;a.download="lifeOS_"+today+".json";a.click();URL.revokeObjectURL(u);};
+  const exportD=()=>{const b=new Blob([JSON.stringify(days,null,2)],{type:"application/json"});const u=URL.createObjectURL(b);const a=document.createElement("a");a.href=u;a.download="operaxis_"+today+".json";a.click();URL.revokeObjectURL(u);};
   const importD=(e)=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=(ev)=>{try{const p=JSON.parse(ev.target.result);if(typeof p==="object"&&p!==null){upd(p);alert("Imported!");}else alert("Invalid.");}catch{alert("Error.");}};r.readAsText(f);e.target.value="";};
 
   const S={bg:"#000",card:"#0a0a0a",border:"#1a1a1a",text:"#e8e8e8",muted:"#555",accent:"#4a9eff",dim:"#111"};
   const C=(ex={})=>({background:S.card,border:`1px solid ${S.border}`,borderRadius:10,...ex});
 
-  const td=days[today]||{checks:{}};
+  const td=days[logDate]||{checks:{}};
   const tPct=dayPct(td),str=streak();
   const last7=L7(),last30=L30();
   const rDays=dRange==="weekly"?last7:mDays();
@@ -493,9 +522,20 @@ function App(){
 
       <div style={{padding:16}}>
 
-        {/* DAILY */}
         {tab==="daily" && (
           <div>
+            {/* Date selector */}
+            <div style={{...C({borderRadius:8}),padding:"10px 14px",marginBottom:14,display:"flex",alignItems:"center",gap:12}}>
+              <button onClick={()=>{const d=new Date(logDate);d.setDate(d.getDate()-1);setLogDate(d.toISOString().slice(0,10));}}
+                style={{background:"transparent",border:`1px solid ${S.border}`,borderRadius:6,padding:"5px 12px",color:S.muted,fontSize:16,cursor:"pointer"}}>‹</button>
+              <div style={{flex:1,textAlign:"center"}}>
+                <input type="date" value={logDate} max={today} onChange={e=>setLogDate(e.target.value)}
+                  style={{background:"transparent",border:"none",color:logDate===today?S.accent:S.text,fontSize:13,fontWeight:500,textAlign:"center",cursor:"pointer",width:"100%"}}/>
+                {logDate!==today&&<div style={{fontSize:10,color:"#f59e0b",marginTop:2}}>Logging past day</div>}
+              </div>
+              <button onClick={()=>{const d=new Date(logDate);d.setDate(d.getDate()+1);const next=d.toISOString().slice(0,10);if(next<=today)setLogDate(next);}}
+                style={{background:"transparent",border:`1px solid ${S.border}`,borderRadius:6,padding:"5px 12px",color:logDate===today?S.dim:S.muted,fontSize:16,cursor:logDate===today?"default":"pointer"}}>›</button>
+            </div>
             {DOMAINS.map(domain=>{
               const checks=td.checks?.[domain.id]||domain.habits.map(()=>false);
               const pct=dPct(checks,domain.habits),isOpen=exp[domain.id]!==false;
@@ -566,7 +606,6 @@ function App(){
           </div>
         )}
 
-        {/* DASHBOARD */}
         {tab==="dashboard" && (
           <div>
             <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:10,marginBottom:16}}>
@@ -618,7 +657,6 @@ function App(){
           </div>
         )}
 
-        {/* MONTHLY */}
         {tab==="monthly" && (
           <div>
             <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:14}}>
@@ -671,7 +709,6 @@ function App(){
           </div>
         )}
 
-        {/* WEEKLY */}
         {tab==="weekly" && (
           <div>
             <div style={{fontSize:13,color:S.muted,marginBottom:14}}>Week ending {today}</div>
@@ -703,7 +740,6 @@ function App(){
           </div>
         )}
 
-        {/* BODY */}
         {tab==="body" && (
           <div>
             <div style={{display:"flex",gap:8,marginBottom:14}}>
@@ -773,11 +809,9 @@ function App(){
           </div>
         )}
 
-        {/* SYSTEM */}
         {tab==="system" && !activeProt && <Flywheel onSelect={(key)=>{if(PROTOCOLS.find(d=>d.id===key))setActiveProt(key);}}/>}
         {tab==="system" && activeProt && <ProtocolDetail id={activeProt} onBack={()=>setActiveProt(null)}/>}
 
-        {/* SETTINGS */}
         {tab==="settings" && (
           <div>
             <div style={{...C(),overflow:"hidden",marginBottom:14}}>
