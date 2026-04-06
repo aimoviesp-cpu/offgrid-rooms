@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>System</title>
+<title>Life OS</title>
 <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
 <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
 <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -16,841 +16,703 @@ input,textarea{outline:none;font-family:inherit}
 ::-webkit-scrollbar{width:4px;height:4px}
 ::-webkit-scrollbar-track{background:#0a0a0a}
 ::-webkit-scrollbar-thumb{background:#1a1a1a;border-radius:2px}
+.nc{cursor:pointer;transition:opacity .2s}
+.nc:hover{opacity:.75}
+#detail-panel{background:#111;border-radius:10px;border:1px solid #1a1a1a;padding:12px 14px;margin-top:12px;font-size:13px;color:#888;line-height:1.6;display:none}
+#detail-panel b{color:#e8e8e8;font-weight:500;display:block;margin-bottom:4px;font-size:14px}
 </style>
 </head>
 <body>
 <div id="root"></div>
-<script type="text/babel">
-const { useState, useRef, useEffect } = React;
-
-const DOMAINS = [
-{ id:“mental”, label:“Mental”, emoji:””, habits:[
-{label:“Deep work block (2+ hrs)”, w:3},
-{label:“Learned or created something”, w:2},
-{label:“Low screen time”, w:1},
-]},
-{ id:“recovery”, label:“Recovery”, emoji:“💤”, habits:[
-{label:“Slept 7-8 hrs”, w:3},
-{label:“Slept on time”, w:2},
-{label:“No overload / rest if needed”, w:1},
-]},
-{ id:“beauty”, label:“Beauty”, emoji:“✨”, habits:[
-{label:“Full grooming done”, w:3},
-{label:“Skincare done”, w:2},
-{label:“Dressed intentionally”, w:2},
-{label:“Dental hygiene”, w:1},
-]},
-{ id:“nutrition”, label:“Nutrition”, emoji:“🥗”, habits:[
-{label:“Hit calorie target”, w:3},
-{label:“Hit protein target”, w:3},
-{label:“No junk food”, w:2},
-]},
-{ id:“fitness”, label:“Fitness”, emoji:“🏆”, habits:[
-{label:“Completed full workout”, w:3},
-{label:“Hit intensity / PR attempt”, w:3},
-{label:“Walk 8-10k steps”, w:2},
-{label:“Went to the gym”, w:2},
-]},
-{ id:“financial”, label:“Financial”, emoji:“💰”, habits:[
-{label:“Worked on an asset”, w:3},
-{label:“Saved money”, w:2},
-{label:“Tracked net worth”, w:1},
-]},
-{ id:“charisma”, label:“Charisma”, emoji:“🗣”, habits:[
-{label:“Led an interaction”, w:3},
-{label:“Initiated a conversation”, w:2},
-{label:“Was fully present”, w:2},
-]},
-{ id:“seduction”, label:“Seduction”, emoji:“🔥”, habits:[
-{label:“Approached someone”, w:3},
-{label:“Flirted intentionally”, w:2},
-{label:“Trained a seduction skill”, w:2},
-]},
-];
-
-const DOMAIN_PROTOCOLS = [
-{ id:“resources”, label:“Resources”, color:”#1a3a2a”, border:”#2d6b4a”, items:[
-“Layer 1 — Immediate Survival (0-3 months): Lead income (job, freelance), Weekly income target”,
-“Layer 2 — Foundation (3-12 months): Save $5k as a war chest, Pick ONE business model and commit, Learn one monetizable skill obsessively”,
-“Layer 3 — Business Build (12+ months): Launch the side hustle, Define revenue targets, Scale or replace job income”,
-“Mission: I sell the system that makes transformation obvious — not because he’s trying, but because he has a system.”,
-]},
-{ id:“mental”, label:“Mental”, color:”#1a1a3a”, border:”#3a3a8a”, items:[
-“OODA Protocol: Every morning 5 minutes decides your main objectives for the day right after waking up.”,
-“Master Mind Protocol: Read or listen for 30 minutes any kind of non-fiction book.”,
-“Mental Clarity — Minimum Digital Noise: Must be educational, No multitasking dynamics, No red pill, Only algo tips allow”,
-“Hard Limits: No movies, No scrolling, No series, No adult content”,
-“Lite System: Read 3 sentences from a book.”,
-]},
-{ id:“physical”, label:“Physical”, color:”#1a2a1a”, border:”#3a6a3a”, items:[
-“Fitness: Workout 5 times a week — Push: Shoulder, upper chest / Pull: Biceps, forearms, back / Lower: Legs and glutes / Rest / Calisthenics / 8-10k steps”,
-“Nutrition: Daily: Eat clean 2130 cals / 200g protein / 70g fat”,
-“Lite version: 20 min walk / 20-30 min light workout”,
-“Stats: Shoulder side cable raise: 20lb 12-15 reps / Shoulder back split pull cable: 45lb 13 reps”,
-]},
-{ id:“charisma”, label:“Charisma”, color:”#1a2a3a”, border:”#2a5a7a”, items:[
-“Every day Mon-Fri: Talk to one stranger or say hi, nothing special and go with the flow.”,
-“Saturday: Approach and flirt with one girl you find attractive.”,
-“Posture and expression review: Record yourself for 5 minutes talking about any subject, review and calibrate.”,
-“Lite Version: If very tired — Greet someone who doesn’t live inside home. Mon-Fri: Greet a girl you don’t know that well.”,
-]},
-{ id:“beauty”, label:“Beauty”, color:”#3a1a2a”, border:”#7a2a4a”, items:[
-“Facial Grooming — Daily / Nail clipping — Weekly / Shower — Daily / Face wash — Daily / Teeth Hygiene — Daily”,
-“Eye bags reduction — Event / Face moisturizer — Daily / Ear hygiene — Every other Day / Hair style — Daily / Cologne — Daily”,
-“Style: Plan in advance your clothes for the week. Every week plan your clothes.”,
-]},
-];
-
-const WORKOUT_TYPES = [“Push”,“Pull”,“Lower”,“Calisthenics”,“Rest”];
-const BMR = 1969;
-const BASE_DAILY_BURN = Math.round(BMR * 1.2);
-const WORKOUT_BURNS = {Push:408,Pull:408,Lower:476,Calisthenics:544,Rest:0};
-const KCAL_PER_STEP = 0.045;
-const calcTotalBurn = (wt, steps) => BASE_DAILY_BURN + (WORKOUT_BURNS[wt]||0) + Math.round((Number(steps)||0)*KCAL_PER_STEP);
-
-const todayStr = () => new Date().toISOString().slice(0,10);
-const loadData = () => { try { return JSON.parse(localStorage.getItem(“lifeOS_days”)||”{}”); } catch { return {}; } };
-const saveData = (d) => { try { localStorage.setItem(“lifeOS_days”, JSON.stringify(d)); } catch {} };
-
-const domainPct = (checks, habits) => {
-if (!checks) return 0;
-const total = habits.reduce((a,h)=>a+h.w,0);
-const earned = habits.reduce((a,h,i)=>a+(checks[i]?h.w:0),0);
-return Math.round((earned/total)*100);
-};
-const dailyPct = (dayData) => {
-if (!dayData) return 0;
-const sum = DOMAINS.reduce((a,d)=>a+domainPct(dayData.checks?.[d.id],d.habits),0);
-return Math.round(sum/DOMAINS.length);
-};
-const pctColor = (p) => p>=75?”#34d399”:p>=40?”#60a5fa”:p>0?”#f59e0b”:”#333”;
-
-function BarLineChart({data}) {
-const ref = useRef(null); const chart = useRef(null);
-useEffect(()=>{
-if (!ref.current) return;
-if (chart.current) chart.current.destroy();
-chart.current = new Chart(ref.current,{
-data:{
-labels:data.map(d=>d.date.slice(5)),
-datasets:[
-{type:“bar”,label:“Eaten”,data:data.map(d=>d.calIn||0),backgroundColor:”#4a9eff88”,borderColor:”#4a9eff”,borderWidth:1},
-{type:“bar”,label:“Burned”,data:data.map(d=>d.calBurn||0),backgroundColor:”#34d39988”,borderColor:”#34d399”,borderWidth:1},
-{type:“line”,label:“Deficit”,data:data.map(d=>Math.max(0,(d.calBurn||0)-(d.calIn||0))),borderColor:”#f59e0b”,backgroundColor:”#f59e0b22”,tension:0.3,fill:false,pointRadius:3,pointBackgroundColor:”#f59e0b”},
-]
-},
-options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:”#555”,font:{size:10}},grid:{color:”#111”}},y:{ticks:{color:”#555”,font:{size:10}},grid:{color:”#111”}}}}
-});
-return ()=>{ if(chart.current) chart.current.destroy(); };
-},[data]);
-return <canvas ref={ref} style={{width:“100%”,height:“100%”}}/>;
-}
-
-function WeightChart({data}) {
-const ref = useRef(null); const chart = useRef(null);
-useEffect(()=>{
-if (!ref.current) return;
-if (chart.current) chart.current.destroy();
-const filtered = data.filter(d=>d.weight);
-if (!filtered.length) return;
-chart.current = new Chart(ref.current,{
-type:“line”,
-data:{labels:filtered.map(d=>d.date.slice(5)),datasets:[{label:“Weight”,data:filtered.map(d=>d.weight),borderColor:”#a78bfa”,backgroundColor:”#a78bfa22”,tension:0.3,pointRadius:4,pointBackgroundColor:”#a78bfa”,fill:true}]},
-options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:”#555”,font:{size:10}},grid:{color:”#111”}},y:{ticks:{color:”#555”,font:{size:10}},grid:{color:”#111”}}}}
-});
-return ()=>{ if(chart.current) chart.current.destroy(); };
-},[data]);
-return <canvas ref={ref} style={{width:“100%”,height:“100%”}}/>;
-}
-
-function App() {
-const [tab, setTab] = useState(“daily”);
-const [days, setDays] = useState(loadData);
-const [today] = useState(todayStr());
-const [expanded, setExpanded] = useState({});
-const [calIn, setCalIn] = useState(””);
-const [steps, setSteps] = useState(””);
-const [weight, setWeight] = useState(””);
-const [workoutType, setWorkoutType] = useState(””);
-const [workoutNotes, setWorkoutNotes] = useState(””);
-const [deficitRange, setDeficitRange] = useState(“weekly”);
-const [monthOffset, setMonthOffset] = useState(0);
-const [activeDomain, setActiveDomain] = useState(null);
-
-const updateDays = (nd) => { setDays(nd); saveData(nd); };
-
-const toggleHabit = (domainId, idx) => {
-const d = days[today]||{checks:{}};
-const checks = {…d.checks};
-const domain = DOMAINS.find(x=>x.id===domainId);
-const arr = […(checks[domainId]||domain.habits.map(()=>false))];
-arr[idx] = !arr[idx];
-checks[domainId] = arr;
-updateDays({…days,[today]:{…d,checks}});
-};
-
-const saveDaily = () => {
-const d = days[today]||{checks:{}};
-const stepsNum = Number(steps)||0;
-updateDays({…days,[today]:{…d,calIn:Number(calIn)||0,calBurn:calcTotalBurn(workoutType,stepsNum),stepsNum,weight:Number(weight)||0,workoutType,workoutNotes}});
-alert(“Saved!”);
-};
-
-const getLast7 = () => Array.from({length:7},(*,i)=>{ const d=new Date(); d.setDate(d.getDate()-(6-i)); return d.toISOString().slice(0,10); });
-const getLast30 = () => Array.from({length:30},(*,i)=>{ const d=new Date(); d.setDate(d.getDate()-(29-i)); return d.toISOString().slice(0,10); });
-const getMonthDays = (offset=0) => {
-const now=new Date(); now.setDate(1); now.setMonth(now.getMonth()+offset);
-const y=now.getFullYear(),m=now.getMonth();
-return Array.from({length:new Date(y,m+1,0).getDate()},(_,i)=>`${y}-${String(m+1).padStart(2,"0")}-${String(i+1).padStart(2,"0")}`);
-};
-const getMonthLabel = (offset=0) => {
-const now=new Date(); now.setDate(1); now.setMonth(now.getMonth()+offset);
-return now.toLocaleString(“default”,{month:“long”,year:“numeric”});
-};
-const getStreak = () => {
-let streak=0; const d=new Date();
-while(true){ const k=d.toISOString().slice(0,10); if(dailyPct(days[k])>0){streak++;d.setDate(d.getDate()-1);}else break; }
-return streak;
-};
-
-const exportData = () => {
-const blob=new Blob([JSON.stringify(days,null,2)],{type:“application/json”});
-const url=URL.createObjectURL(blob); const a=document.createElement(“a”); a.href=url; a.download=`lifeOS_backup_${today}.json`; a.click(); URL.revokeObjectURL(url);
-};
-const importData = (e) => {
-const file=e.target.files[0]; if(!file) return;
-const reader=new FileReader();
-reader.onload=(ev)=>{ try{ const p=JSON.parse(ev.target.result); if(typeof p===“object”&&p!==null){updateDays(p);alert(“Imported!”);} else alert(“Invalid file.”); } catch{ alert(“Could not read file.”); } };
-reader.readAsText(file); e.target.value=””;
-};
-
-const s = {bg:”#000”,card:”#0a0a0a”,border:”#1a1a1a”,text:”#e8e8e8”,muted:”#555”,accent:”#4a9eff”,dim:”#111”};
-const C = (ex={}) => ({background:s.card,border:`1px solid ${s.border}`,borderRadius:10,…ex});
-
-const todayData = days[today]||{checks:{}};
-const todayPct = dailyPct(todayData);
-const streak = getStreak();
-const last7 = getLast7();
-const last30 = getLast30();
-
-const deficitDays = deficitRange===“weekly”?last7:getMonthDays();
-const rangeCalIn   = deficitDays.reduce((a,dt)=>a+(days[dt]?.calIn||0),0);
-const rangeCalBurn = deficitDays.reduce((a,dt)=>a+(days[dt]?.calBurn||0),0);
-const rangeDeficit = rangeCalBurn-rangeCalIn;
-const rangeSteps   = deficitDays.reduce((a,dt)=>a+(days[dt]?.stepsNum||0),0);
-const chartData    = deficitDays.map(dt=>({date:dt,calIn:days[dt]?.calIn||0,calBurn:days[dt]?.calBurn||0}));
-
-const weekGymDays = last7.filter(dt=>days[dt]?.workoutType&&days[dt].workoutType!==“Rest”);
-const weekWorkoutSummary = last7.map(dt=>({date:dt,type:days[dt]?.workoutType||””,notes:days[dt]?.workoutNotes||””,steps:days[dt]?.stepsNum||0})).filter(d=>d.type);
-const latestWeight = […last30].reverse().find(dt=>days[dt]?.weight);
-const weightChartData = last30.map(dt=>({date:dt,weight:days[dt]?.weight||0}));
-
-const previewBurn = calcTotalBurn(workoutType,steps);
-const previewDeficit = previewBurn-(Number(calIn)||0);
-const domainAvg7 = (d) => Math.round(last7.reduce((a,dt)=>a+domainPct(days[dt]?.checks?.[d.id],d.habits),0)/7);
-
-const tabs = [
-{id:“daily”,label:“Daily”},{id:“dashboard”,label:“Dashboard”},
-{id:“monthly”,label:“Monthly”},{id:“weekly”,label:“Weekly”},
-{id:“body”,label:“Body”},{id:“domains”,label:“Domains”},
-{id:“system”,label:“System”},{id:“settings”,label:“Settings”}
-];
-
-return (
-<div style={{background:s.bg,minHeight:“100vh”,color:s.text,paddingBottom:80}}>
-
-```
-  {/* TOP HEADER */}
-  <div style={{background:s.card,borderBottom:`1px solid ${s.border}`,padding:"14px 16px",position:"sticky",top:0,zIndex:10,textAlign:"center"}}>
-    <div style={{fontSize:18,fontWeight:600,letterSpacing:1,color:s.text}}>SYSTEM</div>
-  </div>
-
-  {/* NAV */}
-  <div style={{display:"flex",background:s.card,borderBottom:`1px solid ${s.border}`,overflowX:"auto"}}>
-    {tabs.map(t=>(
-      <button key={t.id} onClick={()=>{ setTab(t.id); setActiveDomain(null); }}
-        style={{flex:1,minWidth:44,padding:"10px 1px",border:"none",background:"none",
-          color:tab===t.id?s.accent:s.muted,fontSize:10,fontWeight:tab===t.id?600:400,
-          borderBottom:tab===t.id?`2px solid ${s.accent}`:"2px solid transparent",cursor:"pointer",whiteSpace:"nowrap"}}>
-        {t.label}
-      </button>
-    ))}
-  </div>
-
-  {/* CONTENT */}
-  <div style={{padding:16}}>
-
-    {/* ── DAILY ── */}
-    {tab==="daily" && (
-      <div>
-        {DOMAINS.map(domain=>{
-          const checks = todayData.checks?.[domain.id]||domain.habits.map(()=>false);
-          const pct = domainPct(checks,domain.habits);
-          const isOpen = expanded[domain.id]!==false;
-          const totalW = domain.habits.reduce((a,h)=>a+h.w,0);
-          return (
-            <div key={domain.id} style={{...C(),marginBottom:10,overflow:"hidden"}}>
-              <div onClick={()=>setExpanded(e=>({...e,[domain.id]:!isOpen}))} style={{display:"flex",alignItems:"center",padding:"12px 14px",cursor:"pointer"}}>
-                <span style={{flex:1,fontWeight:500,fontSize:15}}>{domain.label}</span>
-                <span style={{fontSize:13,fontWeight:600,color:pctColor(pct),marginRight:10}}>{pct}%</span>
-                <span style={{color:s.muted,fontSize:11}}>{isOpen?"▲":"▼"}</span>
-              </div>
-              <div style={{height:2,background:s.border}}>
-                <div style={{height:"100%",width:`${pct}%`,background:pctColor(pct),transition:"width 0.3s"}}/>
-              </div>
-              {isOpen && (
-                <div style={{borderTop:`1px solid ${s.border}`,padding:"8px 14px"}}>
-                  {domain.habits.map((h,i)=>{
-                    const habPct = Math.round((h.w/totalW)*100);
-                    return (
-                      <div key={i} onClick={()=>toggleHabit(domain.id,i)}
-                        style={{display:"flex",alignItems:"center",gap:10,padding:"8px 0",cursor:"pointer",borderBottom:i<domain.habits.length-1?`1px solid ${s.dim}`:"none"}}>
-                        <div style={{width:18,height:18,border:`1.5px solid ${checks[i]?s.accent:s.muted}`,borderRadius:4,background:checks[i]?s.accent:"transparent",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
-                          {checks[i]&&<span style={{color:"#000",fontSize:11,fontWeight:700}}>✓</span>}
-                        </div>
-                        <span style={{flex:1,fontSize:14,color:checks[i]?s.muted:s.text,textDecoration:checks[i]?"line-through":"none"}}>{h.label}</span>
-                        <span style={{fontSize:11,color:checks[i]?s.accent:s.muted,minWidth:32,textAlign:"right"}}>{habPct}%</span>
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
-            </div>
-          );
-        })}
-
-        <div style={{...C(),padding:14,marginBottom:10}}>
-          <div style={{fontSize:14,fontWeight:500,marginBottom:14}}>Nutrition & Body</div>
-          {[["Calories eaten",calIn,setCalIn,"e.g. 2000"],["Steps walked",steps,setSteps,"e.g. 8500"],["Weight (lbs)",weight,setWeight,"e.g. 200"]].map(([label,val,setter,ph])=>(
-            <div key={label} style={{marginBottom:12}}>
-              <div style={{fontSize:11,color:s.muted,marginBottom:4}}>{label}</div>
-              <input value={val} onChange={e=>setter(e.target.value)} type="number" placeholder={ph}
-                style={{width:"100%",background:s.bg,border:`1px solid ${s.border}`,borderRadius:6,padding:"8px 10px",color:s.text,fontSize:14}}/>
-            </div>
-          ))}
-          <div style={{marginBottom:12}}>
-            <div style={{fontSize:11,color:s.muted,marginBottom:6}}>Workout type</div>
-            <div style={{display:"flex",flexWrap:"wrap",gap:6}}>
-              {WORKOUT_TYPES.map(t=>(
-                <button key={t} onClick={()=>setWorkoutType(workoutType===t?"":t)}
-                  style={{padding:"5px 12px",borderRadius:20,border:`1px solid ${workoutType===t?s.accent:s.border}`,
-                    background:workoutType===t?"#4a9eff22":"transparent",color:workoutType===t?s.accent:s.muted,fontSize:12,cursor:"pointer"}}>
-                  {t}
-                </button>
-              ))}
-            </div>
-          </div>
-          <div style={{marginBottom:14}}>
-            <div style={{fontSize:11,color:s.muted,marginBottom:4}}>Workout notes / PRs</div>
-            <textarea value={workoutNotes} onChange={e=>setWorkoutNotes(e.target.value)} rows={2} placeholder="e.g. Bench 3x8 @ 185lbs..."
-              style={{width:"100%",background:s.bg,border:`1px solid ${s.border}`,borderRadius:6,padding:"8px 10px",color:s.text,fontSize:13,resize:"vertical"}}/>
-          </div>
-          {(calIn||steps||workoutType)&&(
-            <div style={{background:s.dim,borderRadius:8,padding:"10px 12px",marginBottom:14,borderLeft:`3px solid ${previewDeficit>0?"#34d399":"#f87171"}`}}>
-              <div style={{fontSize:11,color:s.muted,marginBottom:6}}>Estimated burn today</div>
-              <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:8,marginBottom:8}}>
-                {[["Base",BASE_DAILY_BURN,"#555"],["Workout",WORKOUT_BURNS[workoutType]||0,"#60a5fa"],["Steps",Math.round((Number(steps)||0)*KCAL_PER_STEP),"#34d399"]].map(([l,v,c])=>(
-                  <div key={l}><div style={{fontSize:10,color:s.muted}}>{l}</div><div style={{fontSize:13,fontWeight:600,color:c}}>{v} kcal</div></div>
-                ))}
-              </div>
-              <div style={{display:"flex",justifyContent:"space-between",paddingTop:8,borderTop:`1px solid ${s.border}`}}>
-                <span style={{fontSize:12,color:s.muted}}>Total: <span style={{color:s.text,fontWeight:600}}>{previewBurn.toLocaleString()} kcal</span></span>
-                <span style={{fontSize:12,fontWeight:600,color:previewDeficit>0?"#34d399":"#f87171"}}>{previewDeficit>0?"✓ −":"↑ +"}{Math.abs(previewDeficit).toLocaleString()} kcal</span>
-              </div>
-            </div>
-          )}
-          <button onClick={saveDaily} style={{background:s.accent,color:"#000",border:"none",borderRadius:6,padding:"8px 16px",fontSize:13,fontWeight:600,cursor:"pointer"}}>Save Day</button>
-        </div>
-      </div>
-    )}
-
-    {/* ── DASHBOARD ── */}
-    {tab==="dashboard" && (
-      <div>
-        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:10,marginBottom:16}}>
-          {[["⚡ Streak",`${streak}d`],["Today",`${todayPct}%`],["7d Avg",`${Math.round(last7.reduce((a,d)=>a+dailyPct(days[d]),0)/7)}%`]].map(([l,v])=>(
-            <div key={l} style={{...C({borderRadius:8}),padding:"10px 12px"}}>
-              <div style={{fontSize:10,color:s.muted,marginBottom:4}}>{l}</div>
-              <div style={{fontSize:20,fontWeight:600}}>{v}</div>
-            </div>
-          ))}
-        </div>
-        <div style={{...C(),marginBottom:14,overflow:"hidden"}}>
-          <div style={{padding:"10px 14px",fontSize:13,fontWeight:500,borderBottom:`1px solid ${s.border}`}}>Last 7 Days</div>
-          <div style={{overflowX:"auto"}}>
-            <table style={{width:"100%",borderCollapse:"collapse",fontSize:12,minWidth:380}}>
-              <thead>
-                <tr style={{borderBottom:`1px solid ${s.border}`}}>
-                  <th style={{padding:"8px 10px",textAlign:"left",color:s.muted,fontWeight:500}}>Date</th>
-                  {DOMAINS.map(d=><th key={d.id} style={{padding:"8px 5px",color:s.muted,fontWeight:500,fontSize:10,whiteSpace:"nowrap"}}>{d.label.slice(0,3)}</th>)}
-                  <th style={{padding:"8px 8px",color:s.muted,fontWeight:500}}>Day</th>
-                </tr>
-              </thead>
-              <tbody>
-                {last7.map(dt=>{
-                  const dd=days[dt]||{}; const dp=dailyPct(dd); const isToday=dt===today;
-                  return (
-                    <tr key={dt} style={{borderBottom:`1px solid ${s.dim}`,background:isToday?"#0d1a2a":"transparent"}}>
-                      <td style={{padding:"7px 10px",color:isToday?s.accent:s.muted,fontSize:11}}>{dt.slice(5)}</td>
-                      {DOMAINS.map(d=>{ const p=domainPct(dd.checks?.[d.id],d.habits); return <td key={d.id} style={{padding:"7px 5px",textAlign:"center",fontSize:11,color:pctColor(p)}}>{p>0?p+"%":"·"}</td>; })}
-                      <td style={{padding:"7px 8px",textAlign:"center",fontWeight:600,fontSize:12,color:pctColor(dp)}}>{dp>0?dp+"%":"·"}</td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-        </div>
-        <div style={{...C(),overflow:"hidden"}}>
-          <div style={{padding:"10px 14px",fontSize:13,fontWeight:500,borderBottom:`1px solid ${s.border}`}}>7-Day Domain Averages</div>
-          {DOMAINS.map(d=>{ const avg=domainAvg7(d); return (
-            <div key={d.id} style={{padding:"10px 14px",borderBottom:`1px solid ${s.dim}`}}>
-              <div style={{display:"flex",justifyContent:"space-between",marginBottom:5}}>
-                <span style={{fontSize:13}}>{d.emoji} {d.label}</span>
-                <span style={{fontSize:13,fontWeight:600,color:pctColor(avg)}}>{avg}%</span>
-              </div>
-              <div style={{height:3,background:s.border,borderRadius:2}}>
-                <div style={{height:"100%",width:`${avg}%`,background:pctColor(avg),borderRadius:2}}/>
-              </div>
-            </div>
-          );})}
-        </div>
-      </div>
-    )}
-
-    {/* ── MONTHLY ── */}
-    {tab==="monthly" && (
-      <div>
-        <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:14}}>
-          <button onClick={()=>setMonthOffset(o=>o-1)} style={{background:"transparent",border:`1px solid ${s.border}`,borderRadius:6,padding:"6px 14px",color:s.muted,fontSize:16,cursor:"pointer"}}>‹</button>
-          <div style={{fontSize:15,fontWeight:500}}>{getMonthLabel(monthOffset)}</div>
-          <button onClick={()=>setMonthOffset(o=>Math.min(0,o+1))} style={{background:"transparent",border:`1px solid ${s.border}`,borderRadius:6,padding:"6px 14px",color:monthOffset===0?s.dim:s.muted,fontSize:16,cursor:monthOffset===0?"default":"pointer"}}>›</button>
-        </div>
-        <div style={{...C(),overflow:"hidden",marginBottom:14}}>
-          <div style={{overflowX:"auto"}}>
-            <table style={{width:"100%",borderCollapse:"collapse",fontSize:11,minWidth:520}}>
-              <thead>
-                <tr style={{borderBottom:`1px solid ${s.border}`}}>
-                  <th style={{padding:"8px 10px",textAlign:"left",color:s.muted,whiteSpace:"nowrap"}}>Day</th>
-                  {DOMAINS.map(d=><th key={d.id} style={{padding:"8px 6px",color:s.muted,minWidth:28,fontSize:10,whiteSpace:"nowrap"}}>{d.label.slice(0,3)}</th>)}
-                  <th style={{padding:"8px 8px",color:s.muted}}>Day%</th>
-                </tr>
-              </thead>
-              <tbody>
-                {getMonthDays(monthOffset).map(dt=>{
-                  const dd=days[dt]||{}; const dp=dailyPct(dd); const isToday=dt===today;
-                  return (
-                    <tr key={dt} style={{borderBottom:`1px solid ${s.dim}`,background:isToday?"#0d1a2a":"transparent"}}>
-                      <td style={{padding:"6px 10px",color:isToday?s.accent:s.muted}}>{dt.slice(8)}</td>
-                      {DOMAINS.map(d=>{ const p=domainPct(dd.checks?.[d.id],d.habits); return <td key={d.id} style={{padding:"6px 6px",textAlign:"center",fontSize:10,color:pctColor(p)}}>{p>0?p+"%":"·"}</td>; })}
-                      <td style={{padding:"6px 8px",textAlign:"center",fontWeight:600,fontSize:11,color:pctColor(dp)}}>{dp>0?dp+"%":"·"}</td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-        </div>
-        <div style={{...C(),overflow:"hidden"}}>
-          <div style={{padding:"10px 14px",fontSize:13,fontWeight:500,borderBottom:`1px solid ${s.border}`}}>Month Domain Averages</div>
-          {DOMAINS.map(d=>{
-            const mDays=getMonthDays(monthOffset);
-            const avg=Math.round(mDays.reduce((a,dt)=>a+domainPct(days[dt]?.checks?.[d.id],d.habits),0)/mDays.length);
-            return (
-              <div key={d.id} style={{display:"flex",alignItems:"center",padding:"9px 14px",borderBottom:`1px solid ${s.dim}`}}>
-                <div style={{flex:1}}>
-                  <div style={{display:"flex",justifyContent:"space-between",marginBottom:4}}>
-                    <span style={{fontSize:13}}>{d.label}</span>
-                    <span style={{fontSize:13,fontWeight:600,color:pctColor(avg)}}>{avg}%</span>
-                  </div>
-                  <div style={{height:3,background:s.border,borderRadius:2}}>
-                    <div style={{height:"100%",width:`${avg}%`,background:pctColor(avg),borderRadius:2}}/>
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-    )}
-
-    {/* ── WEEKLY ── */}
-    {tab==="weekly" && (
-      <div>
-        <div style={{fontSize:13,color:s.muted,marginBottom:14}}>Week ending {today}</div>
-        {DOMAINS.map(d=>{ const avg=domainAvg7(d); return (
-          <div key={d.id} style={{...C({borderRadius:8}),padding:"12px 14px",marginBottom:8,display:"flex",alignItems:"center"}}>
-            <div style={{flex:1}}>
-              <div style={{fontSize:13,fontWeight:500,marginBottom:5}}>{d.label}</div>
-              <div style={{height:3,background:s.border,borderRadius:2}}>
-                <div style={{height:"100%",width:`${avg}%`,background:pctColor(avg),borderRadius:2}}/>
-              </div>
-            </div>
-            <div style={{textAlign:"right",marginLeft:14}}>
-              <div style={{fontSize:18,fontWeight:600,color:pctColor(avg)}}>{avg}%</div>
-              <div style={{fontSize:10,color:s.muted}}>7d avg</div>
-            </div>
-          </div>
-        );})}
-        <div style={{...C(),padding:14,marginTop:6}}>
-          <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-end",marginBottom:14}}>
-            <div style={{fontSize:13,fontWeight:500}}>Overall Week</div>
-            <div>
-              <span style={{fontSize:28,fontWeight:700,color:pctColor(Math.round(last7.reduce((a,d)=>a+dailyPct(days[d]),0)/7))}}>{Math.round(last7.reduce((a,d)=>a+dailyPct(days[d]),0)/7)}%</span>
-              <div style={{fontSize:10,color:s.muted,textAlign:"right"}}>avg daily score</div>
-            </div>
-          </div>
-          <div style={{fontSize:12,color:s.muted,marginBottom:6}}>Reflection</div>
-          <textarea rows={3} placeholder="What went well? What didn't?"
-            style={{width:"100%",background:s.bg,border:`1px solid ${s.border}`,borderRadius:6,padding:"10px 12px",color:s.text,fontSize:13,resize:"vertical",marginBottom:10}}/>
-          <div style={{fontSize:12,color:s.muted,marginBottom:6}}>Focus next week</div>
-          <textarea rows={2} style={{width:"100%",background:s.bg,border:`1px solid ${s.border}`,borderRadius:6,padding:"10px 12px",color:s.text,fontSize:13,resize:"vertical"}}/>
-        </div>
-      </div>
-    )}
-
-    {/* ── BODY ── */}
-    {tab==="body" && (
-      <div>
-        <div style={{display:"flex",gap:8,marginBottom:14}}>
-          {["weekly","monthly"].map(r=>(
-            <button key={r} onClick={()=>setDeficitRange(r)}
-              style={{flex:1,padding:"8px 0",borderRadius:8,border:`1px solid ${deficitRange===r?s.accent:s.border}`,
-                background:deficitRange===r?"#4a9eff22":"transparent",color:deficitRange===r?s.accent:s.muted,
-                fontSize:13,fontWeight:deficitRange===r?600:400,cursor:"pointer"}}>
-              {r==="weekly"?"7 Days":"This Month"}
-            </button>
-          ))}
-        </div>
-        <div style={{...C(),overflow:"hidden",marginBottom:14}}>
-          <div style={{padding:"10px 14px",fontSize:13,fontWeight:500,borderBottom:`1px solid ${s.border}`}}>Calories — {deficitRange==="weekly"?"7 Day":"Month"}</div>
-          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:1,borderBottom:`1px solid ${s.border}`}}>
-            {[["Eaten",rangeCalIn,"#4a9eff"],["Burned",rangeCalBurn,"#34d399"],[rangeDeficit>=0?"Deficit":"Surplus",Math.abs(rangeDeficit),rangeDeficit>=0?"#34d399":"#f87171"]].map(([l,v,c])=>(
-              <div key={l} style={{padding:"12px 10px",background:s.dim}}>
-                <div style={{fontSize:10,color:s.muted,marginBottom:4}}>{l}</div>
-                <div style={{fontSize:16,fontWeight:600,color:c}}>{Number(v).toLocaleString()}</div>
-                <div style={{fontSize:10,color:s.muted}}>kcal</div>
-              </div>
-            ))}
-          </div>
-          <div style={{padding:"10px 14px",borderBottom:`1px solid ${s.border}`,display:"flex",gap:20}}>
-            <div><div style={{fontSize:10,color:s.muted,marginBottom:2}}>Total steps</div><div style={{fontSize:15,fontWeight:600}}>{rangeSteps.toLocaleString()}</div></div>
-            <div><div style={{fontSize:10,color:s.muted,marginBottom:2}}>Avg steps/day</div><div style={{fontSize:15,fontWeight:600}}>{Math.round(rangeSteps/deficitDays.length).toLocaleString()}</div></div>
-            <div><div style={{fontSize:10,color:s.muted,marginBottom:2}}>Days in deficit</div><div style={{fontSize:15,fontWeight:600,color:"#34d399"}}>{deficitDays.filter(dt=>(days[dt]?.calBurn||0)>(days[dt]?.calIn||0)).length}</div></div>
-          </div>
-          <div style={{padding:14}}>
-            <div style={{display:"flex",gap:16,marginBottom:10}}>
-              {[["■ Eaten","#4a9eff"],["■ Burned","#34d399"],["— Deficit","#f59e0b"]].map(([l,c])=>(
-                <span key={l} style={{fontSize:11,color:c}}>{l}</span>
-              ))}
-            </div>
-            <div style={{position:"relative",height:200}}><BarLineChart data={chartData}/></div>
-          </div>
-        </div>
-        <div style={{...C(),overflow:"hidden",marginBottom:14}}>
-          <div style={{padding:"10px 14px",fontSize:13,fontWeight:500,borderBottom:`1px solid ${s.border}`}}>Workouts — 7 Day</div>
-          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:1,borderBottom:`1px solid ${s.border}`}}>
-            {[["Sessions",`${weekGymDays.length} / 7`],["Avg steps",Math.round(last7.reduce((a,dt)=>a+(days[dt]?.stepsNum||0),0)/7).toLocaleString()],["Step burn",Math.round(last7.reduce((a,dt)=>a+Math.round((days[dt]?.stepsNum||0)*KCAL_PER_STEP),0)).toLocaleString()+" kcal"]].map(([l,v])=>(
-              <div key={l} style={{padding:"12px 10px",background:s.dim}}>
-                <div style={{fontSize:10,color:s.muted,marginBottom:4}}>{l}</div>
-                <div style={{fontSize:14,fontWeight:600,color:s.text}}>{v}</div>
-              </div>
-            ))}
-          </div>
-          {weekWorkoutSummary.length>0?(
-            <div style={{padding:"10px 14px"}}>
-              {weekWorkoutSummary.map((w,i)=>(
-                <div key={i} style={{padding:"8px 0",borderBottom:i<weekWorkoutSummary.length-1?`1px solid ${s.dim}`:"none"}}>
-                  <div style={{display:"flex",gap:10,alignItems:"center",marginBottom:w.notes?4:0}}>
-                    <div style={{fontSize:11,color:s.muted,minWidth:44}}>{w.date.slice(5)}</div>
-                    <div style={{padding:"2px 8px",background:"#4a9eff22",border:`1px solid #4a9eff44`,borderRadius:10,fontSize:11,color:s.accent}}>{w.type}</div>
-                    {w.steps>0&&<div style={{fontSize:11,color:s.muted}}>{w.steps.toLocaleString()} steps</div>}
-                  </div>
-                  {w.notes&&<div style={{fontSize:12,color:s.muted,paddingLeft:54,lineHeight:1.5}}>{w.notes}</div>}
-                </div>
-              ))}
-            </div>
-          ):(
-            <div style={{padding:14,fontSize:13,color:s.muted}}>No workouts logged this week.</div>
-          )}
-        </div>
-        <div style={{...C(),overflow:"hidden"}}>
-          <div style={{padding:"10px 14px",fontSize:13,fontWeight:500,borderBottom:`1px solid ${s.border}`}}>Weight — 30 Day</div>
-          <div style={{padding:"12px 14px",borderBottom:`1px solid ${s.border}`,display:"flex",gap:24,flexWrap:"wrap"}}>
-            <div>
-              <div style={{fontSize:10,color:s.muted,marginBottom:4}}>Latest</div>
-              <div style={{fontSize:22,fontWeight:600,color:"#a78bfa"}}>{latestWeight?`${days[latestWeight].weight} lbs`:"—"}</div>
-            </div>
-            {(()=>{
-              const wDays=last30.filter(dt=>days[dt]?.weight);
-              if(wDays.length<2) return null;
-              const diff=(days[wDays[wDays.length-1]].weight-days[wDays[0]].weight).toFixed(1);
-              return <div><div style={{fontSize:10,color:s.muted,marginBottom:4}}>30d change</div><div style={{fontSize:22,fontWeight:600,color:Number(diff)<0?"#34d399":"#f87171"}}>{diff>0?"+":""}{diff} lbs</div></div>;
-            })()}
-          </div>
-          <div style={{padding:14}}>
-            <div style={{position:"relative",height:160}}><WeightChart data={weightChartData}/></div>
-            {!weightChartData.some(d=>d.weight)&&<div style={{fontSize:13,color:s.muted,textAlign:"center",paddingTop:20}}>Log your weight in Daily to see the chart.</div>}
-          </div>
-        </div>
-      </div>
-    )}
-
-    {/* ── DOMAINS LIST ── */}
-    {tab==="domains" && !activeDomain && (
-      <div>
-        <div style={{fontSize:12,color:s.muted,marginBottom:14}}>Tap a domain to view its full protocol</div>
-        {DOMAIN_PROTOCOLS.map(dp=>(
-          <div key={dp.id} onClick={()=>setActiveDomain(dp.id)}
-            style={{background:s.card,border:`1px solid ${dp.border}`,borderRadius:10,marginBottom:12,overflow:"hidden",cursor:"pointer"}}>
-            <div style={{background:dp.color,padding:"12px 14px",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
-              <div style={{fontSize:14,fontWeight:600}}>{dp.label}</div>
-              <span style={{color:s.muted,fontSize:13}}>›</span>
-            </div>
-            <div style={{padding:"8px 14px",fontSize:12,color:s.muted}}>{dp.items[0].slice(0,72)}…</div>
-          </div>
-        ))}
-      </div>
-    )}
-
-    {/* ── DOMAINS DETAIL ── */}
-    {tab==="domains" && activeDomain && (()=>{
-      const dp=DOMAIN_PROTOCOLS.find(d=>d.id===activeDomain);
-      return (
-        <div>
-          <button onClick={()=>setActiveDomain(null)}
-            style={{background:"transparent",border:`1px solid ${s.border}`,borderRadius:6,padding:"6px 12px",color:s.muted,fontSize:12,cursor:"pointer",marginBottom:14}}>
-            ‹ Back
-          </button>
-          <div style={{background:s.card,border:`1px solid ${dp.border}`,borderRadius:10,overflow:"hidden"}}>
-            <div style={{background:dp.color,padding:"14px 16px",borderBottom:`1px solid ${dp.border}`}}>
-              <div style={{fontSize:16,fontWeight:600}}>{dp.label}</div>
-            </div>
-            <div style={{padding:"12px 16px"}}>
-              {dp.items.map((item,i)=>(
-                <div key={i} style={{fontSize:13,color:s.muted,lineHeight:1.8,paddingBottom:i<dp.items.length-1?12:0,marginBottom:i<dp.items.length-1?12:0,borderBottom:i<dp.items.length-1?`1px solid ${s.dim}`:"none"}}>{item}</div>
-              ))}
-            </div>
-          </div>
-        </div>
-      );
-    })()}
-
-    {/* ── SYSTEM ── */}
-    {tab==="system" && (
-      <div>
-        <div style={{...C(),overflow:"hidden",padding:14}}>
-          <style>{`
-            .nc{cursor:pointer;transition:opacity .15s}.nc:hover{opacity:.8}
-            .detail-panel{background:#111;border-radius:10px;border:1px solid #1a1a1a;padding:12px 14px;margin-top:12px;font-size:13px;color:#555;line-height:1.6;min-height:60px}
-            .detail-panel strong{color:#e8e8e8;font-weight:500;display:block;margin-bottom:4px;font-size:14px}
-          `}</style>
-          <svg width="100%" viewBox="0 0 680 620" id="fw">
-            <defs>
-              <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
-                <path d="M1 1L9 5L1 9" fill="none" stroke="context-stroke" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              </marker>
-            </defs>
-            <g id="arcs"></g>
-            <g id="spokes"></g>
-            <g className="nc" id="n-financial" onClick="sel('financial')">
-              <rect x="270" y="268" width="140" height="58" rx="12" fill="#085041" stroke="#1D9E75" strokeWidth="1.5"/>
-              <text fontFamily="sans-serif" fontSize="14" fontWeight="500" fill="#9FE1CB" x="340" y="292" textAnchor="middle" dominantBaseline="central">Financial</text>
-              <text fontFamily="sans-serif" fontSize="11" fill="#5DCAA5" x="340" y="312" textAnchor="middle" dominantBaseline="central">Primary engine</text>
-            </g>
-            <g className="nc" id="n-mental" onClick="sel('mental')">
-              <rect x="276" y="34" width="128" height="52" rx="10" fill="#26215C" stroke="#7F77DD" strokeWidth="1"/>
-              <text fontFamily="sans-serif" fontSize="13" fontWeight="500" fill="#CECBF6" x="340" y="55" textAnchor="middle" dominantBaseline="central">Mental</text>
-              <text fontFamily="sans-serif" fontSize="11" fill="#AFA9EC" x="340" y="72" textAnchor="middle" dominantBaseline="central">Strategy &amp; clarity</text>
-            </g>
-            <g className="nc" id="n-charisma" onClick="sel('charisma')">
-              <rect x="506" y="144" width="136" height="52" rx="10" fill="#412402" stroke="#BA7517" strokeWidth="1"/>
-              <text fontFamily="sans-serif" fontSize="13" fontWeight="500" fill="#FAC775" x="574" y="165" textAnchor="middle" dominantBaseline="central">Charisma</text>
-              <text fontFamily="sans-serif" fontSize="11" fill="#EF9F27" x="574" y="182" textAnchor="middle" dominantBaseline="central">Social leverage</text>
-            </g>
-            <g className="nc" id="n-seduction" onClick="sel('seduction')">
-              <rect x="506" y="398" width="136" height="52" rx="10" fill="#4A1B0C" stroke="#D85A30" strokeWidth="1"/>
-              <text fontFamily="sans-serif" fontSize="13" fontWeight="500" fill="#F5C4B3" x="574" y="419" textAnchor="middle" dominantBaseline="central">Seduction</text>
-              <text fontFamily="sans-serif" fontSize="11" fill="#F0997B" x="574" y="436" textAnchor="middle" dominantBaseline="central">Presence &amp; draw</text>
-            </g>
-            <g className="nc" id="n-nutrition" onClick="sel('nutrition')">
-              <rect x="276" y="508" width="128" height="52" rx="10" fill="#173404" stroke="#639922" strokeWidth="1"/>
-              <text fontFamily="sans-serif" fontSize="13" fontWeight="500" fill="#C0DD97" x="340" y="529" textAnchor="middle" dominantBaseline="central">Nutrition</text>
-              <text fontFamily="sans-serif" fontSize="11" fill="#97C459" x="340" y="546" textAnchor="middle" dominantBaseline="central">Fuel &amp; body comp</text>
-            </g>
-            <g className="nc" id="n-fitness" onClick="sel('fitness')">
-              <rect x="38" y="398" width="136" height="52" rx="10" fill="#042C53" stroke="#378ADD" strokeWidth="1"/>
-              <text fontFamily="sans-serif" fontSize="13" fontWeight="500" fill="#B5D4F4" x="106" y="419" textAnchor="middle" dominantBaseline="central">Fitness</text>
-              <text fontFamily="sans-serif" fontSize="11" fill="#85B7EB" x="106" y="436" textAnchor="middle" dominantBaseline="central">Energy &amp; signal</text>
-            </g>
-            <g className="nc" id="n-beauty" onClick="sel('beauty')">
-              <rect x="38" y="144" width="136" height="52" rx="10" fill="#4B1528" stroke="#D4537E" strokeWidth="1"/>
-              <text fontFamily="sans-serif" fontSize="13" fontWeight="500" fill="#F4C0D1" x="106" y="165" textAnchor="middle" dominantBaseline="central">Beauty</text>
-              <text fontFamily="sans-serif" fontSize="11" fill="#ED93B1" x="106" y="182" textAnchor="middle" dominantBaseline="central">Aesthetic edge</text>
-            </g>
-          </svg>
-          <div className="detail-panel" id="detail-panel" style={{display:"none"}}>
-            <strong id="dt"></strong>
-            <span id="db"></span>
-          </div>
-        </div>
-      </div>
-    )}
-
-    {/* ── SETTINGS ── */}
-    {tab==="settings" && (
-      <div>
-        <div style={{fontSize:12,color:s.muted,marginBottom:14}}>Manage your data</div>
-        <div style={{...C(),overflow:"hidden",marginBottom:14}}>
-          <div style={{padding:"10px 14px",fontSize:13,fontWeight:500,borderBottom:`1px solid ${s.border}`}}>Backup & Restore</div>
-          <div style={{padding:14}}>
-            <div style={{fontSize:12,color:s.muted,marginBottom:14,lineHeight:1.6}}>Export saves all your data to a JSON file. Import restores from a previously exported file. Do this weekly to avoid data loss on Safari.</div>
-            <div style={{display:"flex",flexDirection:"column",gap:10}}>
-              <button onClick={exportData} style={{background:"transparent",border:`1px solid ${s.accent}`,borderRadius:8,padding:"12px 16px",color:s.accent,fontSize:14,fontWeight:500,cursor:"pointer",textAlign:"left"}}>
-                ⬇ Export backup
-                <div style={{fontSize:11,color:s.muted,marginTop:3,fontWeight:400}}>Download all data as a JSON file</div>
-              </button>
-              <label style={{background:"transparent",border:`1px solid ${s.border}`,borderRadius:8,padding:"12px 16px",color:s.muted,fontSize:14,fontWeight:500,cursor:"pointer",display:"block"}}>
-                ⬆ Import backup
-                <div style={{fontSize:11,color:s.muted,marginTop:3,fontWeight:400}}>Restore from a previously exported file</div>
-                <input type="file" accept=".json" onChange={importData} style={{display:"none"}}/>
-              </label>
-            </div>
-          </div>
-        </div>
-        <div style={{...C(),overflow:"hidden",marginBottom:14}}>
-          <div style={{padding:"10px 14px",fontSize:13,fontWeight:500,borderBottom:`1px solid ${s.border}`}}>About</div>
-          <div style={{padding:14}}>
-            {[["Profile","Male · 25y · 200lb · 5'10\""],["Base burn",`${BASE_DAILY_BURN} kcal/day`],["Step burn","~0.045 kcal per step"],["Scoring","Weighted % per domain, avg 8 domains"]].map(([l,v])=>(
-              <div key={l} style={{display:"flex",justifyContent:"space-between",padding:"8px 0",borderBottom:`1px solid ${s.dim}`}}>
-                <span style={{fontSize:13,color:s.muted}}>{l}</span>
-                <span style={{fontSize:13,color:s.text}}>{v}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-        <div style={{...C(),overflow:"hidden"}}>
-          <div style={{padding:"10px 14px",fontSize:13,fontWeight:500,borderBottom:`1px solid ${s.border}`}}>Danger Zone</div>
-          <div style={{padding:14}}>
-            <div style={{fontSize:12,color:s.muted,marginBottom:12,lineHeight:1.6}}>This will permanently delete all your logged data. Export first.</div>
-            <button onClick={()=>{ if(window.confirm("Delete ALL data? This cannot be undone.")){updateDays({});alert("All data cleared.");}}}
-              style={{background:"transparent",border:`1px solid #f87171`,borderRadius:8,padding:"10px 16px",color:"#f87171",fontSize:13,fontWeight:500,cursor:"pointer",width:"100%"}}>
-              Clear all data
-            </button>
-          </div>
-        </div>
-      </div>
-    )}
-
-  </div>
-
-  {/* BOTTOM BAR */}
-  <div style={{background:s.card,borderTop:`1px solid ${s.border}`,padding:"10px 16px",position:"sticky",bottom:0,zIndex:10}}>
-    <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:6}}>
-      <div style={{fontSize:11,color:s.muted}}>{today}</div>
-      <div style={{display:"flex",alignItems:"center",gap:6}}><span>⚡</span><span style={{fontSize:13,fontWeight:500}}>{streak}d streak</span></div>
-      <div style={{fontSize:13,color:pctColor(todayPct),fontWeight:600}}>{todayPct}%</div>
-    </div>
-    <div style={{height:3,background:s.border,borderRadius:2}}>
-      <div style={{height:"100%",width:`${todayPct}%`,background:pctColor(todayPct),borderRadius:2,transition:"width 0.3s"}}/>
-    </div>
-  </div>
-
-</div>
-```
-
-);
-}
-
-ReactDOM.createRoot(document.getElementById(“root”)).render(<App/>);
-</script>
 
 <script>
-const _nodes = {
-  financial:{cx:340,cy:297,hw:70,hh:29},mental:{cx:340,cy:60,hw:64,hh:26},
-  charisma:{cx:574,cy:170,hw:68,hh:26},seduction:{cx:574,cy:424,hw:68,hh:26},
-  nutrition:{cx:340,cy:534,hw:64,hh:26},fitness:{cx:106,cy:424,hw:68,hh:26},
-  beauty:{cx:106,cy:170,hw:68,hh:26},
+// ── Flywheel (plain JS, no React/JSX) ──────────────────────────────────────
+var FW_NODES={financial:{cx:340,cy:297,hw:70,hh:29},mental:{cx:340,cy:60,hw:64,hh:26},charisma:{cx:574,cy:170,hw:68,hh:26},seduction:{cx:574,cy:424,hw:68,hh:26},nutrition:{cx:340,cy:534,hw:64,hh:26},fitness:{cx:106,cy:424,hw:68,hh:26},beauty:{cx:106,cy:170,hw:68,hh:26}};
+var FW_RING=['mental','charisma','seduction','nutrition','fitness','beauty'];
+var FW_COL={mental:'#7F77DD',charisma:'#BA7517',seduction:'#D85A30',nutrition:'#639922',fitness:'#378ADD',beauty:'#D4537E'};
+var FW_DET={
+  financial:{t:'Financial — primary engine',b:'Everything feeds here. Job search output, delivery income, and skill-building all convert to capital. Financial is the only node that compounds across all others.'},
+  mental:{t:'Mental — strategy & clarity',b:'Your Obsidian system, reading, and weekly reviews live here. Mental clarity sharpens financial decisions and job search execution.'},
+  charisma:{t:'Charisma — social leverage',b:'Your delivery shift is live practice reps every evening. Strong Charisma compounds into Seduction and lifts Financial through interviews and negotiation.'},
+  seduction:{t:'Seduction — presence & draw',b:'The downstream output of Charisma, Fitness, and Beauty converging. This is where the 4-month silent build pays off.'},
+  nutrition:{t:'Nutrition — fuel & body comp',b:'Your protein breakfast flywheel anchors this. Hitting targets here directly enables Fitness output and compounds into Beauty and Seduction.'},
+  fitness:{t:'Fitness — energy & signal',b:'Gym sessions raise your daily output ceiling across every domain. The 10k step walk targets dual output: Fitness + Mental audio. Fitness → Beauty → Seduction.'},
+  beauty:{t:'Beauty — aesthetic edge',b:'Grooming, style, and physical presentation. Easiest domain to move quickly in relative to effort. Feeds back into Mental via confidence.'}
 };
-const _ring = ['mental','charisma','seduction','nutrition','fitness','beauty'];
-const _rc = {mental:'#7F77DD',charisma:'#BA7517',seduction:'#D85A30',nutrition:'#639922',fitness:'#378ADD',beauty:'#D4537E'};
 
-function _edge(from,to){
-  const n=_nodes[from],dx=_nodes[to].cx-n.cx,dy=_nodes[to].cy-n.cy;
-  const a=Math.atan2(dy,dx),ca=Math.cos(a),sa=Math.sin(a);
-  const t=Math.min(Math.abs(ca)<1e-6?Infinity:n.hw/Math.abs(ca),Math.abs(sa)<1e-6?Infinity:n.hh/Math.abs(sa))-6;
-  return {x:n.cx+ca*t,y:n.cy+sa*t};
+function fwEdge(f,t){
+  var n=FW_NODES[f],to=FW_NODES[t];
+  var dx=to.cx-n.cx,dy=to.cy-n.cy,a=Math.atan2(dy,dx);
+  var ca=Math.cos(a),sa=Math.sin(a);
+  var tw=Math.abs(ca)<1e-6?1e9:n.hw/Math.abs(ca);
+  var th=Math.abs(sa)<1e-6?1e9:n.hh/Math.abs(sa);
+  var t2=Math.min(tw,th)-6;
+  return{x:n.cx+ca*t2,y:n.cy+sa*t2};
 }
 
 function buildFlywheel(){
-  const fw=document.getElementById('fw'); if(!fw) return;
-  const arcsG=document.getElementById('arcs');
-  const spokesG=document.getElementById('spokes');
-  if(!arcsG||!spokesG) return;
-  arcsG.innerHTML=''; spokesG.innerHTML='';
-  const ns='http://www.w3.org/2000/svg';
+  var svg=document.getElementById('fw-svg');
+  if(!svg)return;
+  var ns='http://www.w3.org/2000/svg';
+  // clear old arrows
+  ['fw-arcs','fw-spokes'].forEach(function(id){
+    var g=document.getElementById(id);
+    if(g)g.innerHTML='';
+  });
+  var ag=document.getElementById('fw-arcs');
+  var sg=document.getElementById('fw-spokes');
+  if(!ag||!sg)return;
 
-  for(let i=0;i<_ring.length;i++){
-    const from=_ring[i],to=_ring[(i+1)%_ring.length],c=_rc[from];
-    const p1=_edge(from,to),p2=_edge(to,from);
-    const mx=(p1.x+p2.x)/2,my=(p1.y+p2.y)/2;
-    const dx=p2.x-p1.x,dy=p2.y-p1.y,len=Math.sqrt(dx*dx+dy*dy),curve=len*0.18;
-    const nx=-dy/len,ny=dx/len;
-    const d=`M${p1.x.toFixed(1)} ${p1.y.toFixed(1)} Q${(mx+nx*curve).toFixed(1)} ${(my+ny*curve).toFixed(1)} ${p2.x.toFixed(1)} ${p2.y.toFixed(1)}`;
-    const path=document.createElementNS(ns,'path');
-    path.setAttribute('d',d); path.setAttribute('fill','none');
-    path.setAttribute('stroke',c); path.setAttribute('stroke-width','1.5');
-    path.setAttribute('stroke-linecap','round'); path.setAttribute('marker-end','url(#ah)');
-    path.setAttribute('opacity','0.7'); arcsG.appendChild(path);
+  // ring arcs
+  for(var i=0;i<FW_RING.length;i++){
+    var f=FW_RING[i],t2=FW_RING[(i+1)%FW_RING.length],c=FW_COL[f];
+    var p1=fwEdge(f,t2),p2=fwEdge(t2,f);
+    var mx=(p1.x+p2.x)/2,my=(p1.y+p2.y)/2;
+    var dx=p2.x-p1.x,dy=p2.y-p1.y,len=Math.sqrt(dx*dx+dy*dy);
+    var curve=len*0.18,nx=-dy/len,ny=dx/len;
+    var p=document.createElementNS(ns,'path');
+    p.setAttribute('d','M'+p1.x.toFixed(1)+' '+p1.y.toFixed(1)+' Q'+(mx+nx*curve).toFixed(1)+' '+(my+ny*curve).toFixed(1)+' '+p2.x.toFixed(1)+' '+p2.y.toFixed(1));
+    p.setAttribute('fill','none');p.setAttribute('stroke',c);p.setAttribute('stroke-width','1.5');
+    p.setAttribute('stroke-linecap','round');p.setAttribute('marker-end','url(#fw-ah)');p.setAttribute('opacity','0.7');
+    ag.appendChild(p);
   }
-
-  for(const domain of _ring){
-    const c=_rc[domain],p1=_edge(domain,'financial'),p2=_edge('financial',domain);
-    const path=document.createElementNS(ns,'path');
-    path.setAttribute('d',`M${p1.x.toFixed(1)} ${p1.y.toFixed(1)} L${p2.x.toFixed(1)} ${p2.y.toFixed(1)}`);
-    path.setAttribute('fill','none'); path.setAttribute('stroke',c);
-    path.setAttribute('stroke-width','1'); path.setAttribute('stroke-dasharray','4 4');
-    path.setAttribute('stroke-linecap','round'); path.setAttribute('marker-end','url(#ah)');
-    path.setAttribute('opacity','0.45'); spokesG.appendChild(path);
-  }
-
-  ['n-mental','n-charisma','n-seduction','n-nutrition','n-fitness','n-beauty','n-financial'].forEach(id=>{
-    const el=document.getElementById(id); if(el) fw.appendChild(el);
+  // spokes
+  FW_RING.forEach(function(d){
+    var c=FW_COL[d],p1=fwEdge(d,'financial'),p2=fwEdge('financial',d);
+    var p=document.createElementNS(ns,'path');
+    p.setAttribute('d','M'+p1.x.toFixed(1)+' '+p1.y.toFixed(1)+' L'+p2.x.toFixed(1)+' '+p2.y.toFixed(1));
+    p.setAttribute('fill','none');p.setAttribute('stroke',c);p.setAttribute('stroke-width','1');
+    p.setAttribute('stroke-dasharray','4 4');p.setAttribute('stroke-linecap','round');
+    p.setAttribute('marker-end','url(#fw-ah)');p.setAttribute('opacity','0.4');
+    sg.appendChild(p);
+  });
+  // re-append nodes on top
+  ['fw-mental','fw-charisma','fw-seduction','fw-nutrition','fw-fitness','fw-beauty','fw-financial'].forEach(function(id){
+    var el=document.getElementById(id);if(el)svg.appendChild(el);
   });
 }
 
-const _details = {
-  financial:{title:'Financial — the primary engine',body:"Everything feeds here. Job search output, delivery income, and skill-building all convert to capital. As the engine, Financial is the only node that compounds across all others — more resources → better inputs for every other domain."},
-  mental:{title:'Mental — strategy & clarity',body:"Your Obsidian system, reading, and weekly reviews live here. Mental clarity sharpens your financial decisions and job search execution. Strong Mental → better Charisma (sharper thinking shows up in conversation)."},
-  charisma:{title:'Charisma — social leverage',body:"Your delivery shift is live practice reps every evening. Each customer interaction is a low-stakes charisma workout. Strong Charisma compounds into Seduction and lifts Financial through interviews and negotiation."},
-  seduction:{title:'Seduction — presence & draw',body:"The downstream output of Charisma, Fitness, and Beauty converging. This is where the 4-month silent build pays off — you're not chasing, you're becoming someone worth chasing."},
-  nutrition:{title:'Nutrition — fuel & body comp',body:"Your protein breakfast flywheel anchors this. Hitting targets here directly enables Fitness output — gym performance and recovery. Body composition changes also compound into Beauty and Seduction."},
-  fitness:{title:'Fitness — energy & signal',body:"Gym sessions generate energy that raises your daily output ceiling across every domain. The 10k step walk targets dual output: steps for Fitness, audio content for Mental. Fitness → Beauty → Seduction."},
-  beauty:{title:'Beauty — aesthetic edge',body:"Grooming, style, and physical presentation. Easiest domain to move quickly in relative to effort. Strong Beauty amplifies first impressions in every social context — interviews, dates, delivery interactions."},
-};
-
-function sel(key){
-  const d=_details[key]; if(!d) return;
-  const dt=document.getElementById('dt'),db=document.getElementById('db'),panel=document.getElementById('detail-panel');
-  if(dt) dt.textContent=d.title;
-  if(db) db.textContent=d.body;
-  if(panel) panel.style.display='block';
-  document.querySelectorAll('.nc').forEach(g=>g.style.opacity='0.4');
-  const nk=document.getElementById('n-'+key),nf=document.getElementById('n-financial');
-  if(nk) nk.style.opacity='1';
-  if(nf) nf.style.opacity='1';
+function fwSel(key){
+  var d=FW_DET[key];if(!d)return;
+  var panel=document.getElementById('detail-panel');
+  var dt=document.getElementById('detail-title');
+  var db=document.getElementById('detail-body');
+  if(dt)dt.textContent=d.t;
+  if(db)db.textContent=d.b;
+  if(panel)panel.style.display='block';
+  document.querySelectorAll('.nc').forEach(function(g){g.style.opacity='0.35';});
+  var nk=document.getElementById('fw-'+key);
+  var nf=document.getElementById('fw-financial');
+  if(nk)nk.style.opacity='1';
+  if(nf)nf.style.opacity='1';
 }
 
-// Build flywheel once each time the SVG appears, disconnect while absent
-let _built = false;
-const _obs = new MutationObserver(()=>{
-  const fw = document.getElementById('fw');
-  if(!_built && fw){ _built=true; buildFlywheel(); }
-  if(_built && !fw){ _built=false; }
+var _fwBuilt=false;
+var _fwObs=new MutationObserver(function(){
+  var svg=document.getElementById('fw-svg');
+  if(!_fwBuilt&&svg){_fwBuilt=true;buildFlywheel();}
+  if(_fwBuilt&&!svg){_fwBuilt=false;}
 });
-_obs.observe(document.body, {childList:true, subtree:false});
-// Also watch one level deeper without walking entire tree
-_obs.observe(document.getElementById('root'), {childList:true});
+</script>
+
+<script type="text/babel">
+const {useState,useRef,useEffect}=React;
+
+const DOMAINS=[
+  {id:"mental",   label:"Mental",   habits:[{label:"Deep work block (2+ hrs)",w:3},{label:"Learned or created something",w:2},{label:"Low screen time",w:1}]},
+  {id:"recovery", label:"Recovery", habits:[{label:"Slept 7-8 hrs",w:3},{label:"Slept on time",w:2},{label:"No overload / rest if needed",w:1}]},
+  {id:"beauty",   label:"Beauty",   habits:[{label:"Full grooming done",w:3},{label:"Skincare done",w:2},{label:"Dressed intentionally",w:2},{label:"Dental hygiene",w:1}]},
+  {id:"nutrition",label:"Nutrition",habits:[{label:"Hit calorie target",w:3},{label:"Hit protein target",w:3},{label:"No junk food",w:2}]},
+  {id:"fitness",  label:"Fitness",  habits:[{label:"Completed full workout",w:3},{label:"Hit intensity / PR attempt",w:3},{label:"Walk 8-10k steps",w:2},{label:"Went to the gym",w:2}]},
+  {id:"financial",label:"Financial",habits:[{label:"Worked on an asset",w:3},{label:"Saved money",w:2},{label:"Tracked net worth",w:1}]},
+  {id:"charisma", label:"Charisma", habits:[{label:"Led an interaction",w:3},{label:"Initiated a conversation",w:2},{label:"Was fully present",w:2}]},
+  {id:"seduction",label:"Seduction",habits:[{label:"Approached someone",w:3},{label:"Flirted intentionally",w:2},{label:"Trained a seduction skill",w:2}]},
+];
+
+const PROTOCOLS=[
+  {id:"resources",label:"Resources",color:"#1a3a2a",border:"#2d6b4a",items:["Layer 1 — Immediate Survival (0-3 months): Lead income (job, freelance), Weekly income target","Layer 2 — Foundation (3-12 months): Save $5k, Pick ONE business model, Learn one monetizable skill","Layer 3 — Business Build (12+ months): Launch the side hustle, Define revenue targets, Scale or replace job income","Mission: I sell the system that makes transformation obvious."]},
+  {id:"mental",   label:"Mental",   color:"#1a1a3a",border:"#3a3a8a",items:["OODA Protocol: Every morning 5 minutes decides your main objectives for the day.","Master Mind Protocol: Read or listen for 30 minutes any kind of non-fiction book.","Mental Clarity: Must be educational, No multitasking, No red pill, Only algo tips","Hard Limits: No movies, No scrolling, No series, No adult content","Lite System: Read 3 sentences from a book."]},
+  {id:"physical", label:"Physical", color:"#1a2a1a",border:"#3a6a3a",items:["Fitness: Workout 5x week — Push / Pull / Lower / Rest / Calisthenics / 8-10k steps","Nutrition: Eat clean 2130 cals / 200g protein / 70g fat daily","Lite version: 20 min walk / 20-30 min light workout","Stats: Shoulder side cable raise: 20lb 12-15 reps / Back split pull cable: 45lb 13 reps"]},
+  {id:"charisma", label:"Charisma", color:"#1a2a3a",border:"#2a5a7a",items:["Mon-Fri: Talk to one stranger or say hi, go with the flow.","Saturday: Approach and flirt with one girl you find attractive.","Posture and expression review: Record yourself 5 minutes, review and calibrate.","Lite Version: If very tired — Greet someone who doesn't live inside home."]},
+  {id:"beauty",   label:"Beauty",   color:"#3a1a2a",border:"#7a2a4a",items:["Facial Grooming — Daily / Nail clipping — Weekly / Shower — Daily / Teeth Hygiene — Daily","Face moisturizer — Daily / Ear hygiene — Every other Day / Hair style — Daily / Cologne — Daily","Style: Plan your clothes for the week in advance."]},
+];
+
+const WTYPES=["Push","Pull","Lower","Calisthenics","Rest"];
+const BMR=1969, BASE=Math.round(BMR*1.2);
+const WBURN={Push:408,Pull:408,Lower:476,Calisthenics:544,Rest:0};
+const KPS=0.045;
+const calcBurn=(wt,st)=>BASE+(WBURN[wt]||0)+Math.round((Number(st)||0)*KPS);
+const toDay=()=>new Date().toISOString().slice(0,10);
+const ld=()=>{try{return JSON.parse(localStorage.getItem("lifeOS_v3")||"{}");}catch{return{};}};
+const sv=(d)=>{try{localStorage.setItem("lifeOS_v3",JSON.stringify(d));}catch{}};
+const dPct=(checks,habits)=>{if(!checks)return 0;const tot=habits.reduce((a,h)=>a+h.w,0),earn=habits.reduce((a,h,i)=>a+(checks[i]?h.w:0),0);return Math.round(earn/tot*100);};
+const dayPct=(dd)=>{if(!dd)return 0;return Math.round(DOMAINS.reduce((a,d)=>a+dPct(dd.checks?.[d.id],d.habits),0)/DOMAINS.length);};
+const pc=(p)=>p>=75?"#34d399":p>=40?"#60a5fa":p>0?"#f59e0b":"#333";
+
+function CalChart({data}){
+  const ref=useRef(null),ch=useRef(null);
+  useEffect(()=>{
+    if(!ref.current)return;
+    if(ch.current)ch.current.destroy();
+    ch.current=new Chart(ref.current,{data:{labels:data.map(d=>d.date.slice(5)),datasets:[
+      {type:"bar",label:"Eaten",data:data.map(d=>d.calIn||0),backgroundColor:"#4a9eff88",borderColor:"#4a9eff",borderWidth:1},
+      {type:"bar",label:"Burned",data:data.map(d=>d.calBurn||0),backgroundColor:"#34d39988",borderColor:"#34d399",borderWidth:1},
+      {type:"line",label:"Deficit",data:data.map(d=>Math.max(0,(d.calBurn||0)-(d.calIn||0))),borderColor:"#f59e0b",tension:0.3,fill:false,pointRadius:3,pointBackgroundColor:"#f59e0b"},
+    ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:"#555",font:{size:10}},grid:{color:"#111"}},y:{ticks:{color:"#555",font:{size:10}},grid:{color:"#111"}}}}});
+    return()=>{if(ch.current)ch.current.destroy();};
+  },[data]);
+  return <canvas ref={ref} style={{width:"100%",height:"100%"}}/>;
+}
+
+function WtChart({data}){
+  const ref=useRef(null),ch=useRef(null);
+  useEffect(()=>{
+    if(!ref.current)return;
+    if(ch.current)ch.current.destroy();
+    const f=data.filter(d=>d.weight);
+    if(!f.length)return;
+    ch.current=new Chart(ref.current,{type:"line",data:{labels:f.map(d=>d.date.slice(5)),datasets:[{label:"Weight",data:f.map(d=>d.weight),borderColor:"#a78bfa",backgroundColor:"#a78bfa22",tension:0.3,pointRadius:4,pointBackgroundColor:"#a78bfa",fill:true}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:"#555",font:{size:10}},grid:{color:"#111"}},y:{ticks:{color:"#555",font:{size:10}},grid:{color:"#111"}}}}});
+    return()=>{if(ch.current)ch.current.destroy();};
+  },[data]);
+  return <canvas ref={ref} style={{width:"100%",height:"100%"}}/>;
+}
+
+function Flywheel(){
+  useEffect(()=>{
+    window._fwObs && window._fwObs.observe(document.body,{childList:true,subtree:false});
+    const svg=document.getElementById('fw-svg');
+    if(svg&&!window._fwBuilt){window._fwBuilt=true;window.buildFlywheel&&window.buildFlywheel();}
+    return()=>{};
+  },[]);
+  return (
+    <div style={{background:"#0a0a0a",border:"1px solid #1a1a1a",borderRadius:10,padding:14}}>
+      <svg id="fw-svg" width="100%" viewBox="0 0 680 620" style={{display:"block"}}>
+        <defs>
+          <marker id="fw-ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+            <path d="M1 1L9 5L1 9" fill="none" stroke="#888" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          </marker>
+        </defs>
+        <g id="fw-arcs"/><g id="fw-spokes"/>
+        <g className="nc" id="fw-financial" onClick={()=>window.fwSel('financial')}>
+          <rect x="270" y="268" width="140" height="58" rx="12" fill="#085041" stroke="#1D9E75" strokeWidth="1.5"/>
+          <text fontFamily="sans-serif" fontSize="14" fontWeight="500" fill="#9FE1CB" x="340" y="292" textAnchor="middle" dominantBaseline="central">Financial</text>
+          <text fontFamily="sans-serif" fontSize="11" fill="#5DCAA5" x="340" y="312" textAnchor="middle" dominantBaseline="central">Primary engine</text>
+        </g>
+        <g className="nc" id="fw-mental" onClick={()=>window.fwSel('mental')}>
+          <rect x="276" y="34" width="128" height="52" rx="10" fill="#26215C" stroke="#7F77DD" strokeWidth="1"/>
+          <text fontFamily="sans-serif" fontSize="13" fontWeight="500" fill="#CECBF6" x="340" y="55" textAnchor="middle" dominantBaseline="central">Mental</text>
+          <text fontFamily="sans-serif" fontSize="11" fill="#AFA9EC" x="340" y="72" textAnchor="middle" dominantBaseline="central">Strategy &amp; clarity</text>
+        </g>
+        <g className="nc" id="fw-charisma" onClick={()=>window.fwSel('charisma')}>
+          <rect x="506" y="144" width="136" height="52" rx="10" fill="#412402" stroke="#BA7517" strokeWidth="1"/>
+          <text fontFamily="sans-serif" fontSize="13" fontWeight="500" fill="#FAC775" x="574" y="165" textAnchor="middle" dominantBaseline="central">Charisma</text>
+          <text fontFamily="sans-serif" fontSize="11" fill="#EF9F27" x="574" y="182" textAnchor="middle" dominantBaseline="central">Social leverage</text>
+        </g>
+        <g className="nc" id="fw-seduction" onClick={()=>window.fwSel('seduction')}>
+          <rect x="506" y="398" width="136" height="52" rx="10" fill="#4A1B0C" stroke="#D85A30" strokeWidth="1"/>
+          <text fontFamily="sans-serif" fontSize="13" fontWeight="500" fill="#F5C4B3" x="574" y="419" textAnchor="middle" dominantBaseline="central">Seduction</text>
+          <text fontFamily="sans-serif" fontSize="11" fill="#F0997B" x="574" y="436" textAnchor="middle" dominantBaseline="central">Presence &amp; draw</text>
+        </g>
+        <g className="nc" id="fw-nutrition" onClick={()=>window.fwSel('nutrition')}>
+          <rect x="276" y="508" width="128" height="52" rx="10" fill="#173404" stroke="#639922" strokeWidth="1"/>
+          <text fontFamily="sans-serif" fontSize="13" fontWeight="500" fill="#C0DD97" x="340" y="529" textAnchor="middle" dominantBaseline="central">Nutrition</text>
+          <text fontFamily="sans-serif" fontSize="11" fill="#97C459" x="340" y="546" textAnchor="middle" dominantBaseline="central">Fuel &amp; body comp</text>
+        </g>
+        <g className="nc" id="fw-fitness" onClick={()=>window.fwSel('fitness')}>
+          <rect x="38" y="398" width="136" height="52" rx="10" fill="#042C53" stroke="#378ADD" strokeWidth="1"/>
+          <text fontFamily="sans-serif" fontSize="13" fontWeight="500" fill="#B5D4F4" x="106" y="419" textAnchor="middle" dominantBaseline="central">Fitness</text>
+          <text fontFamily="sans-serif" fontSize="11" fill="#85B7EB" x="106" y="436" textAnchor="middle" dominantBaseline="central">Energy &amp; signal</text>
+        </g>
+        <g className="nc" id="fw-beauty" onClick={()=>window.fwSel('beauty')}>
+          <rect x="38" y="144" width="136" height="52" rx="10" fill="#4B1528" stroke="#D4537E" strokeWidth="1"/>
+          <text fontFamily="sans-serif" fontSize="13" fontWeight="500" fill="#F4C0D1" x="106" y="165" textAnchor="middle" dominantBaseline="central">Beauty</text>
+          <text fontFamily="sans-serif" fontSize="11" fill="#ED93B1" x="106" y="182" textAnchor="middle" dominantBaseline="central">Aesthetic edge</text>
+        </g>
+      </svg>
+      <div id="detail-panel"><b id="detail-title"/><span id="detail-body"/></div>
+    </div>
+  );
+}
+
+function App(){
+  const [tab,setTab]=useState("daily");
+  const [days,setDays]=useState(ld);
+  const [today]=useState(toDay());
+  const [exp,setExp]=useState({});
+  const [calIn,setCalIn]=useState("");
+  const [steps,setSteps]=useState("");
+  const [wt,setWt]=useState("");
+  const [wType,setWType]=useState("");
+  const [wNotes,setWNotes]=useState("");
+  const [dRange,setDRange]=useState("weekly");
+  const [mOff,setMOff]=useState(0);
+  const [aDom,setADom]=useState(null);
+
+  const upd=(nd)=>{setDays(nd);sv(nd);};
+  const toggle=(domId,idx)=>{
+    const d=days[today]||{checks:{}};
+    const checks={...d.checks};
+    const domain=DOMAINS.find(x=>x.id===domId);
+    const arr=[...(checks[domId]||domain.habits.map(()=>false))];
+    arr[idx]=!arr[idx];checks[domId]=arr;
+    upd({...days,[today]:{...d,checks}});
+  };
+  const saveDay=()=>{
+    const d=days[today]||{checks:{}};
+    upd({...days,[today]:{...d,calIn:Number(calIn)||0,calBurn:calcBurn(wType,steps),stepsNum:Number(steps)||0,weight:Number(wt)||0,workoutType:wType,workoutNotes:wNotes}});
+    alert("Saved!");
+  };
+
+  const L7=()=>Array.from({length:7},(_,i)=>{const d=new Date();d.setDate(d.getDate()-(6-i));return d.toISOString().slice(0,10);});
+  const L30=()=>Array.from({length:30},(_,i)=>{const d=new Date();d.setDate(d.getDate()-(29-i));return d.toISOString().slice(0,10);});
+  const mDays=(off=0)=>{const n=new Date();n.setDate(1);n.setMonth(n.getMonth()+off);const y=n.getFullYear(),m=n.getMonth();return Array.from({length:new Date(y,m+1,0).getDate()},(_,i)=>`${y}-${String(m+1).padStart(2,"0")}-${String(i+1).padStart(2,"0")}`);};
+  const mLabel=(off=0)=>{const n=new Date();n.setDate(1);n.setMonth(n.getMonth()+off);return n.toLocaleString("default",{month:"long",year:"numeric"});};
+  const streak=()=>{let s=0;const d=new Date();while(true){const k=d.toISOString().slice(0,10);if(dayPct(days[k])>0){s++;d.setDate(d.getDate()-1);}else break;}return s;};
+  const avg7=(d)=>Math.round(L7().reduce((a,dt)=>a+dPct(days[dt]?.checks?.[d.id],d.habits),0)/7);
+
+  const exportD=()=>{const b=new Blob([JSON.stringify(days,null,2)],{type:"application/json"});const u=URL.createObjectURL(b);const a=document.createElement("a");a.href=u;a.download="lifeOS_"+today+".json";a.click();URL.revokeObjectURL(u);};
+  const importD=(e)=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=(ev)=>{try{const p=JSON.parse(ev.target.result);if(typeof p==="object"&&p!==null){upd(p);alert("Imported!");}else alert("Invalid.");}catch{alert("Error reading file.");}};r.readAsText(f);e.target.value="";};
+
+  const S={bg:"#000",card:"#0a0a0a",border:"#1a1a1a",text:"#e8e8e8",muted:"#555",accent:"#4a9eff",dim:"#111"};
+  const C=(ex={})=>({background:S.card,border:`1px solid ${S.border}`,borderRadius:10,...ex});
+
+  const td=days[today]||{checks:{}};
+  const tPct=dayPct(td);
+  const str=streak();
+  const last7=L7();
+  const last30=L30();
+  const rDays=dRange==="weekly"?last7:mDays();
+  const rIn=rDays.reduce((a,dt)=>a+(days[dt]?.calIn||0),0);
+  const rBurn=rDays.reduce((a,dt)=>a+(days[dt]?.calBurn||0),0);
+  const rDef=rBurn-rIn;
+  const rSteps=rDays.reduce((a,dt)=>a+(days[dt]?.stepsNum||0),0);
+  const chartD=rDays.map(dt=>({date:dt,calIn:days[dt]?.calIn||0,calBurn:days[dt]?.calBurn||0}));
+  const gym7=last7.filter(dt=>days[dt]?.workoutType&&days[dt].workoutType!=="Rest");
+  const wSum=last7.map(dt=>({date:dt,type:days[dt]?.workoutType||"",notes:days[dt]?.workoutNotes||"",steps:days[dt]?.stepsNum||0})).filter(d=>d.type);
+  const latWt=[...last30].reverse().find(dt=>days[dt]?.weight);
+  const wtD=last30.map(dt=>({date:dt,weight:days[dt]?.weight||0}));
+  const pBurn=calcBurn(wType,steps);
+  const pDef=pBurn-(Number(calIn)||0);
+
+  const TABS=[{id:"daily",label:"Daily"},{id:"dashboard",label:"Dashboard"},{id:"monthly",label:"Monthly"},{id:"weekly",label:"Weekly"},{id:"body",label:"Body"},{id:"domains",label:"Domains"},{id:"system",label:"System"},{id:"settings",label:"Settings"}];
+
+  return (
+    <div style={{background:S.bg,minHeight:"100vh",color:S.text,paddingBottom:90}}>
+
+      <div style={{background:S.card,borderBottom:`1px solid ${S.border}`,padding:"14px 16px",position:"sticky",top:0,zIndex:10,textAlign:"center"}}>
+        <div style={{fontSize:18,fontWeight:600,letterSpacing:1}}>SYSTEM</div>
+      </div>
+
+      <div style={{display:"flex",background:S.card,borderBottom:`1px solid ${S.border}`,overflowX:"auto"}}>
+        {TABS.map(t=>(
+          <button key={t.id} onClick={()=>{setTab(t.id);setADom(null);}}
+            style={{flex:1,minWidth:44,padding:"10px 1px",border:"none",background:"none",color:tab===t.id?S.accent:S.muted,fontSize:10,fontWeight:tab===t.id?600:400,borderBottom:tab===t.id?`2px solid ${S.accent}`:"2px solid transparent",cursor:"pointer",whiteSpace:"nowrap"}}>
+            {t.label}
+          </button>
+        ))}
+      </div>
+
+      <div style={{padding:16}}>
+
+        {tab==="daily" && (
+          <div>
+            {DOMAINS.map(domain=>{
+              const checks=td.checks?.[domain.id]||domain.habits.map(()=>false);
+              const pct=dPct(checks,domain.habits);
+              const isOpen=exp[domain.id]!==false;
+              const totalW=domain.habits.reduce((a,h)=>a+h.w,0);
+              return (
+                <div key={domain.id} style={{...C(),marginBottom:10,overflow:"hidden"}}>
+                  <div onClick={()=>setExp(e=>({...e,[domain.id]:!isOpen}))} style={{display:"flex",alignItems:"center",padding:"12px 14px",cursor:"pointer"}}>
+                    <span style={{flex:1,fontWeight:500,fontSize:15}}>{domain.label}</span>
+                    <span style={{fontSize:13,fontWeight:600,color:pc(pct),marginRight:10}}>{pct}%</span>
+                    <span style={{color:S.muted,fontSize:11}}>{isOpen?"▲":"▼"}</span>
+                  </div>
+                  <div style={{height:2,background:S.border}}>
+                    <div style={{height:"100%",width:`${pct}%`,background:pc(pct),transition:"width 0.3s"}}/>
+                  </div>
+                  {isOpen&&(
+                    <div style={{borderTop:`1px solid ${S.border}`,padding:"8px 14px"}}>
+                      {domain.habits.map((h,i)=>{
+                        const hp=Math.round((h.w/totalW)*100);
+                        return (
+                          <div key={i} onClick={()=>toggle(domain.id,i)}
+                            style={{display:"flex",alignItems:"center",gap:10,padding:"8px 0",cursor:"pointer",borderBottom:i<domain.habits.length-1?`1px solid ${S.dim}`:"none"}}>
+                            <div style={{width:18,height:18,border:`1.5px solid ${checks[i]?S.accent:S.muted}`,borderRadius:4,background:checks[i]?S.accent:"transparent",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
+                              {checks[i]&&<span style={{color:"#000",fontSize:11,fontWeight:700}}>✓</span>}
+                            </div>
+                            <span style={{flex:1,fontSize:14,color:checks[i]?S.muted:S.text,textDecoration:checks[i]?"line-through":"none"}}>{h.label}</span>
+                            <span style={{fontSize:11,color:checks[i]?S.accent:S.muted,minWidth:32,textAlign:"right"}}>{hp}%</span>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+            <div style={{...C(),padding:14,marginBottom:10}}>
+              <div style={{fontSize:14,fontWeight:500,marginBottom:14}}>Nutrition & Body</div>
+              {[["Calories eaten",calIn,setCalIn,"e.g. 2000"],["Steps walked",steps,setSteps,"e.g. 8500"],["Weight (lbs)",wt,setWt,"e.g. 200"]].map(([label,val,setter,ph])=>(
+                <div key={label} style={{marginBottom:12}}>
+                  <div style={{fontSize:11,color:S.muted,marginBottom:4}}>{label}</div>
+                  <input value={val} onChange={e=>setter(e.target.value)} type="number" placeholder={ph}
+                    style={{width:"100%",background:S.bg,border:`1px solid ${S.border}`,borderRadius:6,padding:"8px 10px",color:S.text,fontSize:14}}/>
+                </div>
+              ))}
+              <div style={{marginBottom:12}}>
+                <div style={{fontSize:11,color:S.muted,marginBottom:6}}>Workout type</div>
+                <div style={{display:"flex",flexWrap:"wrap",gap:6}}>
+                  {WTYPES.map(t=>(
+                    <button key={t} onClick={()=>setWType(wType===t?"":t)}
+                      style={{padding:"5px 12px",borderRadius:20,border:`1px solid ${wType===t?S.accent:S.border}`,background:wType===t?"#4a9eff22":"transparent",color:wType===t?S.accent:S.muted,fontSize:12,cursor:"pointer"}}>
+                      {t}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div style={{marginBottom:14}}>
+                <div style={{fontSize:11,color:S.muted,marginBottom:4}}>Workout notes / PRs</div>
+                <textarea value={wNotes} onChange={e=>setWNotes(e.target.value)} rows={2} placeholder="e.g. Bench 3x8 @ 185lbs..."
+                  style={{width:"100%",background:S.bg,border:`1px solid ${S.border}`,borderRadius:6,padding:"8px 10px",color:S.text,fontSize:13,resize:"vertical"}}/>
+              </div>
+              {(calIn||steps||wType)&&(
+                <div style={{background:S.dim,borderRadius:8,padding:"10px 12px",marginBottom:14,borderLeft:`3px solid ${pDef>0?"#34d399":"#f87171"}`}}>
+                  <div style={{fontSize:11,color:S.muted,marginBottom:6}}>Estimated burn today</div>
+                  <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:8,marginBottom:8}}>
+                    {[["Base",BASE,"#555"],["Workout",WBURN[wType]||0,"#60a5fa"],["Steps",Math.round((Number(steps)||0)*KPS),"#34d399"]].map(([l,v,c])=>(
+                      <div key={l}><div style={{fontSize:10,color:S.muted}}>{l}</div><div style={{fontSize:13,fontWeight:600,color:c}}>{v} kcal</div></div>
+                    ))}
+                  </div>
+                  <div style={{display:"flex",justifyContent:"space-between",paddingTop:8,borderTop:`1px solid ${S.border}`}}>
+                    <span style={{fontSize:12,color:S.muted}}>Total: <span style={{color:S.text,fontWeight:600}}>{pBurn.toLocaleString()} kcal</span></span>
+                    <span style={{fontSize:12,fontWeight:600,color:pDef>0?"#34d399":"#f87171"}}>{pDef>0?"✓ −":"↑ +"}{Math.abs(pDef).toLocaleString()} kcal</span>
+                  </div>
+                </div>
+              )}
+              <button onClick={saveDay} style={{background:S.accent,color:"#000",border:"none",borderRadius:6,padding:"8px 16px",fontSize:13,fontWeight:600,cursor:"pointer"}}>Save Day</button>
+            </div>
+          </div>
+        )}
+
+        {tab==="dashboard" && (
+          <div>
+            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:10,marginBottom:16}}>
+              {[["Streak",str+"d"],["Today",tPct+"%"],["7d Avg",Math.round(last7.reduce((a,d)=>a+dayPct(days[d]),0)/7)+"%"]].map(([l,v])=>(
+                <div key={l} style={{...C({borderRadius:8}),padding:"10px 12px"}}>
+                  <div style={{fontSize:10,color:S.muted,marginBottom:4}}>{l}</div>
+                  <div style={{fontSize:20,fontWeight:600}}>{v}</div>
+                </div>
+              ))}
+            </div>
+            <div style={{...C(),marginBottom:14,overflow:"hidden"}}>
+              <div style={{padding:"10px 14px",fontSize:13,fontWeight:500,borderBottom:`1px solid ${S.border}`}}>Last 7 Days</div>
+              <div style={{overflowX:"auto"}}>
+                <table style={{width:"100%",borderCollapse:"collapse",fontSize:11,minWidth:380}}>
+                  <thead>
+                    <tr style={{borderBottom:`1px solid ${S.border}`}}>
+                      <th style={{padding:"8px 10px",textAlign:"left",color:S.muted,fontWeight:500}}>Date</th>
+                      {DOMAINS.map(d=><th key={d.id} style={{padding:"8px 4px",color:S.muted,fontWeight:500,fontSize:10}}>{d.label.slice(0,3)}</th>)}
+                      <th style={{padding:"8px 8px",color:S.muted,fontWeight:500}}>Day</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {last7.map(dt=>{
+                      const dd=days[dt]||{},dp=dayPct(dd),isT=dt===today;
+                      return (
+                        <tr key={dt} style={{borderBottom:`1px solid ${S.dim}`,background:isT?"#0d1a2a":"transparent"}}>
+                          <td style={{padding:"7px 10px",color:isT?S.accent:S.muted,fontSize:11}}>{dt.slice(5)}</td>
+                          {DOMAINS.map(d=>{const p=dPct(dd.checks?.[d.id],d.habits);return <td key={d.id} style={{padding:"7px 4px",textAlign:"center",fontSize:10,color:pc(p)}}>{p>0?p+"%":"·"}</td>;})}
+                          <td style={{padding:"7px 8px",textAlign:"center",fontWeight:600,fontSize:11,color:pc(dp)}}>{dp>0?dp+"%":"·"}</td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div style={{...C(),overflow:"hidden"}}>
+              <div style={{padding:"10px 14px",fontSize:13,fontWeight:500,borderBottom:`1px solid ${S.border}`}}>7-Day Averages</div>
+              {DOMAINS.map(d=>{const avg=avg7(d);return(
+                <div key={d.id} style={{padding:"10px 14px",borderBottom:`1px solid ${S.dim}`}}>
+                  <div style={{display:"flex",justifyContent:"space-between",marginBottom:5}}>
+                    <span style={{fontSize:13}}>{d.label}</span>
+                    <span style={{fontSize:13,fontWeight:600,color:pc(avg)}}>{avg}%</span>
+                  </div>
+                  <div style={{height:3,background:S.border,borderRadius:2}}>
+                    <div style={{height:"100%",width:`${avg}%`,background:pc(avg),borderRadius:2}}/>
+                  </div>
+                </div>
+              );})}
+            </div>
+          </div>
+        )}
+
+        {tab==="monthly" && (
+          <div>
+            <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:14}}>
+              <button onClick={()=>setMOff(o=>o-1)} style={{background:"transparent",border:`1px solid ${S.border}`,borderRadius:6,padding:"6px 14px",color:S.muted,fontSize:16,cursor:"pointer"}}>‹</button>
+              <div style={{fontSize:15,fontWeight:500}}>{mLabel(mOff)}</div>
+              <button onClick={()=>setMOff(o=>Math.min(0,o+1))} style={{background:"transparent",border:`1px solid ${S.border}`,borderRadius:6,padding:"6px 14px",color:mOff===0?S.dim:S.muted,fontSize:16,cursor:mOff===0?"default":"pointer"}}>›</button>
+            </div>
+            <div style={{...C(),overflow:"hidden",marginBottom:14}}>
+              <div style={{overflowX:"auto"}}>
+                <table style={{width:"100%",borderCollapse:"collapse",fontSize:11,minWidth:520}}>
+                  <thead>
+                    <tr style={{borderBottom:`1px solid ${S.border}`}}>
+                      <th style={{padding:"8px 10px",textAlign:"left",color:S.muted,whiteSpace:"nowrap"}}>Day</th>
+                      {DOMAINS.map(d=><th key={d.id} style={{padding:"8px 5px",color:S.muted,minWidth:28,fontSize:10}}>{d.label.slice(0,3)}</th>)}
+                      <th style={{padding:"8px 8px",color:S.muted,fontSize:10}}>Day%</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {mDays(mOff).map(dt=>{
+                      const dd=days[dt]||{},dp=dayPct(dd),isT=dt===today;
+                      return (
+                        <tr key={dt} style={{borderBottom:`1px solid ${S.dim}`,background:isT?"#0d1a2a":"transparent"}}>
+                          <td style={{padding:"6px 10px",color:isT?S.accent:S.muted}}>{dt.slice(8)}</td>
+                          {DOMAINS.map(d=>{const p=dPct(dd.checks?.[d.id],d.habits);return <td key={d.id} style={{padding:"6px 5px",textAlign:"center",fontSize:10,color:pc(p)}}>{p>0?p+"%":"·"}</td>;})}
+                          <td style={{padding:"6px 8px",textAlign:"center",fontWeight:600,fontSize:11,color:pc(dp)}}>{dp>0?dp+"%":"·"}</td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div style={{...C(),overflow:"hidden"}}>
+              <div style={{padding:"10px 14px",fontSize:13,fontWeight:500,borderBottom:`1px solid ${S.border}`}}>Month Averages</div>
+              {DOMAINS.map(d=>{
+                const md=mDays(mOff),avg=Math.round(md.reduce((a,dt)=>a+dPct(days[dt]?.checks?.[d.id],d.habits),0)/md.length);
+                return(
+                  <div key={d.id} style={{display:"flex",alignItems:"center",padding:"9px 14px",borderBottom:`1px solid ${S.dim}`}}>
+                    <div style={{flex:1}}>
+                      <div style={{display:"flex",justifyContent:"space-between",marginBottom:4}}>
+                        <span style={{fontSize:13}}>{d.label}</span>
+                        <span style={{fontSize:13,fontWeight:600,color:pc(avg)}}>{avg}%</span>
+                      </div>
+                      <div style={{height:3,background:S.border,borderRadius:2}}>
+                        <div style={{height:"100%",width:`${avg}%`,background:pc(avg),borderRadius:2}}/>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
+        {tab==="weekly" && (
+          <div>
+            <div style={{fontSize:13,color:S.muted,marginBottom:14}}>Week ending {today}</div>
+            {DOMAINS.map(d=>{const avg=avg7(d);return(
+              <div key={d.id} style={{...C({borderRadius:8}),padding:"12px 14px",marginBottom:8,display:"flex",alignItems:"center"}}>
+                <div style={{flex:1}}>
+                  <div style={{fontSize:13,fontWeight:500,marginBottom:5}}>{d.label}</div>
+                  <div style={{height:3,background:S.border,borderRadius:2}}>
+                    <div style={{height:"100%",width:`${avg}%`,background:pc(avg),borderRadius:2}}/>
+                  </div>
+                </div>
+                <div style={{textAlign:"right",marginLeft:14}}>
+                  <div style={{fontSize:18,fontWeight:600,color:pc(avg)}}>{avg}%</div>
+                  <div style={{fontSize:10,color:S.muted}}>7d avg</div>
+                </div>
+              </div>
+            );})}
+            <div style={{...C(),padding:14,marginTop:6}}>
+              <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-end",marginBottom:14}}>
+                <div style={{fontSize:13,fontWeight:500}}>Overall Week</div>
+                <div>
+                  <span style={{fontSize:28,fontWeight:700,color:pc(Math.round(last7.reduce((a,d)=>a+dayPct(days[d]),0)/7))}}>{Math.round(last7.reduce((a,d)=>a+dayPct(days[d]),0)/7)}%</span>
+                  <div style={{fontSize:10,color:S.muted,textAlign:"right"}}>avg daily score</div>
+                </div>
+              </div>
+              <div style={{fontSize:12,color:S.muted,marginBottom:6}}>Reflection</div>
+              <textarea rows={3} placeholder="What went well? What didn't?" style={{width:"100%",background:S.bg,border:`1px solid ${S.border}`,borderRadius:6,padding:"10px 12px",color:S.text,fontSize:13,resize:"vertical",marginBottom:10}}/>
+              <div style={{fontSize:12,color:S.muted,marginBottom:6}}>Focus next week</div>
+              <textarea rows={2} style={{width:"100%",background:S.bg,border:`1px solid ${S.border}`,borderRadius:6,padding:"10px 12px",color:S.text,fontSize:13,resize:"vertical"}}/>
+            </div>
+          </div>
+        )}
+
+        {tab==="body" && (
+          <div>
+            <div style={{display:"flex",gap:8,marginBottom:14}}>
+              {["weekly","monthly"].map(r=>(
+                <button key={r} onClick={()=>setDRange(r)}
+                  style={{flex:1,padding:"8px 0",borderRadius:8,border:`1px solid ${dRange===r?S.accent:S.border}`,background:dRange===r?"#4a9eff22":"transparent",color:dRange===r?S.accent:S.muted,fontSize:13,fontWeight:dRange===r?600:400,cursor:"pointer"}}>
+                  {r==="weekly"?"7 Days":"This Month"}
+                </button>
+              ))}
+            </div>
+            <div style={{...C(),overflow:"hidden",marginBottom:14}}>
+              <div style={{padding:"10px 14px",fontSize:13,fontWeight:500,borderBottom:`1px solid ${S.border}`}}>Calories — {dRange==="weekly"?"7 Day":"Month"}</div>
+              <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:1,borderBottom:`1px solid ${S.border}`}}>
+                {[["Eaten",rIn,"#4a9eff"],["Burned",rBurn,"#34d399"],[rDef>=0?"Deficit":"Surplus",Math.abs(rDef),rDef>=0?"#34d399":"#f87171"]].map(([l,v,c])=>(
+                  <div key={l} style={{padding:"12px 10px",background:S.dim}}>
+                    <div style={{fontSize:10,color:S.muted,marginBottom:4}}>{l}</div>
+                    <div style={{fontSize:16,fontWeight:600,color:c}}>{Number(v).toLocaleString()}</div>
+                    <div style={{fontSize:10,color:S.muted}}>kcal</div>
+                  </div>
+                ))}
+              </div>
+              <div style={{padding:"10px 14px",borderBottom:`1px solid ${S.border}`,display:"flex",gap:20}}>
+                <div><div style={{fontSize:10,color:S.muted,marginBottom:2}}>Total steps</div><div style={{fontSize:15,fontWeight:600}}>{rSteps.toLocaleString()}</div></div>
+                <div><div style={{fontSize:10,color:S.muted,marginBottom:2}}>Avg/day</div><div style={{fontSize:15,fontWeight:600}}>{Math.round(rSteps/rDays.length).toLocaleString()}</div></div>
+                <div><div style={{fontSize:10,color:S.muted,marginBottom:2}}>Days deficit</div><div style={{fontSize:15,fontWeight:600,color:"#34d399"}}>{rDays.filter(dt=>(days[dt]?.calBurn||0)>(days[dt]?.calIn||0)).length}</div></div>
+              </div>
+              <div style={{padding:14}}>
+                <div style={{display:"flex",gap:16,marginBottom:10}}>
+                  {[["■ Eaten","#4a9eff"],["■ Burned","#34d399"],["— Deficit","#f59e0b"]].map(([l,c])=><span key={l} style={{fontSize:11,color:c}}>{l}</span>)}
+                </div>
+                <div style={{position:"relative",height:200}}><CalChart data={chartD}/></div>
+              </div>
+            </div>
+            <div style={{...C(),overflow:"hidden",marginBottom:14}}>
+              <div style={{padding:"10px 14px",fontSize:13,fontWeight:500,borderBottom:`1px solid ${S.border}`}}>Workouts — 7 Day</div>
+              <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:1,borderBottom:`1px solid ${S.border}`}}>
+                {[["Sessions",gym7.length+"/7"],["Avg steps",Math.round(last7.reduce((a,dt)=>a+(days[dt]?.stepsNum||0),0)/7).toLocaleString()],["Step burn",Math.round(last7.reduce((a,dt)=>a+Math.round((days[dt]?.stepsNum||0)*KPS),0)).toLocaleString()+" kcal"]].map(([l,v])=>(
+                  <div key={l} style={{padding:"12px 10px",background:S.dim}}>
+                    <div style={{fontSize:10,color:S.muted,marginBottom:4}}>{l}</div>
+                    <div style={{fontSize:13,fontWeight:600,color:S.text}}>{v}</div>
+                  </div>
+                ))}
+              </div>
+              {wSum.length>0?(
+                <div style={{padding:"10px 14px"}}>
+                  {wSum.map((w,i)=>(
+                    <div key={i} style={{padding:"8px 0",borderBottom:i<wSum.length-1?`1px solid ${S.dim}`:"none"}}>
+                      <div style={{display:"flex",gap:10,alignItems:"center",marginBottom:w.notes?4:0}}>
+                        <div style={{fontSize:11,color:S.muted,minWidth:44}}>{w.date.slice(5)}</div>
+                        <div style={{padding:"2px 8px",background:"#4a9eff22",border:`1px solid #4a9eff44`,borderRadius:10,fontSize:11,color:S.accent}}>{w.type}</div>
+                        {w.steps>0&&<div style={{fontSize:11,color:S.muted}}>{w.steps.toLocaleString()} steps</div>}
+                      </div>
+                      {w.notes&&<div style={{fontSize:12,color:S.muted,paddingLeft:54,lineHeight:1.5}}>{w.notes}</div>}
+                    </div>
+                  ))}
+                </div>
+              ):<div style={{padding:14,fontSize:13,color:S.muted}}>No workouts logged this week.</div>}
+            </div>
+            <div style={{...C(),overflow:"hidden"}}>
+              <div style={{padding:"10px 14px",fontSize:13,fontWeight:500,borderBottom:`1px solid ${S.border}`}}>Weight — 30 Day</div>
+              <div style={{padding:"12px 14px",borderBottom:`1px solid ${S.border}`,display:"flex",gap:24,flexWrap:"wrap"}}>
+                <div><div style={{fontSize:10,color:S.muted,marginBottom:4}}>Latest</div><div style={{fontSize:22,fontWeight:600,color:"#a78bfa"}}>{latWt?days[latWt].weight+" lbs":"—"}</div></div>
+                {(()=>{const wd=last30.filter(dt=>days[dt]?.weight);if(wd.length<2)return null;const diff=(days[wd[wd.length-1]].weight-days[wd[0]].weight).toFixed(1);return<div><div style={{fontSize:10,color:S.muted,marginBottom:4}}>30d change</div><div style={{fontSize:22,fontWeight:600,color:Number(diff)<0?"#34d399":"#f87171"}}>{diff>0?"+":""}{diff} lbs</div></div>;})()}
+              </div>
+              <div style={{padding:14}}>
+                <div style={{position:"relative",height:160}}><WtChart data={wtD}/></div>
+                {!wtD.some(d=>d.weight)&&<div style={{fontSize:13,color:S.muted,textAlign:"center",paddingTop:20}}>Log your weight in Daily to see the chart.</div>}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {tab==="domains" && !aDom && (
+          <div>
+            {PROTOCOLS.map(dp=>(
+              <div key={dp.id} onClick={()=>setADom(dp.id)}
+                style={{background:S.card,border:`1px solid ${dp.border}`,borderRadius:10,marginBottom:12,overflow:"hidden",cursor:"pointer"}}>
+                <div style={{background:dp.color,padding:"12px 14px",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
+                  <div style={{fontSize:14,fontWeight:600}}>{dp.label}</div>
+                  <span style={{color:S.muted,fontSize:13}}>›</span>
+                </div>
+                <div style={{padding:"8px 14px",fontSize:12,color:S.muted}}>{dp.items[0].slice(0,72)}…</div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {tab==="domains" && aDom && (()=>{
+          const dp=PROTOCOLS.find(d=>d.id===aDom);
+          return (
+            <div>
+              <button onClick={()=>setADom(null)} style={{background:"transparent",border:`1px solid ${S.border}`,borderRadius:6,padding:"6px 12px",color:S.muted,fontSize:12,cursor:"pointer",marginBottom:14}}>‹ Back</button>
+              <div style={{background:S.card,border:`1px solid ${dp.border}`,borderRadius:10,overflow:"hidden"}}>
+                <div style={{background:dp.color,padding:"14px 16px",borderBottom:`1px solid ${dp.border}`}}>
+                  <div style={{fontSize:16,fontWeight:600}}>{dp.label}</div>
+                </div>
+                <div style={{padding:"12px 16px"}}>
+                  {dp.items.map((item,i)=>(
+                    <div key={i} style={{fontSize:13,color:S.muted,lineHeight:1.8,paddingBottom:i<dp.items.length-1?12:0,marginBottom:i<dp.items.length-1?12:0,borderBottom:i<dp.items.length-1?`1px solid ${S.dim}`:"none"}}>{item}</div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          );
+        })()}
+
+        {tab==="system" && <Flywheel/>}
+
+        {tab==="settings" && (
+          <div>
+            <div style={{...C(),overflow:"hidden",marginBottom:14}}>
+              <div style={{padding:"10px 14px",fontSize:13,fontWeight:500,borderBottom:`1px solid ${S.border}`}}>Backup & Restore</div>
+              <div style={{padding:14}}>
+                <div style={{fontSize:12,color:S.muted,marginBottom:14,lineHeight:1.6}}>Export saves all your data to a JSON file. Import restores from a previously exported file. Do this weekly to avoid data loss on Safari.</div>
+                <div style={{display:"flex",flexDirection:"column",gap:10}}>
+                  <button onClick={exportD} style={{background:"transparent",border:`1px solid ${S.accent}`,borderRadius:8,padding:"12px 16px",color:S.accent,fontSize:14,fontWeight:500,cursor:"pointer",textAlign:"left"}}>
+                    ⬇ Export backup
+                    <div style={{fontSize:11,color:S.muted,marginTop:3,fontWeight:400}}>Download all data as a JSON file</div>
+                  </button>
+                  <label style={{background:"transparent",border:`1px solid ${S.border}`,borderRadius:8,padding:"12px 16px",color:S.muted,fontSize:14,fontWeight:500,cursor:"pointer",display:"block"}}>
+                    ⬆ Import backup
+                    <div style={{fontSize:11,color:S.muted,marginTop:3,fontWeight:400}}>Restore from a previously exported file</div>
+                    <input type="file" accept=".json" onChange={importD} style={{display:"none"}}/>
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div style={{...C(),overflow:"hidden",marginBottom:14}}>
+              <div style={{padding:"10px 14px",fontSize:13,fontWeight:500,borderBottom:`1px solid ${S.border}`}}>About</div>
+              <div style={{padding:14}}>
+                {[["Profile","Male · 25y · 200lb · 5'10\""],["Base burn",BASE+" kcal/day"],["Step burn","~0.045 kcal per step"],["Scoring","Weighted % per domain, avg 8 domains"]].map(([l,v])=>(
+                  <div key={l} style={{display:"flex",justifyContent:"space-between",padding:"8px 0",borderBottom:`1px solid ${S.dim}`}}>
+                    <span style={{fontSize:13,color:S.muted}}>{l}</span>
+                    <span style={{fontSize:13,color:S.text}}>{v}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div style={{...C(),overflow:"hidden"}}>
+              <div style={{padding:"10px 14px",fontSize:13,fontWeight:500,borderBottom:`1px solid ${S.border}`}}>Danger Zone</div>
+              <div style={{padding:14}}>
+                <div style={{fontSize:12,color:S.muted,marginBottom:12,lineHeight:1.6}}>Permanently deletes all logged data. Export first.</div>
+                <button onClick={()=>{if(window.confirm("Delete ALL data? Cannot be undone.")){upd({});alert("Cleared.");}}}
+                  style={{background:"transparent",border:`1px solid #f87171`,borderRadius:8,padding:"10px 16px",color:"#f87171",fontSize:13,fontWeight:500,cursor:"pointer",width:"100%"}}>
+                  Clear all data
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+      </div>
+
+      <div style={{background:S.card,borderTop:`1px solid ${S.border}`,padding:"10px 16px",position:"sticky",bottom:0,zIndex:10}}>
+        <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:6}}>
+          <div style={{fontSize:11,color:S.muted}}>{today}</div>
+          <div style={{display:"flex",alignItems:"center",gap:6}}><span>⚡</span><span style={{fontSize:13,fontWeight:500}}>{str}d streak</span></div>
+          <div style={{fontSize:13,color:pc(tPct),fontWeight:600}}>{tPct}%</div>
+        </div>
+        <div style={{height:3,background:S.border,borderRadius:2}}>
+          <div style={{height:"100%",width:`${tPct}%`,background:pc(tPct),borderRadius:2,transition:"width 0.3s"}}/>
+        </div>
+      </div>
+
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(React.createElement(App));
+</script>
+
+<script>
+// expose flywheel functions globally so React component and inline SVG handlers can reach them
+window.buildFlywheel = buildFlywheel;
+window.fwSel = fwSel;
+window._fwObs = _fwObs;
+window._fwBuilt = _fwBuilt;
+_fwObs.observe(document.getElementById('root'), {childList:true});
 </script>
 
 </body>
