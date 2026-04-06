@@ -251,14 +251,15 @@ function App() {
   const tabs = [
     {id:"daily",label:"Daily"},{id:"dashboard",label:"Dashboard"},
     {id:"monthly",label:"Monthly"},{id:"weekly",label:"Weekly"},
-    {id:"body",label:"Body"},{id:"domains",label:"Domains"},{id:"settings",label:"Settings"}
+    {id:"body",label:"Body"},{id:"domains",label:"Domains"},
+    {id:"system",label:"System"},{id:"settings",label:"Settings"}
   ];
 
   return (
     <div style={{background:s.bg,minHeight:"100vh",color:s.text,paddingBottom:80}}>
 
       {/* TOP HEADER */}
-      <div style={{background:s.card,borderBottom:`1px solid ${s.border}`,padding:"14px 16px",position:"sticky",top:0,zIndex:10}}>
+      <div style={{background:s.card,borderBottom:`1px solid ${s.border}`,padding:"14px 16px",position:"sticky",top:0,zIndex:10,textAlign:"center"}}>
         <div style={{fontSize:18,fontWeight:600,letterSpacing:1,color:s.text}}>SYSTEM</div>
       </div>
 
@@ -266,8 +267,8 @@ function App() {
       <div style={{display:"flex",background:s.card,borderBottom:`1px solid ${s.border}`,overflowX:"auto"}}>
         {tabs.map(t=>(
           <button key={t.id} onClick={()=>{ setTab(t.id); setActiveDomain(null); }}
-            style={{flex:1,minWidth:52,padding:"10px 2px",border:"none",background:"none",
-              color:tab===t.id?s.accent:s.muted,fontSize:11,fontWeight:tab===t.id?600:400,
+            style={{flex:1,minWidth:44,padding:"10px 1px",border:"none",background:"none",
+              color:tab===t.id?s.accent:s.muted,fontSize:10,fontWeight:tab===t.id?600:400,
               borderBottom:tab===t.id?`2px solid ${s.accent}`:"2px solid transparent",cursor:"pointer",whiteSpace:"nowrap"}}>
             {t.label}
           </button>
@@ -636,6 +637,68 @@ function App() {
           );
         })()}
 
+        {/* ── SYSTEM ── */}
+        {tab==="system" && (
+          <div>
+            <div style={{fontSize:12,color:s.muted,marginBottom:14}}>Domain flywheel — tap any node to explore connections</div>
+            <div style={{...C(),overflow:"hidden",padding:14}}>
+              <style>{`
+                .nc{cursor:pointer;transition:opacity .15s}.nc:hover{opacity:.8}
+                .detail-panel{background:#111;border-radius:10px;border:1px solid #1a1a1a;padding:12px 14px;margin-top:12px;font-size:13px;color:#555;line-height:1.6;min-height:60px}
+                .detail-panel strong{color:#e8e8e8;font-weight:500;display:block;margin-bottom:4px;font-size:14px}
+              `}</style>
+              <svg width="100%" viewBox="0 0 680 620" id="fw">
+                <defs>
+                  <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+                    <path d="M1 1L9 5L1 9" fill="none" stroke="context-stroke" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </marker>
+                </defs>
+                <g id="arcs"></g>
+                <g id="spokes"></g>
+                <g className="nc" id="n-financial" onClick="sel('financial')">
+                  <rect x="270" y="268" width="140" height="58" rx="12" fill="#085041" stroke="#1D9E75" strokeWidth="1.5"/>
+                  <text fontFamily="sans-serif" fontSize="14" fontWeight="500" fill="#9FE1CB" x="340" y="292" textAnchor="middle" dominantBaseline="central">Financial</text>
+                  <text fontFamily="sans-serif" fontSize="11" fill="#5DCAA5" x="340" y="312" textAnchor="middle" dominantBaseline="central">Primary engine</text>
+                </g>
+                <g className="nc" id="n-mental" onClick="sel('mental')">
+                  <rect x="276" y="34" width="128" height="52" rx="10" fill="#26215C" stroke="#7F77DD" strokeWidth="1"/>
+                  <text fontFamily="sans-serif" fontSize="13" fontWeight="500" fill="#CECBF6" x="340" y="55" textAnchor="middle" dominantBaseline="central">Mental</text>
+                  <text fontFamily="sans-serif" fontSize="11" fill="#AFA9EC" x="340" y="72" textAnchor="middle" dominantBaseline="central">Strategy &amp; clarity</text>
+                </g>
+                <g className="nc" id="n-charisma" onClick="sel('charisma')">
+                  <rect x="506" y="144" width="136" height="52" rx="10" fill="#412402" stroke="#BA7517" strokeWidth="1"/>
+                  <text fontFamily="sans-serif" fontSize="13" fontWeight="500" fill="#FAC775" x="574" y="165" textAnchor="middle" dominantBaseline="central">Charisma</text>
+                  <text fontFamily="sans-serif" fontSize="11" fill="#EF9F27" x="574" y="182" textAnchor="middle" dominantBaseline="central">Social leverage</text>
+                </g>
+                <g className="nc" id="n-seduction" onClick="sel('seduction')">
+                  <rect x="506" y="398" width="136" height="52" rx="10" fill="#4A1B0C" stroke="#D85A30" strokeWidth="1"/>
+                  <text fontFamily="sans-serif" fontSize="13" fontWeight="500" fill="#F5C4B3" x="574" y="419" textAnchor="middle" dominantBaseline="central">Seduction</text>
+                  <text fontFamily="sans-serif" fontSize="11" fill="#F0997B" x="574" y="436" textAnchor="middle" dominantBaseline="central">Presence &amp; draw</text>
+                </g>
+                <g className="nc" id="n-nutrition" onClick="sel('nutrition')">
+                  <rect x="276" y="508" width="128" height="52" rx="10" fill="#173404" stroke="#639922" strokeWidth="1"/>
+                  <text fontFamily="sans-serif" fontSize="13" fontWeight="500" fill="#C0DD97" x="340" y="529" textAnchor="middle" dominantBaseline="central">Nutrition</text>
+                  <text fontFamily="sans-serif" fontSize="11" fill="#97C459" x="340" y="546" textAnchor="middle" dominantBaseline="central">Fuel &amp; body comp</text>
+                </g>
+                <g className="nc" id="n-fitness" onClick="sel('fitness')">
+                  <rect x="38" y="398" width="136" height="52" rx="10" fill="#042C53" stroke="#378ADD" strokeWidth="1"/>
+                  <text fontFamily="sans-serif" fontSize="13" fontWeight="500" fill="#B5D4F4" x="106" y="419" textAnchor="middle" dominantBaseline="central">Fitness</text>
+                  <text fontFamily="sans-serif" fontSize="11" fill="#85B7EB" x="106" y="436" textAnchor="middle" dominantBaseline="central">Energy &amp; signal</text>
+                </g>
+                <g className="nc" id="n-beauty" onClick="sel('beauty')">
+                  <rect x="38" y="144" width="136" height="52" rx="10" fill="#4B1528" stroke="#D4537E" strokeWidth="1"/>
+                  <text fontFamily="sans-serif" fontSize="13" fontWeight="500" fill="#F4C0D1" x="106" y="165" textAnchor="middle" dominantBaseline="central">Beauty</text>
+                  <text fontFamily="sans-serif" fontSize="11" fill="#ED93B1" x="106" y="182" textAnchor="middle" dominantBaseline="central">Aesthetic edge</text>
+                </g>
+              </svg>
+              <div className="detail-panel">
+                <strong id="dt">Tap any domain to explore its connections</strong>
+                <span id="db">The outer ring shows sequential compounding (clockwise). Dashed spokes show every domain feeding the Financial engine at the center.</span>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* ── SETTINGS ── */}
         {tab==="settings" && (
           <div>
@@ -700,6 +763,93 @@ function App() {
 }
 
 ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+</script>
+
+<script>
+const _nodes = {
+  financial:{cx:340,cy:297,hw:70,hh:29},mental:{cx:340,cy:60,hw:64,hh:26},
+  charisma:{cx:574,cy:170,hw:68,hh:26},seduction:{cx:574,cy:424,hw:68,hh:26},
+  nutrition:{cx:340,cy:534,hw:64,hh:26},fitness:{cx:106,cy:424,hw:68,hh:26},
+  beauty:{cx:106,cy:170,hw:68,hh:26},
+};
+const _ring = ['mental','charisma','seduction','nutrition','fitness','beauty'];
+const _rc = {mental:'#7F77DD',charisma:'#BA7517',seduction:'#D85A30',nutrition:'#639922',fitness:'#378ADD',beauty:'#D4537E'};
+
+function _edge(from,to){
+  const n=_nodes[from],dx=_nodes[to].cx-n.cx,dy=_nodes[to].cy-n.cy;
+  const a=Math.atan2(dy,dx),ca=Math.cos(a),sa=Math.sin(a);
+  const t=Math.min(Math.abs(ca)<1e-6?Infinity:n.hw/Math.abs(ca),Math.abs(sa)<1e-6?Infinity:n.hh/Math.abs(sa))-6;
+  return {x:n.cx+ca*t,y:n.cy+sa*t};
+}
+
+function buildFlywheel(){
+  const fw=document.getElementById('fw'); if(!fw) return;
+  const arcsG=document.getElementById('arcs');
+  const spokesG=document.getElementById('spokes');
+  if(!arcsG||!spokesG) return;
+  arcsG.innerHTML=''; spokesG.innerHTML='';
+  const ns='http://www.w3.org/2000/svg';
+
+  for(let i=0;i<_ring.length;i++){
+    const from=_ring[i],to=_ring[(i+1)%_ring.length],c=_rc[from];
+    const p1=_edge(from,to),p2=_edge(to,from);
+    const mx=(p1.x+p2.x)/2,my=(p1.y+p2.y)/2;
+    const dx=p2.x-p1.x,dy=p2.y-p1.y,len=Math.sqrt(dx*dx+dy*dy),curve=len*0.18;
+    const nx=-dy/len,ny=dx/len;
+    const d=`M${p1.x.toFixed(1)} ${p1.y.toFixed(1)} Q${(mx+nx*curve).toFixed(1)} ${(my+ny*curve).toFixed(1)} ${p2.x.toFixed(1)} ${p2.y.toFixed(1)}`;
+    const path=document.createElementNS(ns,'path');
+    path.setAttribute('d',d); path.setAttribute('fill','none');
+    path.setAttribute('stroke',c); path.setAttribute('stroke-width','1.5');
+    path.setAttribute('stroke-linecap','round'); path.setAttribute('marker-end','url(#ah)');
+    path.setAttribute('opacity','0.7'); arcsG.appendChild(path);
+  }
+
+  for(const domain of _ring){
+    const c=_rc[domain],p1=_edge(domain,'financial'),p2=_edge('financial',domain);
+    const path=document.createElementNS(ns,'path');
+    path.setAttribute('d',`M${p1.x.toFixed(1)} ${p1.y.toFixed(1)} L${p2.x.toFixed(1)} ${p2.y.toFixed(1)}`);
+    path.setAttribute('fill','none'); path.setAttribute('stroke',c);
+    path.setAttribute('stroke-width','1'); path.setAttribute('stroke-dasharray','4 4');
+    path.setAttribute('stroke-linecap','round'); path.setAttribute('marker-end','url(#ah)');
+    path.setAttribute('opacity','0.45'); spokesG.appendChild(path);
+  }
+
+  ['n-mental','n-charisma','n-seduction','n-nutrition','n-fitness','n-beauty','n-financial'].forEach(id=>{
+    const el=document.getElementById(id); if(el) fw.appendChild(el);
+  });
+}
+
+const _details = {
+  financial:{title:'Financial — the primary engine',body:"Everything feeds here. Job search output, delivery income, and skill-building all convert to capital. As the engine, Financial is the only node that compounds across all others — more resources → better inputs for every other domain."},
+  mental:{title:'Mental — strategy & clarity',body:"Your Obsidian system, reading, and weekly reviews live here. Mental clarity sharpens your financial decisions and job search execution. Strong Mental → better Charisma (sharper thinking shows up in conversation)."},
+  charisma:{title:'Charisma — social leverage',body:"Your delivery shift is live practice reps every evening. Each customer interaction is a low-stakes charisma workout. Strong Charisma compounds into Seduction and lifts Financial through interviews and negotiation."},
+  seduction:{title:'Seduction — presence & draw',body:"The downstream output of Charisma, Fitness, and Beauty converging. This is where the 4-month silent build pays off — you're not chasing, you're becoming someone worth chasing."},
+  nutrition:{title:'Nutrition — fuel & body comp',body:"Your protein breakfast flywheel anchors this. Hitting targets here directly enables Fitness output — gym performance and recovery. Body composition changes also compound into Beauty and Seduction."},
+  fitness:{title:'Fitness — energy & signal',body:"Gym sessions generate energy that raises your daily output ceiling across every domain. The 10k step walk targets dual output: steps for Fitness, audio content for Mental. Fitness → Beauty → Seduction."},
+  beauty:{title:'Beauty — aesthetic edge',body:"Grooming, style, and physical presentation. Easiest domain to move quickly in relative to effort. Strong Beauty amplifies first impressions in every social context — interviews, dates, delivery interactions."},
+};
+
+function sel(key){
+  const d=_details[key]; if(!d) return;
+  const dt=document.getElementById('dt'),db=document.getElementById('db');
+  if(dt) dt.textContent=d.title;
+  if(db) db.textContent=d.body;
+  document.querySelectorAll('.nc').forEach(g=>g.style.opacity='0.4');
+  const nk=document.getElementById('n-'+key),nf=document.getElementById('n-financial');
+  if(nk) nk.style.opacity='1';
+  if(nf) nf.style.opacity='1';
+}
+
+// Build flywheel once each time the SVG appears, disconnect while absent
+let _built = false;
+const _obs = new MutationObserver(()=>{
+  const fw = document.getElementById('fw');
+  if(!_built && fw){ _built=true; buildFlywheel(); }
+  if(_built && !fw){ _built=false; }
+});
+_obs.observe(document.body, {childList:true, subtree:false});
+// Also watch one level deeper without walking entire tree
+_obs.observe(document.getElementById('root'), {childList:true});
 </script>
 </body>
 </html>
