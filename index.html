@@ -10,7 +10,7 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <style>
   *{box-sizing:border-box;margin:0;padding:0}
-  body{background:#0a0a0a;font-family:-apple-system,BlinkMacSystemFont,sans-serif;color:#e8e8e8}
+  body{background:#000000;font-family:-apple-system,BlinkMacSystemFont,sans-serif;color:#e8e8e8}
   input,textarea{outline:none;font-family:inherit}
   ::-webkit-scrollbar{width:4px;height:4px}
   ::-webkit-scrollbar-track{background:#111}
@@ -226,7 +226,7 @@ function App() {
     reader.readAsText(file); e.target.value="";
   };
 
-  const s = { bg:"#0a0a0a",card:"#111",border:"#222",text:"#e8e8e8",muted:"#666",accent:"#4a9eff",dim:"#1e1e1e" };
+  const s = { bg:"#000000",card:"#0a0a0a",border:"#1a1a1a",text:"#e8e8e8",muted:"#555",accent:"#4a9eff",dim:"#111" };
   const card = (extra={}) => ({background:s.card,border:`1px solid ${s.border}`,borderRadius:10,...extra});
 
   const todayData = days[today]||{checks:{}};
