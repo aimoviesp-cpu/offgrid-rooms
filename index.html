@@ -555,7 +555,6 @@ return(<div style={{background:S.bg,minHeight:"100vh",color:S.text,paddingBottom
   <button onClick={bodyWeekNavBack} style={{background:"transparent",border:"1px solid "+S.border,borderRadius:6,padding:"5px 12px",color:S.muted,fontSize:16,cursor:"pointer"}}>{"\u2039"}</button>
   <div onClick={function(){setCalPickerOpen(true);}} style={{fontSize:13,fontWeight:500,color:isTodayWeek(bodyWeekStart)?S.accent:S.text,cursor:"pointer",padding:"4px 12px",borderRadius:6,border:"1px solid "+(calPickerOpen?S.accent:S.border),background:"transparent",display:"flex",alignItems:"center",gap:6,WebkitTapHighlightColor:"transparent"}}>
     <span>{bodyWeekLabel()==="This Week"?"This Week":rangeLabelFrom(bodyWeekStart)}</span>
-    <span style={{fontSize:10,color:S.muted}}>{"📅"}</span>
   </div>
   <button onClick={bodyWeekNavFwd} style={{background:"transparent",border:"1px solid "+S.border,borderRadius:6,padding:"5px 12px",color:bodyWeekAtMax?S.dim:S.muted,fontSize:16,cursor:bodyWeekAtMax?"default":"pointer"}} disabled={bodyWeekAtMax}>{"\u203A"}</button>
 </div>)}
