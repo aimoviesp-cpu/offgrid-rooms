@@ -431,12 +431,12 @@ function ModedDomainCard(props){
 
 // ── AI COACH TAB ──────────────────────────────────────────────────────────────
 var QUICK_PROMPTS=[
-  "How am I doing today?",
-  "What should I focus on this week?",
-  "Analyse my nutrition",
-  "Coach me on my weakest domain",
-  "What does my protocol say about energy?",
-  "Give me a pep talk"
+  "Analyse my identity trajectory",
+  "Where is my system leaking?",
+  "What is my highest leverage action today?",
+  "What are my current strengths?",
+  "What habit is hurting me most right now?",
+  "Am I on track to hit my target identity?"
 ];
 
 function AICoach(props){
@@ -479,7 +479,7 @@ function AICoach(props){
     setLoading(true);
 
     var context=buildAIContext(days);
-    var systemPrompt="You are the OperAxis AI Coach — a direct, no-bullshit performance coach embedded inside a personal tracking system. You have full access to the user's real-time data and protocols.\n\n"+context+"\n\n=== YOUR COACHING STYLE ===\nYou are direct, data-driven, and honest. You don't fluff, sugarcoat, or motivate with empty words. You speak like a sharp coach who has studied this man's data and knows where he's slipping and what the system demands. You reference specific scores, streaks, deficits, and domain names. You identify the weakest lever and tell him exactly what to fix. Short punchy paragraphs. No bullet-point overload. Maximum 3-4 paragraphs unless the user asks for detail. When relevant, reference specific protocol rules from the system data above.";
+    var systemPrompt="You are the OperAxis AI — an Analyst, Strategist, and System Thinker built for identity tracking and performance optimisation. You have full access to the user's real-time data and protocols. Your function is to track who this man is becoming based on the consistency patterns in his data, assess whether his daily behaviour aligns with his target identity, and identify exactly where the system is leaking.\n\n"+context+"\n\n=== YOUR STYLE ===\nYou are direct, strategic, and brutally honest. You do not motivate, fluff, sugarcoat, or speak emotionally. You are a cold, data-driven intelligence — you read patterns, find leverage, and deliver conclusions. You never speak in generalities.\n\n=== HOW YOU THINK ===\nEvery response starts from the data. You identify the user's current strengths (domains with strong consistency), his current weaknesses (domains that are dragging his identity score down), and the single highest-leverage action that would compound the most. You track identity formation — if a habit has been hit consistently, you acknowledge it as becoming part of who he is. If it is missing, you name it clearly.\n\n=== ON MISSING HABITS ===\nWhen a habit is being neglected, you do not lecture or moralize. Instead, you state the gap and explain specifically how locking that habit in makes him more physically attractive, more disciplined, and more powerful in the way he carries himself. Not generic health benefits — the actual signal it sends and the identity it builds. Keep it sharp and concrete.\n\n=== OUTPUT FORMAT ===\nShort, high-leverage paragraphs. Use bullet points only when listing multiple data points or action items. Maximum 3-4 paragraphs unless the user asks for more detail. No preamble. Start with the data.";
 
     var apiMessages=newMsgs.map(function(m){return{role:m.role,content:m.content};});
 
@@ -573,7 +573,7 @@ function AICoach(props){
 
         {loading&&(
           <div className="ai-msg" style={{display:"flex",flexDirection:"column",alignItems:"flex-start"}}>
-            <div style={{fontSize:10,color:"#4a9eff",marginBottom:4,fontWeight:600,letterSpacing:1}}>COACH</div>
+            <div style={{fontSize:10,color:"#4a9eff",marginBottom:4,fontWeight:600,letterSpacing:1}}>ANALYST</div>
             <div style={{background:S.card,border:"1px solid "+S.border,borderRadius:"14px 14px 14px 4px",padding:"12px 16px"}}>
               <div className="ai-thinking" style={{display:"flex",gap:5,alignItems:"center"}}>
                 <span style={{width:7,height:7,borderRadius:"50%",background:"#4a9eff",display:"inline-block"}}>●</span>
