@@ -183,11 +183,6 @@ function buildAIContext(days){
     avgs7[d.label]=avg+"%";
   });
 
-  // latest weight + 30d change
-  var wtDays=L30.filter(function(dt){return days[dt]&&days[dt].weight;});
-  var latestWeight=wtDays.length?days[wtDays[wtDays.length-1]].weight:null;
-  var wtChange=wtDays.length>=2?(days[wtDays[wtDays.length-1]].weight-days[wtDays[0]].weight).toFixed(1):null;
-
   // today nutrition
   var calIn=todayData.calIn||0;
   var calBurn=todayData.calBurn||0;
@@ -199,6 +194,70 @@ function buildAIContext(days){
 
   // weekly avg score
   var weekAvg=Math.round(L7.reduce(function(a,dt){return a+dayPct(days[dt]||{});},0)/7);
+
+  // ── ALL-TIME STATS ──────────────────────────────────────────────────────────
+  var allDates=Object.keys(days).sort();
+  var loggedDays=allDates.filter(function(dt){
+    var d=days[dt];
+    return d&&(d.calIn||d.calBurn||d.weight||d.workoutType||d.stepsNum);
+  });
+
+  // all-time calorie stats
+  var calDays=loggedDays.filter(function(dt){return days[dt].calIn||days[dt].calBurn;});
+  var totalCalIn=calDays.reduce(function(a,dt){return a+(days[dt].calIn||0);},0);
+  var totalCalBurn=calDays.reduce(function(a,dt){return a+(days[dt].calBurn||0);},0);
+  var totalDeficit=totalCalBurn-totalCalIn;
+  var avgCalIn=calDays.length?Math.round(totalCalIn/calDays.length):0;
+  var avgCalBurn=calDays.length?Math.round(totalCalBurn/calDays.length):0;
+  var avgDeficit=calDays.length?Math.round(totalDeficit/calDays.length):0;
+  var deficitDays=calDays.filter(function(dt){return(days[dt].calBurn||0)>(days[dt].calIn||0);}).length;
+  var surplusDays=calDays.length-deficitDays;
+
+  // all-time steps
+  var stepDays=loggedDays.filter(function(dt){return days[dt].stepsNum;});
+  var totalSteps=stepDays.reduce(function(a,dt){return a+(days[dt].stepsNum||0);},0);
+  var avgSteps=stepDays.length?Math.round(totalSteps/stepDays.length):0;
+
+  // all-time workout breakdown
+  var workoutCounts={};
+  WTYPES.forEach(function(t){workoutCounts[t]=0;});
+  loggedDays.forEach(function(dt){
+    var wt=days[dt].workoutType;
+    if(wt&&workoutCounts[wt]!==undefined)workoutCounts[wt]++;
+  });
+  var totalSessions=loggedDays.filter(function(dt){return days[dt].workoutType&&days[dt].workoutType!=="Rest";}).length;
+
+  // weight trend
+  var wtDaysAll=loggedDays.filter(function(dt){return days[dt].weight;});
+  var firstWeight=wtDaysAll.length?days[wtDaysAll[0]].weight:null;
+  var latestWeight=wtDaysAll.length?days[wtDaysAll[wtDaysAll.length-1]].weight:null;
+  var wtChangeAll=wtDaysAll.length>=2?(days[wtDaysAll[wtDaysAll.length-1]].weight-days[wtDaysAll[0]].weight).toFixed(1):null;
+  var wtChange30=null;
+  var wt30=L30.filter(function(dt){return days[dt]&&days[dt].weight;});
+  if(wt30.length>=2)wtChange30=(days[wt30[wt30.length-1]].weight-days[wt30[0]].weight).toFixed(1);
+
+  // last 30 days detail log
+  var last30Log=L30.map(function(dt){
+    var d=days[dt]||{};
+    var ci=d.calIn||0;
+    var cb=d.calBurn||0;
+    var def=cb-ci;
+    var parts=[];
+    if(ci||cb){parts.push("in="+ci+" burn="+cb+" "+(def>=0?"deficit=+"+def:"surplus="+Math.abs(def)));}
+    if(d.stepsNum){parts.push("steps="+d.stepsNum);}
+    if(d.workoutType){parts.push("workout="+d.workoutType);}
+    if(d.weight){parts.push("weight="+d.weight+"lbs");}
+    return dt.slice(5)+": "+(parts.length?parts.join(" "):"no data");
+  }).join("\n");
+
+  // best and worst deficit weeks in last 30d
+  var weekBlocks=[];
+  for(var wi=0;wi<L30.length;wi+=7){
+    var wk=L30.slice(wi,wi+7);
+    var wkDef=wk.reduce(function(a,dt){var d=days[dt]||{};return a+((d.calBurn||0)-(d.calIn||0));},0);
+    weekBlocks.push({range:wk[0].slice(5)+" to "+wk[wk.length-1].slice(5),deficit:wkDef});
+  }
+  weekBlocks.sort(function(a,b){return b.deficit-a.deficit;});
 
   // protocol summaries (compact)
   var protocolSummary=PROTOCOLS.map(function(p){
@@ -218,18 +277,49 @@ function buildAIContext(days){
     "Streak: "+str+" days\n"+
     "Today's overall score: "+todayPct+"%\n"+
     "7-day average score: "+weekAvg+"%\n\n"+
+
     "TODAY'S DOMAIN SCORES:\n"+
     Object.entries(domainScores).map(function(e){return"  "+e[0]+": "+e[1];}).join("\n")+"\n\n"+
+
     "7-DAY DOMAIN AVERAGES:\n"+
     Object.entries(avgs7).map(function(e){return"  "+e[0]+": "+e[1];}).join("\n")+"\n\n"+
+
     "TODAY'S NUTRITION & TRAINING:\n"+
     "  Calories eaten: "+(calIn||"not logged")+"\n"+
     "  Calories burned: "+(calBurn||"not logged")+"\n"+
-    "  Deficit: "+(calBurn?(deficit>0?"−"+deficit+" kcal surplus":"−"+Math.abs(deficit)+" kcal"):"not logged")+"\n"+
+    "  Deficit/Surplus: "+(calBurn?(deficit>=0?"deficit +"+deficit+" kcal":"surplus "+Math.abs(deficit)+" kcal"):"not logged")+"\n"+
     "  Workout: "+workout+(workoutNotes?" — "+workoutNotes:"")+"\n\n"+
-    "WEIGHT:\n"+
-    "  Latest: "+(latestWeight?latestWeight+" lbs":"not logged")+"\n"+
-    "  30-day change: "+(wtChange!==null?wtChange+" lbs":"insufficient data")+"\n\n"+
+
+    "=== ALL-TIME STATS ("+loggedDays.length+" logged days total) ===\n\n"+
+
+    "CALORIES ALL-TIME ("+calDays.length+" days logged):\n"+
+    "  Avg calories in per day: "+avgCalIn+" kcal\n"+
+    "  Avg calories burned per day: "+avgCalBurn+" kcal\n"+
+    "  Avg daily deficit: "+(avgDeficit>=0?"+"+avgDeficit:String(avgDeficit))+" kcal\n"+
+    "  Total accumulated deficit: "+(totalDeficit>=0?"+"+totalDeficit:String(totalDeficit))+" kcal\n"+
+    "  Days in deficit: "+deficitDays+" / "+calDays.length+"\n"+
+    "  Days in surplus: "+surplusDays+" / "+calDays.length+"\n\n"+
+
+    "STEPS ALL-TIME ("+stepDays.length+" days logged):\n"+
+    "  Total steps logged: "+totalSteps.toLocaleString()+"\n"+
+    "  Average steps per day: "+avgSteps.toLocaleString()+"\n\n"+
+
+    "WORKOUTS ALL-TIME ("+totalSessions+" training sessions):\n"+
+    WTYPES.map(function(t){return"  "+t+": "+workoutCounts[t]+" sessions";}).join("\n")+"\n\n"+
+
+    "WEIGHT TREND:\n"+
+    "  Starting weight: "+(firstWeight?firstWeight+" lbs":"not logged")+"\n"+
+    "  Latest weight: "+(latestWeight?latestWeight+" lbs":"not logged")+"\n"+
+    "  All-time change: "+(wtChangeAll!==null?wtChangeAll+" lbs":"insufficient data")+"\n"+
+    "  30-day change: "+(wtChange30!==null?wtChange30+" lbs":"insufficient data")+"\n\n"+
+
+    "BEST DEFICIT WEEKS (last 30 days):\n"+
+    weekBlocks.slice(0,2).map(function(w){return"  "+w.range+": "+(w.deficit>=0?"+":"")+w.deficit+" kcal";}).join("\n")+"\n"+
+    "WORST SURPLUS WEEKS (last 30 days):\n"+
+    weekBlocks.slice(-2).reverse().map(function(w){return"  "+w.range+": "+(w.deficit>=0?"+":"")+w.deficit+" kcal";}).join("\n")+"\n\n"+
+
+    "LAST 30 DAYS DETAIL LOG:\n"+last30Log+"\n\n"+
+
     "SYSTEM PROTOCOLS (summary):\n"+protocolSummary;
 }
 
@@ -479,7 +569,7 @@ function AICoach(props){
     setLoading(true);
 
     var context=buildAIContext(days);
-    var systemPrompt="You are the OperAxis AI — an Analyst, Strategist, and System Thinker built for identity tracking and performance optimisation. You have full access to the user's real-time data and protocols. Your function is to track who this man is becoming based on the consistency patterns in his data, assess whether his daily behaviour aligns with his target identity, and identify exactly where the system is leaking.\n\n"+context+"\n\n=== YOUR STYLE ===\nYou are direct, strategic, and brutally honest. You do not motivate, fluff, sugarcoat, or speak emotionally. You are a cold, data-driven intelligence — you read patterns, find leverage, and deliver conclusions. You never speak in generalities.\n\n=== HOW YOU THINK ===\nEvery response starts from the data. You identify the user's current strengths (domains with strong consistency), his current weaknesses (domains that are dragging his identity score down), and the single highest-leverage action that would compound the most. You track identity formation — if a habit has been hit consistently, you acknowledge it as becoming part of who he is. If it is missing, you name it clearly.\n\n=== ON MISSING HABITS ===\nWhen a habit is being neglected, you do not lecture or moralize. Instead, you state the gap and explain specifically how locking that habit in makes him more physically attractive, more disciplined, and more powerful in the way he carries himself. Not generic health benefits — the actual signal it sends and the identity it builds. Keep it sharp and concrete.\n\n=== OUTPUT FORMAT ===\nShort, high-leverage paragraphs. Use bullet points only when listing multiple data points or action items. Maximum 3-4 paragraphs unless the user asks for more detail. No preamble. Start with the data.";
+    var systemPrompt="You are the OperAxis AI — an Analyst, Strategist, and System Thinker built for identity tracking and performance optimisation. You have full access to the user's real-time data and protocols. Your function is to track who this man is becoming based on the consistency patterns in his data, assess whether his daily behaviour aligns with his target identity, and identify exactly where the system is leaking.\n\n"+context+"\n\n=== YOUR STYLE ===\nYou are direct, strategic, and brutally honest. You do not motivate, fluff, sugarcoat, or speak emotionally. You are a cold, data-driven intelligence — you read patterns, find leverage, and deliver conclusions. You never speak in generalities.\n\n=== HOW YOU THINK ===\nEvery response starts from the data. You identify the user's current strengths (domains with strong consistency), his current weaknesses (domains that are dragging his identity score down), and the single highest-leverage action that would compound the most. You track identity formation — if a habit has been hit consistently, you acknowledge it as becoming part of who he is. If it is missing, you name it clearly.\n\nWhen analysing nutrition and body composition, use the full historical log. Look at average deficit, consistency of deficit days vs surplus days, weight trend trajectory, and whether the calorie data matches the weight trend. Call out discrepancies. Identify whether the current trajectory will hit the 190lb target by July 2026 based on the rate of change in the data.\n\n=== ON MISSING HABITS ===\nWhen a habit is being neglected, you do not lecture or moralize. Instead, you state the gap and explain specifically how locking that habit in makes him more physically attractive, more disciplined, and more powerful in the way he carries himself. Not generic health benefits — the actual signal it sends and the identity it builds. Keep it sharp and concrete.\n\n=== OUTPUT FORMAT ===\nShort, high-leverage paragraphs. Use bullet points only when listing multiple data points or action items. Maximum 3-4 paragraphs unless the user asks for more detail. No preamble. Start with the data.";
 
     var apiMessages=newMsgs.map(function(m){return{role:m.role,content:m.content};});
 
@@ -534,7 +624,7 @@ function AICoach(props){
       <div ref={scrollRef} style={{flex:1,overflowY:"auto",marginBottom:12,display:"flex",flexDirection:"column",gap:12}}>
         {messages.length===0&&!loading&&(
           <div style={{padding:"20px 0"}}>
-            <div style={{fontSize:13,color:S.muted,marginBottom:16,textAlign:"center"}}>Your AI coach has full access to your data and protocols. Ask anything.</div>
+            <div style={{fontSize:13,color:S.muted,marginBottom:16,textAlign:"center"}}>Your AI analyst has full access to your data and protocols. Ask anything.</div>
             <div style={{display:"flex",flexWrap:"wrap",gap:8}}>
               {QUICK_PROMPTS.map(function(q,i){
                 return(
@@ -552,7 +642,7 @@ function AICoach(props){
           var isUser=m.role==="user";
           return(
             <div key={i} className="ai-msg" style={{display:"flex",flexDirection:"column",alignItems:isUser?"flex-end":"flex-start"}}>
-              {!isUser&&<div style={{fontSize:10,color:"#4a9eff",marginBottom:4,fontWeight:600,letterSpacing:1}}>COACH</div>}
+              {!isUser&&<div style={{fontSize:10,color:"#4a9eff",marginBottom:4,fontWeight:600,letterSpacing:1}}>ANALYST</div>}
               <div style={{
                 maxWidth:"88%",
                 background:isUser?"#4a9eff22":S.card,
@@ -592,7 +682,7 @@ function AICoach(props){
           value={input}
           onChange={function(e){setInput(e.target.value);}}
           onKeyDown={handleKeyDown}
-          placeholder="Ask your coach..."
+          placeholder="Ask your analyst..."
           rows={2}
           style={{flex:1,background:S.card,border:"1px solid "+S.border,borderRadius:10,padding:"10px 12px",color:S.text,fontSize:14,resize:"none",lineHeight:1.5}}
         />
