@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 <meta name="apple-mobile-web-app-title" content="OperAxis"/>
-<link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAIAAACyr5FlAAAP4klEQVR4nO2dS2xbV3rHz7lvkRT1JkW937LlWHZsN54442QGSaeYBCmCArPKoF20BbqYRTdtN0UXRZdtF01RzKrTFjMFiqCZzqBT15PW6dQxkkxiO7Etx7Js60WJoihRFN/33QVj2ZZ0yI/k5b1U5/vhLiTyvMj7v9855zvfOaTKmeMEQQ6D87oBSPOC4kCYoDgQJigOhAnOVhAmaDkQJigOhAmKA2GC4kCYoDgQJhgJhjBBy4EwQXEgTFAcCBMUB8IExYEwwbUVhAlaDoQJigNhIlDsVxAGaDkQJigOhAnOVhAmaDkQJigOhAmKA2GC4kCYoDgQJhgJhjBBy4EwQXEgTFAcCBMUB8IExYEwwbUVhAlaDoQJigNhgmeCIUzQciBMUBwIE5ytIEzQciBMUBwIE8HrBlSG8ytCd1DoCvKtLVxA4XwyFQQqcJTnbMsmhmkbplXQzGzRyhWM7YyxlTZ3c163+v8Aw=="/>
+<link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAIAAACyr5FlAAAP4klEQVR4nO2dS2xbV3rHz7lvkRT1JkW937LlWHZsN54042QGSaeYBCmCArPKoF20BbqYRTdtN0UXRZdtF01RzKrTFjMFiqCZzqBT15PW6dQxkkxiO7Etx7Js60WJoihRFN/33QVj2ZZ0yI/k5b1U5/vhLiTyvMj7v9855zvfOaTKmeMEQQ6D87oBSPOC4kCYoDgQJigOhAnOVhAmaDkQJigOhAnOVhAmaDkQJigOhAmKA2GC4kCYoDgQJhgJhjBBy4EwQXEgTFAcCBMUB8IExYEwwbUVhAlaDoQJigNhgmeCIUzQciBMUBwIE5ytIEzQciBMUBwIE8HrBlSG8ytCd1DoCvKtLVxA4XwyFQQqcJTnbMsmhmkbplXQzGzRyhWM7YyxlTZ3c163+v8Aw=="/>
 <title>OperAxis System</title>
 <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
 <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
@@ -46,8 +46,6 @@ function fwSel(key){var d=FW_DET[key];if(!d)return;var panel=document.getElement
 var _fwBuilt=false;var _fwObs=new MutationObserver(function(){var svg=document.getElementById('fw-svg');if(!_fwBuilt&&svg){_fwBuilt=true;buildFlywheel();}if(_fwBuilt&&!svg){_fwBuilt=false;}});
 
 // ── 16-WEEK PROTOCOL DATA ─────────────────────────────────────────────────────
-// Each week: phase label, target calories eaten/week, burned/week, deficit/week,
-// steps/day target, workouts/week target, refeeds/week, type
 var PROTOCOL_WEEKS = [
   {wk:1,  phase:"Phase 1 — Cut",   eatWk:14000, burnWk:20300, defWk:6300,  stepsDay:9000, workouts:5, refeeds:0, calDay:2000, macros:"200P / 200C / 45F"},
   {wk:2,  phase:"Phase 1 — Cut",   eatWk:14000, burnWk:20090, defWk:6090,  stepsDay:9000, workouts:5, refeeds:0, calDay:2000, macros:"200P / 200C / 45F"},
@@ -67,7 +65,6 @@ var PROTOCOL_WEEKS = [
   {wk:16, phase:"Phase 3 — Cut",   eatWk:15500, burnWk:17339, defWk:1839,  stepsDay:9000, workouts:5, refeeds:2, calDay:2100, macros:"200P / 220C / 45F (cut) / 200P / 325C / 35F (refeed)"},
 ];
 
-// Phase colors
 var PHASE_COL = {
   "Phase 1 — Cut":  {bg:"#042C53", border:"#378ADD", text:"#60a5fa"},
   "Diet Break":     {bg:"#173404", border:"#639922", text:"#86efac"},
@@ -194,49 +191,42 @@ var isTodayWeek=function(startStr){var today=toDay();return today>=startStr&&tod
 
 // ── PROTOCOL HELPERS ──────────────────────────────────────────────────────────
 
-// Returns day index (0-based) from protocol start. Returns -1 if not started.
 var protoDayIndex=function(startDate,targetDate){
   if(!startDate)return -1;
   var s=new Date(startDate+"T12:00:00");
   var t=new Date(targetDate+"T12:00:00");
   var diff=Math.round((t-s)/(1000*60*60*24));
-  return diff; // 0 = day 1
+  return diff;
 };
 
-// Returns current week number (1-based) given start date and today
 var protoWeekNum=function(startDate,today){
   var idx=protoDayIndex(startDate,today);
   if(idx<0)return null;
   return Math.floor(idx/7)+1;
 };
 
-// Get array of dates for a given protocol week number
 var protoWeekDates=function(startDate,weekNum){
   var weekStart=addDays(startDate,(weekNum-1)*7);
   return Array.from({length:7},function(_,i){return addDays(weekStart,i);});
 };
 
-// Get protocol data up to and including current day (cumulative targets)
 var calcProtoTargets=function(startDate,today){
   if(!startDate) return null;
   var dayIdx=protoDayIndex(startDate,today);
   if(dayIdx<0) return null;
 
-  var totalDays=dayIdx+1; // days elapsed including today
+  var totalDays=dayIdx+1;
   var result={eatCum:0,burnCum:0,defCum:0,stepsCum:0,workoutsCum:0,refeedsCum:0};
 
   for(var d=0;d<totalDays;d++){
     var wkNum=Math.floor(d/7)+1;
     if(wkNum>16)wkNum=16;
     var wkData=PROTOCOL_WEEKS[wkNum-1];
-    // daily targets
     result.eatCum+=wkData.eatWk/7;
     result.burnCum+=wkData.burnWk/7;
     result.defCum+=wkData.defWk/7;
     result.stepsCum+=wkData.stepsDay;
-    // workouts: 5 per week = 5/7 per day
     result.workoutsCum+=wkData.workouts/7;
-    // refeeds: per week
     result.refeedsCum+=wkData.refeeds/7;
   }
 
@@ -253,7 +243,6 @@ var calcProtoTargets=function(startDate,today){
   };
 };
 
-// Calc actuals from days data between startDate and today
 var calcProtoActuals=function(days,startDate,today){
   if(!startDate) return null;
   var dayIdx=protoDayIndex(startDate,today);
@@ -270,18 +259,17 @@ var calcProtoActuals=function(days,startDate,today){
       burnCum+=(dd.calBurn||0);
       if(dd.workoutType&&dd.workoutType!=="Rest") workoutsCum++;
       stepsCum+=(dd.stepsNum||0);
-      // Refeeds: we don't have a dedicated field yet, so track as 0 for now
     }
   }
 
   return {
-    eatCum,
-    burnCum,
+    eatCum:eatCum,
+    burnCum:burnCum,
     defCum: burnCum-eatCum,
-    stepsCum,
-    workoutsCum,
+    stepsCum:stepsCum,
+    workoutsCum:workoutsCum,
     refeedsCum: 0,
-    loggedDays,
+    loggedDays:loggedDays,
   };
 };
 
@@ -567,7 +555,6 @@ function ProtocolTab(props){
   var vs=useState("protocol");var view=vs[0],setView=vs[1];
   var today=toDay();
 
-  // No start date set
   if(!protoStart){
     return(
       <div style={{textAlign:"center",padding:"40px 20px"}}>
@@ -594,23 +581,21 @@ function ProtocolTab(props){
   var currentWeekData=PROTOCOL_WEEKS[Math.min(currentWeek-1,15)];
   var phaseCol=PHASE_COL[currentWeekData.phase]||{bg:"#1a1a1a",border:"#333",text:"#888"};
 
-  // Total protocol targets (all 16 weeks)
   var totalProtoDef=PROTOCOL_WEEKS.reduce(function(a,w){return a+w.defWk;},0);
   var totalProtoEat=PROTOCOL_WEEKS.reduce(function(a,w){return a+w.eatWk;},0);
   var totalProtoSteps=PROTOCOL_WEEKS.reduce(function(a,w){return a+w.stepsDay*7;},0);
   var totalProtoWorkouts=PROTOCOL_WEEKS.reduce(function(a,w){return a+w.workouts;},0);
 
-  // Days remaining
   var daysTotal=16*7;
   var daysElapsed=targets.totalDays;
   var daysRemaining=daysTotal-daysElapsed;
   var pctComplete=Math.round((daysElapsed/daysTotal)*100);
 
-  // Projected end deficit based on current rate
-  var currentRate=actuals.defCum>0&&daysElapsed>0?(actuals.defCum/daysElapsed):0;
+  // ── FIX: divide by ALL days elapsed (targets.totalDays), not just logged days
+  // This gives an honest average that includes silent/zero days
+  var currentRate=actuals.defCum>0&&targets.totalDays>0?(actuals.defCum/targets.totalDays):0;
   var projectedTotalDef=Math.round(actuals.defCum+(currentRate*daysRemaining));
 
-  // Per-week breakdown for actuals view
   var weekRows=[];
   for(var wk=1;wk<=Math.min(currentWeek,16);wk++){
     var wkDates=protoWeekDates(protoStart,wk);
@@ -621,18 +606,16 @@ function ProtocolTab(props){
     var wkWorkouts=wkDates.filter(function(dt){return days[dt]&&days[dt].workoutType&&days[dt].workoutType!=="Rest";}).length;
     var pwk=PROTOCOL_WEEKS[wk-1];
     var isCurrentWk=wk===currentWeek;
-    // For current week, target is prorated to days elapsed in week
     var daysInWk=isCurrentWk?targets.dayOfWeek:7;
     var pDefTarget=Math.round(pwk.defWk/7*daysInWk);
     var pEatTarget=Math.round(pwk.eatWk/7*daysInWk);
     var pStepsTarget=pwk.stepsDay*daysInWk;
     var pWorkoutsTarget=Math.round(pwk.workouts/7*daysInWk);
-    weekRows.push({wk,phase:pwk.phase,defTarget:pDefTarget,defActual:wkDef,eatTarget:pEatTarget,eatActual:wkEat,stepsTarget:pStepsTarget,stepsActual:wkSteps,workoutsTarget:pWorkoutsTarget,workoutsActual:wkWorkouts,isCurrent:isCurrentWk});
+    weekRows.push({wk:wk,phase:pwk.phase,defTarget:pDefTarget,defActual:wkDef,eatTarget:pEatTarget,eatActual:wkEat,stepsTarget:pStepsTarget,stepsActual:wkSteps,workoutsTarget:pWorkoutsTarget,workoutsActual:wkWorkouts,isCurrent:isCurrentWk});
   }
 
   return(
     <div>
-      {/* Header — phase badge + progress */}
       <div style={{background:phaseCol.bg,border:"1px solid "+phaseCol.border,borderRadius:10,padding:"14px 16px",marginBottom:14}}>
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:10}}>
           <div>
@@ -656,7 +639,6 @@ function ProtocolTab(props){
         </div>
       </div>
 
-      {/* Toggle */}
       <div style={{display:"flex",gap:8,marginBottom:14}}>
         {["protocol","actuals"].map(function(v){return(
           <button key={v} onClick={function(){setView(v);}}
@@ -668,7 +650,6 @@ function ProtocolTab(props){
 
       {view==="protocol"&&(
         <div>
-          {/* Cumulative gap card */}
           <div style={{background:S.card,border:"1px solid "+S.border,borderRadius:10,padding:"14px 16px",marginBottom:14}}>
             <div style={{fontSize:12,color:S.muted,fontWeight:600,letterSpacing:1,textTransform:"uppercase",marginBottom:14}}>Cumulative Targets vs Actuals</div>
             <GapBar label="Deficit" actual={actuals.defCum} target={targets.defCum} unit=" kcal"/>
@@ -678,7 +659,6 @@ function ProtocolTab(props){
             <GapBar label="Workouts" actual={actuals.workoutsCum} target={targets.workoutsCum} unit=" sessions"/>
           </div>
 
-          {/* Projection card */}
           <div style={{background:S.card,border:"1px solid "+S.border,borderRadius:10,padding:"14px 16px",marginBottom:14}}>
             <div style={{fontSize:12,color:S.muted,fontWeight:600,letterSpacing:1,textTransform:"uppercase",marginBottom:12}}>16-Week Projection</div>
             <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10}}>
@@ -706,7 +686,6 @@ function ProtocolTab(props){
             )}
           </div>
 
-          {/* Week-by-week protocol schedule */}
           <div style={{background:S.card,border:"1px solid "+S.border,borderRadius:10,overflow:"hidden"}}>
             <div style={{padding:"10px 14px",fontSize:12,fontWeight:600,color:S.muted,textTransform:"uppercase",letterSpacing:1,borderBottom:"1px solid "+S.border}}>16-Week Schedule</div>
             {PROTOCOL_WEEKS.map(function(w){
@@ -733,7 +712,6 @@ function ProtocolTab(props){
 
       {view==="actuals"&&(
         <div>
-          {/* Summary stats */}
           <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:8,marginBottom:14}}>
             {[
               ["Deficit",actuals.defCum>=0?(actuals.defCum/1000).toFixed(1)+"k":"0","kcal",actuals.defCum>=targets.defCum*0.9?"#34d399":"#f87171"],
@@ -748,7 +726,6 @@ function ProtocolTab(props){
             );})}
           </div>
 
-          {/* Week-by-week actuals table */}
           <div style={{background:S.card,border:"1px solid "+S.border,borderRadius:10,overflow:"hidden"}}>
             <div style={{padding:"10px 14px",fontSize:12,fontWeight:600,color:S.muted,textTransform:"uppercase",letterSpacing:1,borderBottom:"1px solid "+S.border}}>Week-by-Week Actuals</div>
             {weekRows.map(function(row){
@@ -767,7 +744,6 @@ function ProtocolTab(props){
                     </div>
                     <span style={{fontSize:12,fontWeight:700,color:defColor}}>{defPct}%</span>
                   </div>
-                  {/* Mini bars */}
                   <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:8}}>
                     {[
                       ["Deficit",defPct,row.defActual>=0?Math.round(row.defActual/1000*10)/10+"k":"0","kcal",defColor],
@@ -788,7 +764,6 @@ function ProtocolTab(props){
             })}
           </div>
 
-          {/* Eaten vs Burned actuals */}
           <div style={{background:S.card,border:"1px solid "+S.border,borderRadius:10,padding:"14px 16px",marginTop:14}}>
             <div style={{fontSize:12,color:S.muted,fontWeight:600,letterSpacing:1,textTransform:"uppercase",marginBottom:12}}>Calorie Totals Since Start</div>
             <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:10}}>
@@ -805,9 +780,9 @@ function ProtocolTab(props){
               );})}
             </div>
             <div style={{marginTop:12,display:"flex",justifyContent:"space-between",padding:"8px 0",borderTop:"1px solid "+S.dim}}>
-              <span style={{fontSize:12,color:S.muted}}>Avg deficit/day</span>
-              <span style={{fontSize:13,fontWeight:600,color:actuals.loggedDays>0?"#e8e8e8":"#555"}}>
-                {actuals.loggedDays>0?Math.round(actuals.defCum/actuals.loggedDays).toLocaleString()+" kcal":"No data"}
+              <span style={{fontSize:12,color:S.muted}}>Avg deficit/day (all days elapsed)</span>
+              <span style={{fontSize:13,fontWeight:600,color:targets.totalDays>0?"#e8e8e8":"#555"}}>
+                {targets.totalDays>0?Math.round(actuals.defCum/targets.totalDays).toLocaleString()+" kcal":"No data"}
               </span>
             </div>
             <div style={{display:"flex",justifyContent:"space-between",padding:"8px 0",borderTop:"1px solid "+S.dim}}>
@@ -904,7 +879,6 @@ function App(){
   var bmos=useState(0);var bMOff=bmos[0],setBMOff=bmos[1];
   var aps=useState(null);var activeProt=aps[0],setActiveProt=aps[1];
   var cps=useState(false);var calPickerOpen=cps[0],setCalPickerOpen=cps[1];
-  // Protocol start date
   var pss=useState(ldProtoStart);var protoStart=pss[0],setProtoStart=pss[1];
   var pcp=useState(false);var protoCalOpen=pcp[0],setProtoCalOpen=pcp[1];
 
@@ -1081,7 +1055,6 @@ function App(){
         {tab==="system"&&activeProt&&<ProtocolDetail id={activeProt} onBack={function(){setActiveProt(null);}}/>}
 
         {tab==="settings"&&(<div>
-          {/* Protocol Start Date Setting */}
           <div style={Object.assign({},C(),{overflow:"hidden",marginBottom:14})}>
             <div style={{padding:"10px 14px",fontSize:13,fontWeight:500,borderBottom:"1px solid "+S.border,color:"#34d399"}}>16-Week Protocol</div>
             <div style={{padding:14}}>
