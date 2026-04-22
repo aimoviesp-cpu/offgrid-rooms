@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 <meta name="apple-mobile-web-app-title" content="OperAxis"/>
-<link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAIAAACyr5FlAAAP4klEQVR4nO2dS2xbV3rHz7lvkRT1JkW937LlWHZsN54442QGSaeYBCmCArPKoF20BbqYRTdtN0UXRZdtF01RzKrTFjMFiqCZzqBT15PW6dQxkkxiO7Etx7Js60WJoihRFN/33QVj2ZZ0yI/k5b1U5/vhLiTyvMj7v9855zvfOaTKmeMEQQ6D87oBSPOC4kCYoDgQJigOhAnOVhAmaDkQJigOhAnOVhAmaDkQJigOhAmKA2GC4kCYoDgQJhgJhjBBy4EwQXEgTFAcCBMUB8IExYEwwbUVhAlaDoQJigNhIlDsVxAGaDkQJigOhAnOVhAmaDkQJigOhAmKA2GC4kCYoDgQJhgJhjBBy4EwQXEgTFAcCBMUB8IExYEwwbUVhAlaDoQJigNhgmeCIUzQciBMUBwIE5ytIEzQciBMUBwIE8HrBlSG8ytCd1DoCvKtLVxA4XwyFQQqcJTnbMsmhmkbplXQzGzRyhWM7YyxlTZ3c163+v8Aw=="/>
+<link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAIAAACyr5FlAAAP4klEQVR4nO2dS2xbV3rHz7lvkRT1JkW937LlWHZsN54442QGSaeYBCmCArPKoF20BbqYRTdtN0UXRZdtF01RzKrTFjMFiqCZzqBT15PW6dQxkkxiO7Etx7Js60WJoihRFN/33QVj2ZZ0yI/k5b1U5/vhLiTyvMj7v9855zvfOaTKmeMEQQ6D87oBSPOC4kCYoDgQJigOhAnOVhAmaDkQJigOhAmKA2GC4kCYoDgQJhgJhjBBy4EwQXEgTFAcCBMUB8IExYEwwbUVhAlaDoQJigNhIlDsVxAGaDkQJigOhAnOVhAmaDkQJigOhAmKA2GC4kCYoDgQJhgJhjBBy4EwQXEgTFAcCBMUB8IExYEwwbUVhAlaDoQJigNhgmeCIUzQciBMUBwIE5ytIEzQciBMUBwIE8HrBlSG8ytCd1DoCvKtLVxA4XwyFQQqcJTnbMsmhmkbplXQzGzRyhWM7YyxlTZ3c163+v8Aw=="/>
 <title>OperAxis System</title>
 <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
 <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
@@ -39,21 +39,52 @@ input,textarea{outline:none;font-family:inherit}
 var FW_NODES={financial:{cx:340,cy:310,hw:70,hh:29},mental:{cx:340,cy:50,hw:64,hh:26},energy:{cx:550,cy:130,hw:60,hh:26},fitness:{cx:615,cy:310,hw:58,hh:26},nutrition:{cx:550,cy:490,hw:66,hh:26},looks:{cx:340,cy:570,hw:54,hh:26},charisma:{cx:130,cy:490,hw:66,hh:26},seduction:{cx:65,cy:310,hw:66,hh:26},recovery:{cx:130,cy:130,hw:66,hh:26}};
 var FW_RING=['mental','energy','fitness','nutrition','looks','charisma','seduction','recovery'];
 var FW_COL={mental:'#7F77DD',energy:'#EF9F27',fitness:'#378ADD',nutrition:'#639922',looks:'#D4537E',charisma:'#BA7517',seduction:'#D85A30',recovery:'#e8e8e8'};
-var FW_DET={financial:{t:'Financial \u2014 primary engine',b:'Everything feeds here. Job search output, delivery income, and skill-building all convert to capital. Financial is the only node that compounds across all others.'},mental:{t:'Mental \u2014 strategy & clarity',b:'The loop starts here. Mental clarity sets your daily objectives, drives job search execution, and keeps the whole system intentional.'},energy:{t:'Energy \u2014 the fuel layer',b:'Sleep quality, nutrition timing, and recovery all produce energy. Without it the whole ring degrades.'},fitness:{t:'Fitness \u2014 output & signal',b:'Energy gets converted into physical output here. Gym sessions and daily steps compound into body composition changes.'},nutrition:{t:'Nutrition \u2014 fuel & body comp',b:'Feeds fitness performance and drives body composition. Nutrition discipline compounds into Looks and sustains Energy.'},looks:{t:'Looks \u2014 aesthetic edge',b:'The physical output of Fitness and Nutrition made visible. Grooming, style, and presentation.'},charisma:{t:'Charisma \u2014 social leverage',b:'Looks and Mental converge here. Your delivery shift is live practice reps every evening.'},seduction:{t:'Seduction \u2014 presence & draw',b:'The downstream output of Charisma, Fitness, and Looks. Not chasing \u2014 becoming someone worth pursuing.'},recovery:{t:'Recovery \u2014 system reset',b:'Closes the loop back into Mental. Sleep, rest, and decompression restore cognitive capacity and willpower.'}};
+var FW_DET={financial:{t:'Financial — primary engine',b:'Everything feeds here. Job search output, delivery income, and skill-building all convert to capital. Financial is the only node that compounds across all others.'},mental:{t:'Mental — strategy & clarity',b:'The loop starts here. Mental clarity sets your daily objectives, drives job search execution, and keeps the whole system intentional.'},energy:{t:'Energy — the fuel layer',b:'Sleep quality, nutrition timing, and recovery all produce energy. Without it the whole ring degrades.'},fitness:{t:'Fitness — output & signal',b:'Energy gets converted into physical output here. Gym sessions and daily steps compound into body composition changes.'},nutrition:{t:'Nutrition — fuel & body comp',b:'Feeds fitness performance and drives body composition. Nutrition discipline compounds into Looks and sustains Energy.'},looks:{t:'Looks — aesthetic edge',b:'The physical output of Fitness and Nutrition made visible. Grooming, style, and presentation.'},charisma:{t:'Charisma — social leverage',b:'Looks and Mental converge here. Your delivery shift is live practice reps every evening.'},seduction:{t:'Seduction — presence & draw',b:'The downstream output of Charisma, Fitness, and Looks. Not chasing — becoming someone worth pursuing.'},recovery:{t:'Recovery — system reset',b:'Closes the loop back into Mental. Sleep, rest, and decompression restore cognitive capacity and willpower.'}};
 function fwEdge(f,t){var n=FW_NODES[f],to=FW_NODES[t],dx=to.cx-n.cx,dy=to.cy-n.cy,a=Math.atan2(dy,dx),ca=Math.cos(a),sa=Math.sin(a),tw=Math.abs(ca)<1e-6?1e9:n.hw/Math.abs(ca),th=Math.abs(sa)<1e-6?1e9:n.hh/Math.abs(sa);return{x:n.cx+ca*(Math.min(tw,th)-6),y:n.cy+sa*(Math.min(tw,th)-6)};}
 function buildFlywheel(){var svg=document.getElementById('fw-svg');if(!svg)return;var ns='http://www.w3.org/2000/svg';['fw-arcs','fw-spokes'].forEach(function(id){var g=document.getElementById(id);if(g)g.innerHTML='';});var ag=document.getElementById('fw-arcs'),sg=document.getElementById('fw-spokes');if(!ag||!sg)return;for(var i=0;i<FW_RING.length;i++){var f=FW_RING[i],t=FW_RING[(i+1)%FW_RING.length],c=FW_COL[f],p1=fwEdge(f,t),p2=fwEdge(t,f),mx=(p1.x+p2.x)/2,my=(p1.y+p2.y)/2,dx=p2.x-p1.x,dy=p2.y-p1.y,len=Math.sqrt(dx*dx+dy*dy),curve=len*0.15,nx=-dy/len,ny=dx/len,p=document.createElementNS(ns,'path');p.setAttribute('d','M'+p1.x.toFixed(1)+' '+p1.y.toFixed(1)+' Q'+(mx+nx*curve).toFixed(1)+' '+(my+ny*curve).toFixed(1)+' '+p2.x.toFixed(1)+' '+p2.y.toFixed(1));p.setAttribute('fill','none');p.setAttribute('stroke',c);p.setAttribute('stroke-width','1.5');p.setAttribute('stroke-linecap','round');p.setAttribute('marker-end','url(#fw-ah)');p.setAttribute('opacity','0.7');ag.appendChild(p);}FW_RING.forEach(function(d){var c=FW_COL[d],p1=fwEdge(d,'financial'),p2=fwEdge('financial',d),p=document.createElementNS(ns,'path');p.setAttribute('d','M'+p1.x.toFixed(1)+' '+p1.y.toFixed(1)+' L'+p2.x.toFixed(1)+' '+p2.y.toFixed(1));p.setAttribute('fill','none');p.setAttribute('stroke',c);p.setAttribute('stroke-width','1');p.setAttribute('stroke-dasharray','4 4');p.setAttribute('stroke-linecap','round');p.setAttribute('marker-end','url(#fw-ah)');p.setAttribute('opacity','0.35');sg.appendChild(p);});['fw-mental','fw-energy','fw-fitness','fw-nutrition','fw-looks','fw-charisma','fw-seduction','fw-recovery','fw-financial'].forEach(function(id){var el=document.getElementById(id);if(el)svg.appendChild(el);});}
 function fwSel(key){var d=FW_DET[key];if(!d)return;var panel=document.getElementById('detail-panel'),dt=document.getElementById('detail-title'),db=document.getElementById('detail-body');if(dt)dt.textContent=d.t;if(db)db.textContent=d.b;if(panel)panel.style.display='block';document.querySelectorAll('.nc').forEach(function(g){g.style.opacity='0.35';});var nk=document.getElementById('fw-'+key),nf=document.getElementById('fw-financial');if(nk)nk.style.opacity='1';if(nf)nf.style.opacity='1';setTimeout(function(){if(window._fwOnSelect)window._fwOnSelect(key);},300);}
 var _fwBuilt=false;var _fwObs=new MutationObserver(function(){var svg=document.getElementById('fw-svg');if(!_fwBuilt&&svg){_fwBuilt=true;buildFlywheel();}if(_fwBuilt&&!svg){_fwBuilt=false;}});
+
+// ── 16-WEEK PROTOCOL DATA ─────────────────────────────────────────────────────
+// Each week: phase label, target calories eaten/week, burned/week, deficit/week,
+// steps/day target, workouts/week target, refeeds/week, type
+var PROTOCOL_WEEKS = [
+  {wk:1,  phase:"Phase 1 — Cut",   eatWk:14000, burnWk:20300, defWk:6300,  stepsDay:9000, workouts:5, refeeds:0, calDay:2000, macros:"200P / 200C / 45F"},
+  {wk:2,  phase:"Phase 1 — Cut",   eatWk:14000, burnWk:20090, defWk:6090,  stepsDay:9000, workouts:5, refeeds:0, calDay:2000, macros:"200P / 200C / 45F"},
+  {wk:3,  phase:"Phase 1 — Cut",   eatWk:14000, burnWk:19880, defWk:5880,  stepsDay:9000, workouts:5, refeeds:0, calDay:2000, macros:"200P / 200C / 45F"},
+  {wk:4,  phase:"Phase 1 — Cut",   eatWk:14000, burnWk:19670, defWk:5670,  stepsDay:9000, workouts:5, refeeds:0, calDay:2000, macros:"200P / 200C / 45F"},
+  {wk:5,  phase:"Phase 1 — Cut",   eatWk:14000, burnWk:19509, defWk:5509,  stepsDay:9000, workouts:5, refeeds:0, calDay:2000, macros:"200P / 200C / 45F"},
+  {wk:6,  phase:"Phase 1 — Cut",   eatWk:14000, burnWk:19299, defWk:5299,  stepsDay:9000, workouts:5, refeeds:0, calDay:2000, macros:"200P / 200C / 45F"},
+  {wk:7,  phase:"Diet Break",       eatWk:18550, burnWk:19040, defWk:490,   stepsDay:9000, workouts:5, refeeds:0, calDay:2650, macros:"200P / 300C / 60F"},
+  {wk:8,  phase:"Phase 2 — Cut",   eatWk:15500, burnWk:18690, defWk:3190,  stepsDay:9000, workouts:5, refeeds:2, calDay:2100, macros:"200P / 220C / 45F (cut) / 200P / 325C / 35F (refeed)"},
+  {wk:9,  phase:"Phase 2 — Cut",   eatWk:15500, burnWk:18529, defWk:3029,  stepsDay:9000, workouts:5, refeeds:2, calDay:2100, macros:"200P / 220C / 45F (cut) / 200P / 325C / 35F (refeed)"},
+  {wk:10, phase:"Phase 2 — Cut",   eatWk:15500, burnWk:18375, defWk:2875,  stepsDay:9000, workouts:5, refeeds:2, calDay:2100, macros:"200P / 220C / 45F (cut) / 200P / 325C / 35F (refeed)"},
+  {wk:11, phase:"Phase 2 — Cut",   eatWk:15500, burnWk:18214, defWk:2714,  stepsDay:9000, workouts:5, refeeds:2, calDay:2100, macros:"200P / 220C / 45F (cut) / 200P / 325C / 35F (refeed)"},
+  {wk:12, phase:"Phase 2 — Cut",   eatWk:15500, burnWk:17885, defWk:2385,  stepsDay:9000, workouts:5, refeeds:2, calDay:2100, macros:"200P / 220C / 45F (cut) / 200P / 325C / 35F (refeed)"},
+  {wk:13, phase:"Phase 2 — Cut",   eatWk:15500, burnWk:17780, defWk:2280,  stepsDay:9000, workouts:5, refeeds:2, calDay:2100, macros:"200P / 220C / 45F (cut) / 200P / 325C / 35F (refeed)"},
+  {wk:14, phase:"Diet Break",       eatWk:17150, burnWk:17780, defWk:630,   stepsDay:9000, workouts:5, refeeds:0, calDay:2450, macros:"200P / 270C / 55F"},
+  {wk:15, phase:"Phase 3 — Cut",   eatWk:15500, burnWk:17500, defWk:2000,  stepsDay:9000, workouts:5, refeeds:2, calDay:2100, macros:"200P / 220C / 45F (cut) / 200P / 325C / 35F (refeed)"},
+  {wk:16, phase:"Phase 3 — Cut",   eatWk:15500, burnWk:17339, defWk:1839,  stepsDay:9000, workouts:5, refeeds:2, calDay:2100, macros:"200P / 220C / 45F (cut) / 200P / 325C / 35F (refeed)"},
+];
+
+// Phase colors
+var PHASE_COL = {
+  "Phase 1 — Cut":  {bg:"#042C53", border:"#378ADD", text:"#60a5fa"},
+  "Diet Break":     {bg:"#173404", border:"#639922", text:"#86efac"},
+  "Phase 2 — Cut":  {bg:"#412402", border:"#EF9F27", text:"#fcd34d"},
+  "Phase 3 — Cut":  {bg:"#3a0a0a", border:"#f87171", text:"#fca5a5"},
+};
+
 var PROTOCOLS=[
-  {id:"financial",label:"Financial",color:"#085041",border:"#1D9E75",sections:[{type:"layers",title:"Income Layers",layers:[{label:"Layer 1 \u2014 Immediate Survival (0-3 months)",items:["Land income (job, freelance, anything)","Specific daily job search actions","Weekly income target"]},{label:"Layer 2 \u2014 Foundation (3-12 months)",items:["Save $3k-$5k as a war chest","Pick ONE business model and commit","Learn one monetizable skill obsessively"]},{label:"Layer 3 \u2014 Business Build (12+ months)",items:["Launch the side hustle","Define revenue targets","Scale or replace job income"]}]},{type:"priorities",title:"Current Priorities",items:["Go Mon-Fri to look for a job \u2014 minimum 2 jobs or agency per day","1. Get job","2. Save $3,000 for car","3. Save $2,000 for side hustle"]},{type:"mission",title:"The Mission",quote:"I don\u2019t sell motivation. I don\u2019t sell willpower. I sell the system that makes transformation automatic. Build the structure \u2014 the body and identity follow."},{type:"client",title:"Who I Coach",client:"A man who is overweight, unattractive and stuck \u2014 not because he\u2019s lazy, but because he has no system.",problem:"He doesn\u2019t need more information. He needs a structure that removes the guesswork and makes the right actions inevitable.",result:"Lean. Muscular. Well-groomed. Disciplined. A completely different man \u2014 built by the system."},{type:"proof",title:"My Story = My Proof",rows:[["Before","250lbs, out of shape, no system, no identity"],["After","190lbs, lean, muscular, clear skin, locked in style"],["How","Built the exact system I now teach"]]},{type:"phase",title:"Current Phase: Prove The System (Now \u2192 July 2026)",note:"Not coaching yet. Running the system on myself and documenting every result.",rows:[["Weight","~200 lbs","190 lbs"],["Body","Muscular, slightly soft","Lean + muscular"],["Skin","Clear","Maintained"],["System","Partially proven","Fully documented"]]},{type:"milestones",title:"Financial Milestones",rows:[["Emergency fund","$2,000","\uD83D\uDD34"],["Content setup","$500","\uD83D\uDD34"],["First free client","2-3 people","\uD83D\uDD34"],["First paid client","$500-$1,000","\uD83D\uDD34"],["Replace job income","$4,000/mo","\uD83D\uDD34"],["Scale","$10,000/mo","\uD83D\uDD34"]]},{type:"roadmap",title:"Phase Roadmap",rows:[["1 \u2014 Prove The System","Now \u2192 Jul 2026","Hit 190lbs lean, document system"],["2 \u2014 Build Audience","Month 2-6","1,000 followers"],["3 \u2014 First Clients","Month 4-8","2-3 free clients"],["4 \u2014 Scale","Month 8-12","$4k/month coaching"]]},{type:"nonneg",title:"Daily Non-Negotiables",items:["Follow nutrition protocol","Train (follow the split)","Looks standard maintained","One system or content action taken"]},{type:"nonneg",title:"Weekly Non-Negotiables",items:["Log bodyweight Monday morning","Review what worked and what didn\u2019t","Post 3x minimum on chosen platform","Document one system insight from the week"]},{type:"thisweek",title:"This Week",items:["Take current physique photo","Find before photo at 250lbs","Write your 3 sentence story","Post first piece of content","Audit your current daily structure"]}]},
+  {id:"financial",label:"Financial",color:"#085041",border:"#1D9E75",sections:[{type:"layers",title:"Income Layers",layers:[{label:"Layer 1 — Immediate Survival (0-3 months)",items:["Land income (job, freelance, anything)","Specific daily job search actions","Weekly income target"]},{label:"Layer 2 — Foundation (3-12 months)",items:["Save $3k-$5k as a war chest","Pick ONE business model and commit","Learn one monetizable skill obsessively"]},{label:"Layer 3 — Business Build (12+ months)",items:["Launch the side hustle","Define revenue targets","Scale or replace job income"]}]},{type:"priorities",title:"Current Priorities",items:["Go Mon-Fri to look for a job — minimum 2 jobs or agency per day","1. Get job","2. Save $3,000 for car","3. Save $2,000 for side hustle"]},{type:"mission",title:"The Mission",quote:"I don't sell motivation. I don't sell willpower. I sell the system that makes transformation automatic. Build the structure — the body and identity follow."},{type:"client",title:"Who I Coach",client:"A man who is overweight, unattractive and stuck — not because he's lazy, but because he has no system.",problem:"He doesn't need more information. He needs a structure that removes the guesswork and makes the right actions inevitable.",result:"Lean. Muscular. Well-groomed. Disciplined. A completely different man — built by the system."},{type:"proof",title:"My Story = My Proof",rows:[["Before","250lbs, out of shape, no system, no identity"],["After","190lbs, lean, muscular, clear skin, locked in style"],["How","Built the exact system I now teach"]]},{type:"phase",title:"Current Phase: Prove The System (Now → July 2026)",note:"Not coaching yet. Running the system on myself and documenting every result.",rows:[["Weight","~200 lbs","190 lbs"],["Body","Muscular, slightly soft","Lean + muscular"],["Skin","Clear","Maintained"],["System","Partially proven","Fully documented"]]},{type:"milestones",title:"Financial Milestones",rows:[["Emergency fund","$2,000","🔴"],["Content setup","$500","🔴"],["First free client","2-3 people","🔴"],["First paid client","$500-$1,000","🔴"],["Replace job income","$4,000/mo","🔴"],["Scale","$10,000/mo","🔴"]]},{type:"roadmap",title:"Phase Roadmap",rows:[["1 — Prove The System","Now → Jul 2026","Hit 190lbs lean, document system"],["2 — Build Audience","Month 2-6","1,000 followers"],["3 — First Clients","Month 4-8","2-3 free clients"],["4 — Scale","Month 8-12","$4k/month coaching"]]},{type:"nonneg",title:"Daily Non-Negotiables",items:["Follow nutrition protocol","Train (follow the split)","Looks standard maintained","One system or content action taken"]},{type:"nonneg",title:"Weekly Non-Negotiables",items:["Log bodyweight Monday morning","Review what worked and what didn't","Post 3x minimum on chosen platform","Document one system insight from the week"]},{type:"thisweek",title:"This Week",items:["Take current physique photo","Find before photo at 250lbs","Write your 3 sentence story","Post first piece of content","Audit your current daily structure"]}]},
   {id:"mental",label:"Mental",color:"#1a1a3a",border:"#3a3a8a",items:["OODA Protocol: Every morning 5 minutes decides your main objectives for the day.","Master Mind Protocol: Read or listen for 30 minutes any kind of non-fiction book.","Mental Clarity: Must be educational, No multitasking, No red pill, Only algorithm-recommended content","Hard Limits: No movies, No scrolling, No series, No adult content","Lite System: Read 3 sentences from a book."]},
-  {id:"energy",label:"Energy",color:"#412402",border:"#EF9F27",items:["Sleep 7-8 hrs \u2014 this is the primary energy lever.","Morning sunlight exposure within 30 mins of waking.","Avoid caffeine after 2pm.","High protein breakfast within 1 hr of waking.","No heavy meals within 3 hrs of sleep.","Hydrate first thing \u2014 500ml water before anything else.","No alcohol \u2014 zero exceptions.","No drugs \u2014 the system runs clean.","Sexual transmutation \u2014 redirect sexual energy into training, work, and building.","Pain transmutation \u2014 pain, rejection, and setbacks are fuel.","Emotional transmutation \u2014 feel it fully for 60 seconds, then direct it into a system action.","Lite version: If exhausted, nap 20 mins max before 3pm. Do not skip the walk."]},
-  {id:"fitness",label:"Fitness",color:"#042C53",border:"#378ADD",sections:[{type:"layers",title:"Training Split \u2014 5x Week",layers:[{label:"Push",items:["Shoulder","Upper chest"]},{label:"Pull",items:["Biceps","Forearms","Back"]},{label:"Lower",items:["Legs and glutes","Squats","Leg raises"]},{label:"Rest",items:["Full recovery day"]},{label:"Calisthenics",items:["Bodyweight session"]}]},{type:"priorities",title:"Daily Movement",items:["8-10k steps every day"]},{type:"mission",title:"Lite Version",quote:"If very tired mentally or physically \u2014 execute the lite system. This is the minimum floor. The system never stops."},{type:"nonneg",title:"Lite Fitness",items:["20 min walk","20-30 min light workout"]}]},
-  {id:"nutrition",label:"Nutrition",color:"#173404",border:"#639922",sections:[{type:"nonneg",title:"Phase 1 \u2014 Keto (1-2 weeks)",items:["2,000 kcal","200g protein","Low carb / high fat"]},{type:"nonneg",title:"Phase 2 \u2014 Clean Refeed (3 days)",items:["2,300 kcal","200g protein","200g carbs","Low fat"]},{type:"nonneg",title:"Lite Nutrition Version",items:["2,200 kcal","200g protein","200g carbs","100g fat"]}]},
-  {id:"looks",label:"Looks",color:"#3a1a2a",border:"#7a2a4a",items:["Basic Hygiene \u2014 Daily shower, teeth, deodorant","Skincare \u2014 Cleanser + moisturizer morning and night","Full Grooming \u2014 Hair, nails, ears, facial hair","Style \u2014 Plan and wear outfits intentionally"]},
-  {id:"charisma",label:"Charisma",color:"#412402",border:"#BA7517",items:["Mon-Fri: Talk to one stranger or say hi, go with the flow.","Saturday: Approach and flirt with one girl you find attractive.","Posture and expression review: Record yourself 5 minutes, review and calibrate.","Lite Version: If very tired \u2014 Greet someone who doesn\u2019t live inside home."]},
-  {id:"seduction",label:"Seduction",color:"#4A1B0C",border:"#D85A30",sections:[{type:"priorities",title:"Daily",items:["Naturally greet women when you can \u2014 no agenda, just presence"]},{type:"priorities",title:"Weekly",items:["Approach and lead with one woman per week"]}]},
-  {id:"recovery",label:"Recovery",color:"#1a1a1a",border:"#e8e8e8",items:["Slept 7-8 hrs \u2014 non-negotiable. Sleep is the system\u2019s reset button.","Slept on time \u2014 consistency matters more than duration. Same bedtime every night.","No overload \u2014 if mentally or physically drained, execute the lite system.","Weekly deload awareness \u2014 if performance drops across 3+ domains, reduce training volume for 1 week.","Lite recovery version: 20 min walk + early sleep. That is enough."]}
+  {id:"energy",label:"Energy",color:"#412402",border:"#EF9F27",items:["Sleep 7-8 hrs — this is the primary energy lever.","Morning sunlight exposure within 30 mins of waking.","Avoid caffeine after 2pm.","High protein breakfast within 1 hr of waking.","No heavy meals within 3 hrs of sleep.","Hydrate first thing — 500ml water before anything else.","No alcohol — zero exceptions.","No drugs — the system runs clean.","Sexual transmutation — redirect sexual energy into training, work, and building.","Pain transmutation — pain, rejection, and setbacks are fuel.","Emotional transmutation — feel it fully for 60 seconds, then direct it into a system action.","Lite version: If exhausted, nap 20 mins max before 3pm. Do not skip the walk."]},
+  {id:"fitness",label:"Fitness",color:"#042C53",border:"#378ADD",sections:[{type:"layers",title:"Training Split — 5x Week",layers:[{label:"Push",items:["Shoulder","Upper chest"]},{label:"Pull",items:["Biceps","Forearms","Back"]},{label:"Lower",items:["Legs and glutes","Squats","Leg raises"]},{label:"Rest",items:["Full recovery day"]},{label:"Calisthenics",items:["Bodyweight session"]}]},{type:"priorities",title:"Daily Movement",items:["8-10k steps every day"]},{type:"mission",title:"Lite Version",quote:"If very tired mentally or physically — execute the lite system. This is the minimum floor. The system never stops."},{type:"nonneg",title:"Lite Fitness",items:["20 min walk","20-30 min light workout"]}]},
+  {id:"nutrition",label:"Nutrition",color:"#173404",border:"#639922",sections:[{type:"nonneg",title:"Phase 1 — Keto (1-2 weeks)",items:["2,000 kcal","200g protein","Low carb / high fat"]},{type:"nonneg",title:"Phase 2 — Clean Refeed (3 days)",items:["2,300 kcal","200g protein","200g carbs","Low fat"]},{type:"nonneg",title:"Lite Nutrition Version",items:["2,200 kcal","200g protein","200g carbs","100g fat"]}]},
+  {id:"looks",label:"Looks",color:"#3a1a2a",border:"#7a2a4a",items:["Basic Hygiene — Daily shower, teeth, deodorant","Skincare — Cleanser + moisturizer morning and night","Full Grooming — Hair, nails, ears, facial hair","Style — Plan and wear outfits intentionally"]},
+  {id:"charisma",label:"Charisma",color:"#412402",border:"#BA7517",items:["Mon-Fri: Talk to one stranger or say hi, go with the flow.","Saturday: Approach and flirt with one girl you find attractive.","Posture and expression review: Record yourself 5 minutes, review and calibrate.","Lite Version: If very tired — Greet someone who doesn't live inside home."]},
+  {id:"seduction",label:"Seduction",color:"#4A1B0C",border:"#D85A30",sections:[{type:"priorities",title:"Daily",items:["Naturally greet women when you can — no agenda, just presence"]},{type:"priorities",title:"Weekly",items:["Approach and lead with one woman per week"]}]},
+  {id:"recovery",label:"Recovery",color:"#1a1a1a",border:"#e8e8e8",items:["Slept 7-8 hrs — non-negotiable. Sleep is the system's reset button.","Slept on time — consistency matters more than duration. Same bedtime every night.","No overload — if mentally or physically drained, execute the lite system.","Weekly deload awareness — if performance drops across 3+ domains, reduce training volume for 1 week.","Lite recovery version: 20 min walk + early sleep. That is enough."]}
 ];
 </script>
 
@@ -94,6 +125,8 @@ var ld=function(){try{return JSON.parse(localStorage.getItem("lifeOS_v3")||"{}")
 var sv=function(d){try{localStorage.setItem("lifeOS_v3",JSON.stringify(d));}catch(e){}};
 var ldApiKey=function(){try{return localStorage.getItem("operaxis_api_key")||"";}catch(e){return "";}};
 var svApiKey=function(k){try{localStorage.setItem("operaxis_api_key",k);}catch(e){}};
+var ldProtoStart=function(){try{return localStorage.getItem("operaxis_proto_start")||"";}catch(e){return "";}};
+var svProtoStart=function(d){try{localStorage.setItem("operaxis_proto_start",d);}catch(e){}};
 
 var MODE_HABIT_PTS={
   fitness:{lite:15,rest:50},
@@ -156,53 +189,126 @@ var modeLabel=function(mode){return mode.charAt(0).toUpperCase()+mode.slice(1);}
 
 var addDays=function(dateStr,n){var d=new Date(dateStr+"T12:00:00");d.setDate(d.getDate()+n);return fmtDate(d);};
 var get7Days=function(startStr){return Array.from({length:7},function(_,i){return addDays(startStr,i);});};
-var rangeLabelFrom=function(startStr){var end=addDays(startStr,6);return startStr.slice(5)+" \u2013 "+end.slice(5);};
+var rangeLabelFrom=function(startStr){var end=addDays(startStr,6);return startStr.slice(5)+" – "+end.slice(5);};
 var isTodayWeek=function(startStr){var today=toDay();return today>=startStr&&today<=addDays(startStr,6);};
 
-// ── Build AI context snapshot from live data ──────────────────────────────────
+// ── PROTOCOL HELPERS ──────────────────────────────────────────────────────────
+
+// Returns day index (0-based) from protocol start. Returns -1 if not started.
+var protoDayIndex=function(startDate,targetDate){
+  if(!startDate)return -1;
+  var s=new Date(startDate+"T12:00:00");
+  var t=new Date(targetDate+"T12:00:00");
+  var diff=Math.round((t-s)/(1000*60*60*24));
+  return diff; // 0 = day 1
+};
+
+// Returns current week number (1-based) given start date and today
+var protoWeekNum=function(startDate,today){
+  var idx=protoDayIndex(startDate,today);
+  if(idx<0)return null;
+  return Math.floor(idx/7)+1;
+};
+
+// Get array of dates for a given protocol week number
+var protoWeekDates=function(startDate,weekNum){
+  var weekStart=addDays(startDate,(weekNum-1)*7);
+  return Array.from({length:7},function(_,i){return addDays(weekStart,i);});
+};
+
+// Get protocol data up to and including current day (cumulative targets)
+var calcProtoTargets=function(startDate,today){
+  if(!startDate) return null;
+  var dayIdx=protoDayIndex(startDate,today);
+  if(dayIdx<0) return null;
+
+  var totalDays=dayIdx+1; // days elapsed including today
+  var result={eatCum:0,burnCum:0,defCum:0,stepsCum:0,workoutsCum:0,refeedsCum:0};
+
+  for(var d=0;d<totalDays;d++){
+    var wkNum=Math.floor(d/7)+1;
+    if(wkNum>16)wkNum=16;
+    var wkData=PROTOCOL_WEEKS[wkNum-1];
+    // daily targets
+    result.eatCum+=wkData.eatWk/7;
+    result.burnCum+=wkData.burnWk/7;
+    result.defCum+=wkData.defWk/7;
+    result.stepsCum+=wkData.stepsDay;
+    // workouts: 5 per week = 5/7 per day
+    result.workoutsCum+=wkData.workouts/7;
+    // refeeds: per week
+    result.refeedsCum+=wkData.refeeds/7;
+  }
+
+  return {
+    eatCum:    Math.round(result.eatCum),
+    burnCum:   Math.round(result.burnCum),
+    defCum:    Math.round(result.defCum),
+    stepsCum:  Math.round(result.stepsCum),
+    workoutsCum: Math.round(result.workoutsCum),
+    refeedsCum:  Math.round(result.refeedsCum),
+    totalDays:   totalDays,
+    currentWeek: Math.min(16, Math.floor(dayIdx/7)+1),
+    dayOfWeek:   (dayIdx%7)+1,
+  };
+};
+
+// Calc actuals from days data between startDate and today
+var calcProtoActuals=function(days,startDate,today){
+  if(!startDate) return null;
+  var dayIdx=protoDayIndex(startDate,today);
+  if(dayIdx<0) return null;
+
+  var eatCum=0,burnCum=0,stepsCum=0,workoutsCum=0,refeedsCum=0,loggedDays=0;
+
+  for(var d=0;d<=dayIdx;d++){
+    var dt=addDays(startDate,d);
+    var dd=days[dt];
+    if(dd){
+      if(dd.calIn||dd.calBurn) loggedDays++;
+      eatCum+=(dd.calIn||0);
+      burnCum+=(dd.calBurn||0);
+      if(dd.workoutType&&dd.workoutType!=="Rest") workoutsCum++;
+      stepsCum+=(dd.stepsNum||0);
+      // Refeeds: we don't have a dedicated field yet, so track as 0 for now
+    }
+  }
+
+  return {
+    eatCum,
+    burnCum,
+    defCum: burnCum-eatCum,
+    stepsCum,
+    workoutsCum,
+    refeedsCum: 0,
+    loggedDays,
+  };
+};
+
+// ── BUILD AI CONTEXT ──────────────────────────────────────────────────────────
 function buildAIContext(days){
   var today=toDay();
   var L7=Array.from({length:7},function(_,i){var d=new Date();d.setDate(d.getDate()-(6-i));return fmtDate(d);});
   var L30=Array.from({length:30},function(_,i){var d=new Date();d.setDate(d.getDate()-(29-i));return fmtDate(d);});
-
   var todayData=days[today]||{};
   var todayPct=dayPct(todayData);
-
-  // per-domain scores today
   var domainScores={};
   DOMAINS.forEach(function(d){domainScores[d.label]=domainPct(todayData,d)+"%";});
-
-  // streak
   var str=0;var d2=new Date();
   while(true){var k=fmtDate(d2);if(dayPct(days[k])>0){str++;d2.setDate(d2.getDate()-1);}else break;}
-
-  // 7d avgs
   var avgs7={};
   DOMAINS.forEach(function(d){
     var avg=Math.round(L7.reduce(function(a,dt){return a+domainPct(days[dt],d);},0)/7);
     avgs7[d.label]=avg+"%";
   });
-
-  // today nutrition
   var calIn=todayData.calIn||0;
   var calBurn=todayData.calBurn||0;
   var deficit=calBurn-calIn;
-
-  // workout today
   var workout=todayData.workoutType||"Not logged";
   var workoutNotes=todayData.workoutNotes||"";
-
-  // weekly avg score
   var weekAvg=Math.round(L7.reduce(function(a,dt){return a+dayPct(days[dt]||{});},0)/7);
-
-  // ── ALL-TIME STATS ──────────────────────────────────────────────────────────
   var allDates=Object.keys(days).sort();
-  var loggedDays=allDates.filter(function(dt){
-    var d=days[dt];
-    return d&&(d.calIn||d.calBurn||d.weight||d.workoutType||d.stepsNum);
-  });
-
-  // all-time calorie stats
+  var loggedDays=allDates.filter(function(dt){var d=days[dt];return d&&(d.calIn||d.calBurn||d.weight||d.workoutType||d.stepsNum);});
   var calDays=loggedDays.filter(function(dt){return days[dt].calIn||days[dt].calBurn;});
   var totalCalIn=calDays.reduce(function(a,dt){return a+(days[dt].calIn||0);},0);
   var totalCalBurn=calDays.reduce(function(a,dt){return a+(days[dt].calBurn||0);},0);
@@ -212,22 +318,12 @@ function buildAIContext(days){
   var avgDeficit=calDays.length?Math.round(totalDeficit/calDays.length):0;
   var deficitDays=calDays.filter(function(dt){return(days[dt].calBurn||0)>(days[dt].calIn||0);}).length;
   var surplusDays=calDays.length-deficitDays;
-
-  // all-time steps
   var stepDays=loggedDays.filter(function(dt){return days[dt].stepsNum;});
   var totalSteps=stepDays.reduce(function(a,dt){return a+(days[dt].stepsNum||0);},0);
   var avgSteps=stepDays.length?Math.round(totalSteps/stepDays.length):0;
-
-  // all-time workout breakdown
-  var workoutCounts={};
-  WTYPES.forEach(function(t){workoutCounts[t]=0;});
-  loggedDays.forEach(function(dt){
-    var wt=days[dt].workoutType;
-    if(wt&&workoutCounts[wt]!==undefined)workoutCounts[wt]++;
-  });
+  var workoutCounts={};WTYPES.forEach(function(t){workoutCounts[t]=0;});
+  loggedDays.forEach(function(dt){var wt=days[dt].workoutType;if(wt&&workoutCounts[wt]!==undefined)workoutCounts[wt]++;});
   var totalSessions=loggedDays.filter(function(dt){return days[dt].workoutType&&days[dt].workoutType!=="Rest";}).length;
-
-  // weight trend
   var wtDaysAll=loggedDays.filter(function(dt){return days[dt].weight;});
   var firstWeight=wtDaysAll.length?days[wtDaysAll[0]].weight:null;
   var latestWeight=wtDaysAll.length?days[wtDaysAll[wtDaysAll.length-1]].weight:null;
@@ -235,92 +331,11 @@ function buildAIContext(days){
   var wtChange30=null;
   var wt30=L30.filter(function(dt){return days[dt]&&days[dt].weight;});
   if(wt30.length>=2)wtChange30=(days[wt30[wt30.length-1]].weight-days[wt30[0]].weight).toFixed(1);
-
-  // last 30 days detail log
-  var last30Log=L30.map(function(dt){
-    var d=days[dt]||{};
-    var ci=d.calIn||0;
-    var cb=d.calBurn||0;
-    var def=cb-ci;
-    var parts=[];
-    if(ci||cb){parts.push("in="+ci+" burn="+cb+" "+(def>=0?"deficit=+"+def:"surplus="+Math.abs(def)));}
-    if(d.stepsNum){parts.push("steps="+d.stepsNum);}
-    if(d.workoutType){parts.push("workout="+d.workoutType);}
-    if(d.weight){parts.push("weight="+d.weight+"lbs");}
-    return dt.slice(5)+": "+(parts.length?parts.join(" "):"no data");
-  }).join("\n");
-
-  // best and worst deficit weeks in last 30d
-  var weekBlocks=[];
-  for(var wi=0;wi<L30.length;wi+=7){
-    var wk=L30.slice(wi,wi+7);
-    var wkDef=wk.reduce(function(a,dt){var d=days[dt]||{};return a+((d.calBurn||0)-(d.calIn||0));},0);
-    weekBlocks.push({range:wk[0].slice(5)+" to "+wk[wk.length-1].slice(5),deficit:wkDef});
-  }
+  var last30Log=L30.map(function(dt){var d=days[dt]||{};var ci=d.calIn||0;var cb=d.calBurn||0;var def=cb-ci;var parts=[];if(ci||cb){parts.push("in="+ci+" burn="+cb+" "+(def>=0?"deficit=+"+def:"surplus="+Math.abs(def)));}if(d.stepsNum){parts.push("steps="+d.stepsNum);}if(d.workoutType){parts.push("workout="+d.workoutType);}if(d.weight){parts.push("weight="+d.weight+"lbs");}return dt.slice(5)+": "+(parts.length?parts.join(" "):"no data");}).join("\n");
+  var weekBlocks=[];for(var wi=0;wi<L30.length;wi+=7){var wk=L30.slice(wi,wi+7);var wkDef=wk.reduce(function(a,dt){var d=days[dt]||{};return a+((d.calBurn||0)-(d.calIn||0));},0);weekBlocks.push({range:wk[0].slice(5)+" to "+wk[wk.length-1].slice(5),deficit:wkDef});}
   weekBlocks.sort(function(a,b){return b.deficit-a.deficit;});
-
-  // protocol summaries (compact)
-  var protocolSummary=PROTOCOLS.map(function(p){
-    var items=[];
-    if(p.items)items=p.items;
-    else if(p.sections){
-      p.sections.forEach(function(s){
-        if(s.items)items=items.concat(s.items);
-        if(s.layers)s.layers.forEach(function(l){items=items.concat(l.items);});
-      });
-    }
-    return p.label+": "+items.slice(0,4).join("; ");
-  }).join("\n");
-
-  return "=== OPERAXIS SYSTEM CONTEXT ===\n"+
-    "Date: "+today+"\n"+
-    "Streak: "+str+" days\n"+
-    "Today's overall score: "+todayPct+"%\n"+
-    "7-day average score: "+weekAvg+"%\n\n"+
-
-    "TODAY'S DOMAIN SCORES:\n"+
-    Object.entries(domainScores).map(function(e){return"  "+e[0]+": "+e[1];}).join("\n")+"\n\n"+
-
-    "7-DAY DOMAIN AVERAGES:\n"+
-    Object.entries(avgs7).map(function(e){return"  "+e[0]+": "+e[1];}).join("\n")+"\n\n"+
-
-    "TODAY'S NUTRITION & TRAINING:\n"+
-    "  Calories eaten: "+(calIn||"not logged")+"\n"+
-    "  Calories burned: "+(calBurn||"not logged")+"\n"+
-    "  Deficit/Surplus: "+(calBurn?(deficit>=0?"deficit +"+deficit+" kcal":"surplus "+Math.abs(deficit)+" kcal"):"not logged")+"\n"+
-    "  Workout: "+workout+(workoutNotes?" — "+workoutNotes:"")+"\n\n"+
-
-    "=== ALL-TIME STATS ("+loggedDays.length+" logged days total) ===\n\n"+
-
-    "CALORIES ALL-TIME ("+calDays.length+" days logged):\n"+
-    "  Avg calories in per day: "+avgCalIn+" kcal\n"+
-    "  Avg calories burned per day: "+avgCalBurn+" kcal\n"+
-    "  Avg daily deficit: "+(avgDeficit>=0?"+"+avgDeficit:String(avgDeficit))+" kcal\n"+
-    "  Total accumulated deficit: "+(totalDeficit>=0?"+"+totalDeficit:String(totalDeficit))+" kcal\n"+
-    "  Days in deficit: "+deficitDays+" / "+calDays.length+"\n"+
-    "  Days in surplus: "+surplusDays+" / "+calDays.length+"\n\n"+
-
-    "STEPS ALL-TIME ("+stepDays.length+" days logged):\n"+
-    "  Total steps logged: "+totalSteps.toLocaleString()+"\n"+
-    "  Average steps per day: "+avgSteps.toLocaleString()+"\n\n"+
-
-    "WORKOUTS ALL-TIME ("+totalSessions+" training sessions):\n"+
-    WTYPES.map(function(t){return"  "+t+": "+workoutCounts[t]+" sessions";}).join("\n")+"\n\n"+
-
-    "WEIGHT TREND:\n"+
-    "  Starting weight: "+(firstWeight?firstWeight+" lbs":"not logged")+"\n"+
-    "  Latest weight: "+(latestWeight?latestWeight+" lbs":"not logged")+"\n"+
-    "  All-time change: "+(wtChangeAll!==null?wtChangeAll+" lbs":"insufficient data")+"\n"+
-    "  30-day change: "+(wtChange30!==null?wtChange30+" lbs":"insufficient data")+"\n\n"+
-
-    "BEST DEFICIT WEEKS (last 30 days):\n"+
-    weekBlocks.slice(0,2).map(function(w){return"  "+w.range+": "+(w.deficit>=0?"+":"")+w.deficit+" kcal";}).join("\n")+"\n"+
-    "WORST SURPLUS WEEKS (last 30 days):\n"+
-    weekBlocks.slice(-2).reverse().map(function(w){return"  "+w.range+": "+(w.deficit>=0?"+":"")+w.deficit+" kcal";}).join("\n")+"\n\n"+
-
-    "LAST 30 DAYS DETAIL LOG:\n"+last30Log+"\n\n"+
-
-    "SYSTEM PROTOCOLS (summary):\n"+protocolSummary;
+  var protocolSummary=PROTOCOLS.map(function(p){var items=[];if(p.items)items=p.items;else if(p.sections){p.sections.forEach(function(s){if(s.items)items=items.concat(s.items);if(s.layers)s.layers.forEach(function(l){items=items.concat(l.items);});});}return p.label+": "+items.slice(0,4).join("; ");}).join("\n");
+  return "=== OPERAXIS SYSTEM CONTEXT ===\n"+"Date: "+today+"\n"+"Streak: "+str+" days\n"+"Today's overall score: "+todayPct+"%\n"+"7-day average score: "+weekAvg+"%\n\n"+"TODAY'S DOMAIN SCORES:\n"+Object.entries(domainScores).map(function(e){return"  "+e[0]+": "+e[1];}).join("\n")+"\n\n"+"7-DAY DOMAIN AVERAGES:\n"+Object.entries(avgs7).map(function(e){return"  "+e[0]+": "+e[1];}).join("\n")+"\n\n"+"TODAY'S NUTRITION & TRAINING:\n"+"  Calories eaten: "+(calIn||"not logged")+"\n"+"  Calories burned: "+(calBurn||"not logged")+"\n"+"  Deficit/Surplus: "+(calBurn?(deficit>=0?"deficit +"+deficit+" kcal":"surplus "+Math.abs(deficit)+" kcal"):"not logged")+"\n"+"  Workout: "+workout+(workoutNotes?" — "+workoutNotes:"")+"\n\n"+"=== ALL-TIME STATS ("+loggedDays.length+" logged days total) ===\n\n"+"CALORIES ALL-TIME ("+calDays.length+" days logged):\n"+"  Avg calories in per day: "+avgCalIn+" kcal\n"+"  Avg calories burned per day: "+avgCalBurn+" kcal\n"+"  Avg daily deficit: "+(avgDeficit>=0?"+"+avgDeficit:String(avgDeficit))+" kcal\n"+"  Total accumulated deficit: "+(totalDeficit>=0?"+"+totalDeficit:String(totalDeficit))+" kcal\n"+"  Days in deficit: "+deficitDays+" / "+calDays.length+"\n"+"  Days in surplus: "+surplusDays+" / "+calDays.length+"\n\n"+"STEPS ALL-TIME ("+stepDays.length+" days logged):\n"+"  Total steps logged: "+totalSteps.toLocaleString()+"\n"+"  Average steps per day: "+avgSteps.toLocaleString()+"\n\n"+"WORKOUTS ALL-TIME ("+totalSessions+" training sessions):\n"+WTYPES.map(function(t){return"  "+t+": "+workoutCounts[t]+" sessions";}).join("\n")+"\n\n"+"WEIGHT TREND:\n"+"  Starting weight: "+(firstWeight?firstWeight+" lbs":"not logged")+"\n"+"  Latest weight: "+(latestWeight?latestWeight+" lbs":"not logged")+"\n"+"  All-time change: "+(wtChangeAll!==null?wtChangeAll+" lbs":"insufficient data")+"\n"+"  30-day change: "+(wtChange30!==null?wtChange30+" lbs":"insufficient data")+"\n\n"+"BEST DEFICIT WEEKS (last 30 days):\n"+weekBlocks.slice(0,2).map(function(w){return"  "+w.range+": "+(w.deficit>=0?"+":"")+w.deficit+" kcal";}).join("\n")+"\n"+"WORST SURPLUS WEEKS (last 30 days):\n"+weekBlocks.slice(-2).reverse().map(function(w){return"  "+w.range+": "+(w.deficit>=0?"+":"")+w.deficit+" kcal";}).join("\n")+"\n\n"+"LAST 30 DAYS DETAIL LOG:\n"+last30Log+"\n\n"+"SYSTEM PROTOCOLS (summary):\n"+protocolSummary;
 }
 
 function CalendarPicker(props){
@@ -328,17 +343,14 @@ function CalendarPicker(props){
   var onSelect=props.onSelect;
   var onReset=props.onReset;
   var onClose=props.onClose;
-
   var today=toDay();
   var todayDate=new Date(today+"T12:00:00");
   var initDate=selectedStart?new Date(selectedStart+"T12:00:00"):todayDate;
   var ms=useState(initDate.getFullYear());var displayYear=ms[0],setDisplayYear=ms[1];
   var ms2=useState(initDate.getMonth());var displayMonth=ms2[0],setDisplayMonth=ms2[1];
   var ps=useState(selectedStart);var pendingStart=ps[0],setPendingStart=ps[1];
-
   var prevMonth=function(){if(displayMonth===0){setDisplayMonth(11);setDisplayYear(function(y){return y-1;});}else setDisplayMonth(function(m){return m-1;});};
   var nextMonth=function(){if(displayMonth===11){setDisplayMonth(0);setDisplayYear(function(y){return y+1;});}else setDisplayMonth(function(m){return m+1;});};
-
   var MONTH_NAMES=["January","February","March","April","May","June","July","August","September","October","November","December"];
   var DAY_NAMES=["SUN","MON","TUE","WED","THU","FRI","SAT"];
   var firstDay=new Date(displayYear,displayMonth,1).getDay();
@@ -347,7 +359,6 @@ function CalendarPicker(props){
   for(var i=0;i<firstDay;i++)cells.push(null);
   for(var d=1;d<=daysInMonth;d++)cells.push(d);
   var S={bg:"#1c1c1e",text:"#e8e8e8",muted:"#555",accent:"#4a9eff"};
-
   return(
     <div style={{position:"fixed",top:0,left:0,right:0,bottom:0,zIndex:100,display:"flex",alignItems:"center",justifyContent:"center",background:"rgba(0,0,0,0.7)"}} onClick={onClose}>
       <div style={{background:"#1c1c1e",borderRadius:16,padding:20,width:"calc(100% - 48px)",maxWidth:360,boxShadow:"0 20px 60px rgba(0,0,0,0.8)"}} onClick={function(e){e.stopPropagation();}}>
@@ -367,11 +378,10 @@ function CalendarPicker(props){
             var dateStr=displayYear+"-"+String(displayMonth+1).padStart(2,"0")+"-"+String(day).padStart(2,"0");
             var isToday=dateStr===today;
             var isPending=dateStr===pendingStart;
-            var inRange=pendingStart&&dateStr>pendingStart&&dateStr<=addDays(pendingStart,6);
             var isFuture=dateStr>today;
             return(
               <div key={day} onClick={function(){if(!isFuture)setPendingStart(dateStr);}}
-                style={{textAlign:"center",padding:"8px 0",borderRadius:isPending?"50%":(inRange?"0":"50%"),background:isPending?"#4a9eff":(inRange?"#4a9eff22":(isToday?"#4a9eff":"transparent")),color:isPending?"#000":(isToday&&!inRange?"#fff":(isFuture?"#333":(inRange?"#4a9eff":S.text))),fontWeight:isPending||isToday?700:400,fontSize:15,cursor:isFuture?"default":"pointer",WebkitTapHighlightColor:"transparent"}}>
+                style={{textAlign:"center",padding:"8px 0",borderRadius:"50%",background:isPending?"#4a9eff":(isToday&&!isPending?"#4a9eff33":"transparent"),color:isPending?"#000":(isToday?"#fff":(isFuture?"#333":S.text)),fontWeight:isPending||isToday?700:400,fontSize:15,cursor:isFuture?"default":"pointer",WebkitTapHighlightColor:"transparent"}}>
                 {day}
               </div>
             );
@@ -405,7 +415,7 @@ function LockScreen(props){
           if(k==="")return <div key={i} style={{width:88,height:88}}/>;
           var isDel=k==="del";
           return(<div key={i} onClick={function(){isDel?handleDel():handleKey(k);}} style={{width:88,height:88,borderRadius:"50%",background:isDel?"transparent":"#111",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",cursor:"pointer",WebkitTapHighlightColor:"transparent"}}>
-            <div style={{fontSize:isDel?22:30,fontWeight:200,color:isDel?"#555":"#fff",lineHeight:1}}>{isDel?"\u232B":k}</div>
+            <div style={{fontSize:isDel?22:30,fontWeight:200,color:isDel?"#555":"#fff",lineHeight:1}}>{isDel?"⌫":k}</div>
             {!isDel&&SUB_LABELS[k]&&(<div style={{fontSize:9,color:"#444",letterSpacing:2,marginTop:3}}>{SUB_LABELS[k]}</div>)}
           </div>);
         })}
@@ -454,7 +464,7 @@ function ProtocolDetail(props){
   if(!dp)return null;
   var hdr=function(title){return <div style={{fontSize:11,fontWeight:600,color:"#777",textTransform:"uppercase",letterSpacing:1,marginBottom:8,marginTop:4}}>{title}</div>;};
   var renderSec=function(sec,i){
-    if(sec.type==="layers")return(<div key={i} style={{marginBottom:16}}>{hdr(sec.title)}{sec.layers.map(function(l,li){return(<div key={li} style={{marginBottom:10,padding:"10px 12px",background:S.dim,borderRadius:8,borderLeft:"3px solid "+dp.border}}><div style={{fontSize:13,fontWeight:600,color:S.text,marginBottom:5}}>{l.label}</div>{l.items.map(function(item,ii){return <div key={ii} style={{fontSize:12,color:S.text,paddingLeft:8,marginBottom:3}}>{"\u2022 "+item}</div>;})}</div>);})}</div>);
+    if(sec.type==="layers")return(<div key={i} style={{marginBottom:16}}>{hdr(sec.title)}{sec.layers.map(function(l,li){return(<div key={li} style={{marginBottom:10,padding:"10px 12px",background:S.dim,borderRadius:8,borderLeft:"3px solid "+dp.border}}><div style={{fontSize:13,fontWeight:600,color:S.text,marginBottom:5}}>{l.label}</div>{l.items.map(function(item,ii){return <div key={ii} style={{fontSize:12,color:S.text,paddingLeft:8,marginBottom:3}}>{"• "+item}</div>;})}</div>);})}</div>);
     if(sec.type==="priorities")return(<div key={i} style={{marginBottom:16}}>{hdr(sec.title)}<div style={{padding:"10px 12px",background:S.dim,borderRadius:8}}>{sec.items.map(function(item,ii){return <div key={ii} style={{fontSize:13,color:ii===0?S.text:S.accent,fontWeight:ii>0?600:400,marginBottom:6}}>{item}</div>;})}</div></div>);
     if(sec.type==="mission")return(<div key={i} style={{marginBottom:16}}>{hdr(sec.title)}<div style={{padding:"12px 14px",background:S.dim,borderRadius:8,borderLeft:"3px solid "+dp.border}}><div style={{fontSize:13,color:S.text,lineHeight:1.7,fontStyle:"italic"}}>"{sec.quote}"</div></div></div>);
     if(sec.type==="client")return(<div key={i} style={{marginBottom:16}}>{hdr(sec.title)}{[["The Client",sec.client],["The Problem",sec.problem],["The Result",sec.result]].map(function(pair,ci){return(<div key={ci} style={{marginBottom:8,padding:"10px 12px",background:S.dim,borderRadius:8}}><div style={{fontSize:11,color:"#777",marginBottom:4}}>{pair[0]}</div><div style={{fontSize:13,color:S.text,lineHeight:1.6}}>{pair[1]}</div></div>);})}</div>);
@@ -467,7 +477,7 @@ function ProtocolDetail(props){
   };
   return(
     <div>
-      <button onClick={onBack} style={{background:"transparent",border:"1px solid #1a1a1a",borderRadius:6,padding:"6px 12px",color:"#555",fontSize:12,cursor:"pointer",marginBottom:14}}>{"\u2039 Back"}</button>
+      <button onClick={onBack} style={{background:"transparent",border:"1px solid #1a1a1a",borderRadius:6,padding:"6px 12px",color:"#555",fontSize:12,cursor:"pointer",marginBottom:14}}>{"‹ Back"}</button>
       <div style={{background:"#0a0a0a",border:"1px solid "+dp.border,borderRadius:10,overflow:"hidden"}}>
         <div style={{background:dp.color,padding:"14px 16px",borderBottom:"1px solid "+dp.border}}><div style={{fontSize:16,fontWeight:600}}>{dp.label}</div></div>
         <div style={{padding:"14px 16px"}}>{dp.sections?dp.sections.map(function(sec,i){return renderSec(sec,i);}):dp.items.map(function(item,i){return(<div key={i} style={{fontSize:13,color:"#e8e8e8",lineHeight:1.8,paddingBottom:i<dp.items.length-1?12:0,marginBottom:i<dp.items.length-1?12:0,borderBottom:i<dp.items.length-1?"1px solid #111":"none"}}>{item}</div>);})}</div>
@@ -493,7 +503,7 @@ function ModedDomainCard(props){
         <span style={{flex:1,fontWeight:500,fontSize:15}}>{domain.label}</span>
         <div onClick={cycleMode} style={{padding:"3px 10px",borderRadius:20,border:"1px solid "+mc.border,background:mc.bg,color:mc.text,fontSize:11,fontWeight:600,cursor:"pointer",flexShrink:0}}>{modeLabel(currentMode)}</div>
         <span style={{fontSize:13,fontWeight:600,color:pc(pct),marginLeft:4}}>{pct}%</span>
-        <span style={{color:S.muted,fontSize:11,marginLeft:4}}>{isOpen?"\u25B2":"\u25BC"}</span>
+        <span style={{color:S.muted,fontSize:11,marginLeft:4}}>{isOpen?"▲":"▼"}</span>
       </div>
       <div style={{height:2,background:S.border}}><div style={{height:"100%",width:pct+"%",background:pc(pct),transition:"width 0.3s"}}/></div>
       {isOpen&&(
@@ -506,13 +516,309 @@ function ModedDomainCard(props){
             return(
               <div key={currentMode+"-"+i} onClick={function(){onCheckToggle(domain.id,currentMode,i);}} style={{display:"flex",alignItems:"center",gap:10,padding:"8px 0",cursor:"pointer",borderBottom:i<habits.length-1?"1px solid "+S.dim:"none"}}>
                 <div style={{width:18,height:18,border:"1.5px solid "+(checked?S.accent:S.muted),borderRadius:4,background:checked?S.accent:"transparent",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
-                  {checked&&<span style={{color:"#000",fontSize:11,fontWeight:700}}>{"\u2713"}</span>}
+                  {checked&&<span style={{color:"#000",fontSize:11,fontWeight:700}}>{"✓"}</span>}
                 </div>
                 <span style={{flex:1,fontSize:14,color:checked?S.muted:S.text,textDecoration:checked?"line-through":"none"}}>{h.label}</span>
                 <span style={{fontSize:11,color:checked?S.accent:S.muted,minWidth:32,textAlign:"right"}}>{hp}%</span>
               </div>
             );
           })}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ── PROTOCOL TAB COMPONENT ────────────────────────────────────────────────────
+function GapBar(props){
+  var actual=props.actual,target=props.target,label=props.label,unit=props.unit,higherIsBetter=props.higherIsBetter;
+  if(higherIsBetter===undefined)higherIsBetter=true;
+  var pct=target>0?Math.min(100,Math.round((actual/target)*100)):0;
+  var gap=actual-target;
+  var onTrack=higherIsBetter?(actual>=target):(actual<=target);
+  var barColor=pct>=90?"#34d399":pct>=60?"#60a5fa":pct>=30?"#f59e0b":"#f87171";
+  var gapColor=onTrack?"#34d399":"#f87171";
+  var fmtNum=function(n){return Math.abs(n)>=1000?Math.round(n/100)/10+"k":Math.round(n).toString();};
+  return(
+    <div style={{marginBottom:14}}>
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"baseline",marginBottom:5}}>
+        <span style={{fontSize:12,color:"#888",fontWeight:500}}>{label}</span>
+        <div style={{display:"flex",alignItems:"center",gap:8}}>
+          <span style={{fontSize:11,color:"#555"}}>{fmtNum(actual)}{unit} / {fmtNum(target)}{unit}</span>
+          <span style={{fontSize:12,fontWeight:700,color:gapColor,minWidth:60,textAlign:"right"}}>
+            {onTrack?"✓ +":(gap>=0?"+":"")+fmtNum(gap)+unit}
+          </span>
+        </div>
+      </div>
+      <div style={{height:5,background:"#1a1a1a",borderRadius:3,overflow:"hidden"}}>
+        <div style={{height:"100%",width:pct+"%",background:barColor,borderRadius:3,transition:"width 0.4s ease"}}/>
+      </div>
+      <div style={{display:"flex",justifyContent:"space-between",marginTop:3}}>
+        <span style={{fontSize:10,color:"#444"}}>{pct}% of target</span>
+        <span style={{fontSize:10,color:gapColor}}>{onTrack?"On track":fmtNum(Math.abs(gap))+unit+" behind"}</span>
+      </div>
+    </div>
+  );
+}
+
+function ProtocolTab(props){
+  var days=props.days,protoStart=props.protoStart,onSetStart=props.onSetStart;
+  var S={bg:"#000",card:"#0a0a0a",border:"#1a1a1a",text:"#e8e8e8",muted:"#555",accent:"#4a9eff",dim:"#111"};
+  var vs=useState("protocol");var view=vs[0],setView=vs[1];
+  var today=toDay();
+
+  // No start date set
+  if(!protoStart){
+    return(
+      <div style={{textAlign:"center",padding:"40px 20px"}}>
+        <div style={{fontSize:16,fontWeight:600,marginBottom:8}}>Protocol Start Date</div>
+        <div style={{fontSize:13,color:S.muted,marginBottom:24,lineHeight:1.6}}>Set your 16-week cutting protocol start date to begin tracking your compliance vs targets.</div>
+        <button onClick={onSetStart} style={{background:S.accent,color:"#000",border:"none",borderRadius:10,padding:"12px 28px",fontSize:14,fontWeight:700,cursor:"pointer"}}>Set Start Date</button>
+      </div>
+    );
+  }
+
+  var targets=calcProtoTargets(protoStart,today);
+  var actuals=calcProtoActuals(days,protoStart,today);
+
+  if(!targets){
+    return(
+      <div style={{textAlign:"center",padding:"40px 20px"}}>
+        <div style={{fontSize:14,color:S.muted}}>Protocol hasn't started yet.</div>
+        <div style={{fontSize:12,color:"#333",marginTop:8}}>Start date: {protoStart}</div>
+      </div>
+    );
+  }
+
+  var currentWeek=targets.currentWeek;
+  var currentWeekData=PROTOCOL_WEEKS[Math.min(currentWeek-1,15)];
+  var phaseCol=PHASE_COL[currentWeekData.phase]||{bg:"#1a1a1a",border:"#333",text:"#888"};
+
+  // Total protocol targets (all 16 weeks)
+  var totalProtoDef=PROTOCOL_WEEKS.reduce(function(a,w){return a+w.defWk;},0);
+  var totalProtoEat=PROTOCOL_WEEKS.reduce(function(a,w){return a+w.eatWk;},0);
+  var totalProtoSteps=PROTOCOL_WEEKS.reduce(function(a,w){return a+w.stepsDay*7;},0);
+  var totalProtoWorkouts=PROTOCOL_WEEKS.reduce(function(a,w){return a+w.workouts;},0);
+
+  // Days remaining
+  var daysTotal=16*7;
+  var daysElapsed=targets.totalDays;
+  var daysRemaining=daysTotal-daysElapsed;
+  var pctComplete=Math.round((daysElapsed/daysTotal)*100);
+
+  // Projected end deficit based on current rate
+  var currentRate=actuals.defCum>0&&daysElapsed>0?(actuals.defCum/daysElapsed):0;
+  var projectedTotalDef=Math.round(actuals.defCum+(currentRate*daysRemaining));
+
+  // Per-week breakdown for actuals view
+  var weekRows=[];
+  for(var wk=1;wk<=Math.min(currentWeek,16);wk++){
+    var wkDates=protoWeekDates(protoStart,wk);
+    var wkEat=wkDates.reduce(function(a,dt){return a+((days[dt]&&days[dt].calIn)||0);},0);
+    var wkBurn=wkDates.reduce(function(a,dt){return a+((days[dt]&&days[dt].calBurn)||0);},0);
+    var wkDef=wkBurn-wkEat;
+    var wkSteps=wkDates.reduce(function(a,dt){return a+((days[dt]&&days[dt].stepsNum)||0);},0);
+    var wkWorkouts=wkDates.filter(function(dt){return days[dt]&&days[dt].workoutType&&days[dt].workoutType!=="Rest";}).length;
+    var pwk=PROTOCOL_WEEKS[wk-1];
+    var isCurrentWk=wk===currentWeek;
+    // For current week, target is prorated to days elapsed in week
+    var daysInWk=isCurrentWk?targets.dayOfWeek:7;
+    var pDefTarget=Math.round(pwk.defWk/7*daysInWk);
+    var pEatTarget=Math.round(pwk.eatWk/7*daysInWk);
+    var pStepsTarget=pwk.stepsDay*daysInWk;
+    var pWorkoutsTarget=Math.round(pwk.workouts/7*daysInWk);
+    weekRows.push({wk,phase:pwk.phase,defTarget:pDefTarget,defActual:wkDef,eatTarget:pEatTarget,eatActual:wkEat,stepsTarget:pStepsTarget,stepsActual:wkSteps,workoutsTarget:pWorkoutsTarget,workoutsActual:wkWorkouts,isCurrent:isCurrentWk});
+  }
+
+  return(
+    <div>
+      {/* Header — phase badge + progress */}
+      <div style={{background:phaseCol.bg,border:"1px solid "+phaseCol.border,borderRadius:10,padding:"14px 16px",marginBottom:14}}>
+        <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:10}}>
+          <div>
+            <div style={{fontSize:11,color:phaseCol.text,fontWeight:600,letterSpacing:1,textTransform:"uppercase",marginBottom:4}}>{currentWeekData.phase}</div>
+            <div style={{fontSize:22,fontWeight:700,color:"#e8e8e8"}}>Week {currentWeek} <span style={{fontSize:13,color:"#666",fontWeight:400}}>/ 16</span></div>
+            <div style={{fontSize:12,color:"#555",marginTop:2}}>Day {targets.dayOfWeek} of week · Day {daysElapsed} total</div>
+          </div>
+          <div style={{textAlign:"right"}}>
+            <div style={{fontSize:22,fontWeight:700,color:phaseCol.text}}>{pctComplete}%</div>
+            <div style={{fontSize:11,color:"#555"}}>complete</div>
+            <div style={{fontSize:11,color:"#444",marginTop:2}}>{daysRemaining}d left</div>
+          </div>
+        </div>
+        <div style={{height:4,background:"#0a0a0a",borderRadius:2}}>
+          <div style={{height:"100%",width:pctComplete+"%",background:phaseCol.border,borderRadius:2,transition:"width 0.5s ease"}}/>
+        </div>
+        <div style={{marginTop:10,fontSize:12,color:"#666"}}>
+          <span style={{color:"#888"}}>Daily target: </span>
+          <span style={{color:phaseCol.text,fontWeight:600}}>{currentWeekData.calDay.toLocaleString()} kcal</span>
+          <span style={{color:"#444",marginLeft:12}}>{currentWeekData.macros}</span>
+        </div>
+      </div>
+
+      {/* Toggle */}
+      <div style={{display:"flex",gap:8,marginBottom:14}}>
+        {["protocol","actuals"].map(function(v){return(
+          <button key={v} onClick={function(){setView(v);}}
+            style={{flex:1,padding:"8px 0",borderRadius:8,border:"1px solid "+(view===v?S.accent:S.border),background:view===v?"#4a9eff22":"transparent",color:view===v?S.accent:S.muted,fontSize:13,fontWeight:view===v?600:400,cursor:"pointer",textTransform:"capitalize"}}>
+            {v==="protocol"?"Protocol":"Actuals"}
+          </button>
+        );})}
+      </div>
+
+      {view==="protocol"&&(
+        <div>
+          {/* Cumulative gap card */}
+          <div style={{background:S.card,border:"1px solid "+S.border,borderRadius:10,padding:"14px 16px",marginBottom:14}}>
+            <div style={{fontSize:12,color:S.muted,fontWeight:600,letterSpacing:1,textTransform:"uppercase",marginBottom:14}}>Cumulative Targets vs Actuals</div>
+            <GapBar label="Deficit" actual={actuals.defCum} target={targets.defCum} unit=" kcal"/>
+            <GapBar label="Calories Eaten" actual={actuals.eatCum} target={targets.eatCum} unit=" kcal" higherIsBetter={false}/>
+            <GapBar label="Calories Burned" actual={actuals.burnCum} target={targets.burnCum} unit=" kcal"/>
+            <GapBar label="Steps" actual={actuals.stepsCum} target={targets.stepsCum} unit=""/>
+            <GapBar label="Workouts" actual={actuals.workoutsCum} target={targets.workoutsCum} unit=" sessions"/>
+          </div>
+
+          {/* Projection card */}
+          <div style={{background:S.card,border:"1px solid "+S.border,borderRadius:10,padding:"14px 16px",marginBottom:14}}>
+            <div style={{fontSize:12,color:S.muted,fontWeight:600,letterSpacing:1,textTransform:"uppercase",marginBottom:12}}>16-Week Projection</div>
+            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10}}>
+              {[
+                ["Protocol Target",totalProtoDef.toLocaleString()+" kcal","#4a9eff"],
+                ["At Current Rate",projectedTotalDef.toLocaleString()+" kcal",projectedTotalDef>=totalProtoDef?"#34d399":"#f87171"],
+                ["Deficit So Far",actuals.defCum.toLocaleString()+" kcal","#e8e8e8"],
+                ["Gap",((actuals.defCum-targets.defCum)<0?""+(actuals.defCum-targets.defCum).toLocaleString():"+"+(actuals.defCum-targets.defCum).toLocaleString())+" kcal",(actuals.defCum-targets.defCum)>=0?"#34d399":"#f87171"],
+              ].map(function(row){return(
+                <div key={row[0]} style={{background:S.dim,borderRadius:8,padding:"10px 12px"}}>
+                  <div style={{fontSize:10,color:"#555",marginBottom:4}}>{row[0]}</div>
+                  <div style={{fontSize:15,fontWeight:700,color:row[2]}}>{row[1]}</div>
+                </div>
+              );})}
+            </div>
+            {projectedTotalDef<totalProtoDef&&(
+              <div style={{marginTop:10,padding:"8px 12px",background:"#3a0a0a",border:"1px solid #f8717144",borderRadius:8,fontSize:12,color:"#fca5a5",lineHeight:1.5}}>
+                At your current rate you will finish {(totalProtoDef-projectedTotalDef).toLocaleString()} kcal short of the 16-week target — roughly {Math.round((totalProtoDef-projectedTotalDef)/3500*10)/10} lbs of fat left on the table.
+              </div>
+            )}
+            {projectedTotalDef>=totalProtoDef&&(
+              <div style={{marginTop:10,padding:"8px 12px",background:"#042C53",border:"1px solid #34d39944",borderRadius:8,fontSize:12,color:"#86efac",lineHeight:1.5}}>
+                On pace to hit or exceed the 16-week deficit target. Keep the rate consistent.
+              </div>
+            )}
+          </div>
+
+          {/* Week-by-week protocol schedule */}
+          <div style={{background:S.card,border:"1px solid "+S.border,borderRadius:10,overflow:"hidden"}}>
+            <div style={{padding:"10px 14px",fontSize:12,fontWeight:600,color:S.muted,textTransform:"uppercase",letterSpacing:1,borderBottom:"1px solid "+S.border}}>16-Week Schedule</div>
+            {PROTOCOL_WEEKS.map(function(w){
+              var isCur=w.wk===currentWeek;
+              var isPast=w.wk<currentWeek;
+              var pc2=PHASE_COL[w.phase]||{bg:"#111",border:"#333",text:"#888"};
+              return(
+                <div key={w.wk} style={{padding:"10px 14px",borderBottom:"1px solid "+S.dim,background:isCur?(pc2.bg+"cc"):"transparent",borderLeft:isCur?"3px solid "+pc2.border:"3px solid transparent",opacity:isPast?0.5:1}}>
+                  <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:3}}>
+                    <div style={{display:"flex",alignItems:"center",gap:8}}>
+                      <span style={{fontSize:13,fontWeight:isCur?700:400,color:isCur?pc2.text:S.text}}>Wk {w.wk}</span>
+                      <span style={{fontSize:10,color:pc2.text,background:pc2.bg,border:"1px solid "+pc2.border,borderRadius:10,padding:"1px 7px"}}>{w.phase}</span>
+                      {isCur&&<span style={{fontSize:10,color:"#34d399",fontWeight:600}}>← NOW</span>}
+                    </div>
+                    <span style={{fontSize:11,color:S.muted}}>{w.defWk.toLocaleString()} kcal deficit</span>
+                  </div>
+                  <div style={{fontSize:11,color:"#444"}}>{w.calDay.toLocaleString()} kcal/day · {w.stepsDay.toLocaleString()} steps · {w.workouts}x workouts{w.refeeds>0?" · "+w.refeeds+" refeeds":""}</div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      {view==="actuals"&&(
+        <div>
+          {/* Summary stats */}
+          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:8,marginBottom:14}}>
+            {[
+              ["Deficit",actuals.defCum>=0?(actuals.defCum/1000).toFixed(1)+"k":"0","kcal",actuals.defCum>=targets.defCum*0.9?"#34d399":"#f87171"],
+              ["Workouts",actuals.workoutsCum,"sessions",actuals.workoutsCum>=targets.workoutsCum*0.9?"#34d399":"#f59e0b"],
+              ["Steps",(actuals.stepsCum/1000).toFixed(0)+"k","total",actuals.stepsCum>=targets.stepsCum*0.9?"#34d399":"#f59e0b"],
+            ].map(function(row){return(
+              <div key={row[0]} style={{background:S.card,border:"1px solid "+S.border,borderRadius:8,padding:"10px 10px"}}>
+                <div style={{fontSize:10,color:S.muted,marginBottom:4}}>{row[0]}</div>
+                <div style={{fontSize:18,fontWeight:700,color:row[3]}}>{row[1]}</div>
+                <div style={{fontSize:10,color:"#444"}}>{row[2]}</div>
+              </div>
+            );})}
+          </div>
+
+          {/* Week-by-week actuals table */}
+          <div style={{background:S.card,border:"1px solid "+S.border,borderRadius:10,overflow:"hidden"}}>
+            <div style={{padding:"10px 14px",fontSize:12,fontWeight:600,color:S.muted,textTransform:"uppercase",letterSpacing:1,borderBottom:"1px solid "+S.border}}>Week-by-Week Actuals</div>
+            {weekRows.map(function(row){
+              var pc2=PHASE_COL[row.phase]||{bg:"#111",border:"#333",text:"#888"};
+              var defPct=row.defTarget>0?Math.min(100,Math.round(row.defActual/row.defTarget*100)):0;
+              var defColor=defPct>=90?"#34d399":defPct>=60?"#60a5fa":defPct>=30?"#f59e0b":"#f87171";
+              var stepsPct=row.stepsTarget>0?Math.min(100,Math.round(row.stepsActual/row.stepsTarget*100)):0;
+              var woPct=row.workoutsTarget>0?Math.min(100,Math.round(row.workoutsActual/row.workoutsTarget*100)):0;
+              return(
+                <div key={row.wk} style={{padding:"12px 14px",borderBottom:"1px solid "+S.dim,background:row.isCurrent?(pc2.bg+"88"):"transparent",borderLeft:row.isCurrent?"3px solid "+pc2.border:"3px solid transparent"}}>
+                  <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8}}>
+                    <div style={{display:"flex",alignItems:"center",gap:6}}>
+                      <span style={{fontSize:13,fontWeight:600,color:row.isCurrent?pc2.text:S.text}}>Wk {row.wk}</span>
+                      <span style={{fontSize:10,color:pc2.text,background:pc2.bg,border:"1px solid "+pc2.border,borderRadius:10,padding:"1px 7px"}}>{row.phase.replace(" — Cut","").replace("Phase ","P")}</span>
+                      {row.isCurrent&&<span style={{fontSize:10,color:"#34d399",fontWeight:600}}>← current</span>}
+                    </div>
+                    <span style={{fontSize:12,fontWeight:700,color:defColor}}>{defPct}%</span>
+                  </div>
+                  {/* Mini bars */}
+                  <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:8}}>
+                    {[
+                      ["Deficit",defPct,row.defActual>=0?Math.round(row.defActual/1000*10)/10+"k":"0","kcal",defColor],
+                      ["Steps",stepsPct,Math.round(row.stepsActual/1000)+"k","steps",stepsPct>=90?"#34d399":stepsPct>=60?"#60a5fa":"#f59e0b"],
+                      ["Workouts",woPct,row.workoutsActual+"/"+row.workoutsTarget,"sessions",woPct>=90?"#34d399":woPct>=60?"#60a5fa":"#f59e0b"],
+                    ].map(function(col){return(
+                      <div key={col[0]}>
+                        <div style={{fontSize:9,color:"#555",marginBottom:2}}>{col[0]}</div>
+                        <div style={{height:3,background:"#1a1a1a",borderRadius:2,marginBottom:2}}>
+                          <div style={{height:"100%",width:col[1]+"%",background:col[4],borderRadius:2}}/>
+                        </div>
+                        <div style={{fontSize:10,color:col[4],fontWeight:600}}>{col[2]} <span style={{color:"#444",fontWeight:400}}>{col[3]}</span></div>
+                      </div>
+                    );})}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Eaten vs Burned actuals */}
+          <div style={{background:S.card,border:"1px solid "+S.border,borderRadius:10,padding:"14px 16px",marginTop:14}}>
+            <div style={{fontSize:12,color:S.muted,fontWeight:600,letterSpacing:1,textTransform:"uppercase",marginBottom:12}}>Calorie Totals Since Start</div>
+            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:10}}>
+              {[
+                ["Total Eaten",actuals.eatCum.toLocaleString(),"#4a9eff"],
+                ["Total Burned",actuals.burnCum.toLocaleString(),"#34d399"],
+                [actuals.defCum>=0?"Total Deficit":"Total Surplus",Math.abs(actuals.defCum).toLocaleString(),actuals.defCum>=0?"#34d399":"#f87171"],
+              ].map(function(row){return(
+                <div key={row[0]} style={{background:S.dim,borderRadius:8,padding:"10px 10px"}}>
+                  <div style={{fontSize:10,color:"#555",marginBottom:4}}>{row[0]}</div>
+                  <div style={{fontSize:14,fontWeight:700,color:row[2]}}>{row[1]}</div>
+                  <div style={{fontSize:10,color:"#444"}}>kcal</div>
+                </div>
+              );})}
+            </div>
+            <div style={{marginTop:12,display:"flex",justifyContent:"space-between",padding:"8px 0",borderTop:"1px solid "+S.dim}}>
+              <span style={{fontSize:12,color:S.muted}}>Avg deficit/day</span>
+              <span style={{fontSize:13,fontWeight:600,color:actuals.loggedDays>0?"#e8e8e8":"#555"}}>
+                {actuals.loggedDays>0?Math.round(actuals.defCum/actuals.loggedDays).toLocaleString()+" kcal":"No data"}
+              </span>
+            </div>
+            <div style={{display:"flex",justifyContent:"space-between",padding:"8px 0",borderTop:"1px solid "+S.dim}}>
+              <span style={{fontSize:12,color:S.muted}}>Protocol target avg</span>
+              <span style={{fontSize:13,fontWeight:600,color:"#4a9eff"}}>{Math.round(targets.defCum/targets.totalDays).toLocaleString()} kcal/day</span>
+            </div>
+            <div style={{display:"flex",justifyContent:"space-between",padding:"8px 0",borderTop:"1px solid "+S.dim}}>
+              <span style={{fontSize:12,color:S.muted}}>Days logged</span>
+              <span style={{fontSize:13,fontWeight:600,color:"#e8e8e8"}}>{actuals.loggedDays} / {targets.totalDays}</span>
+            </div>
+          </div>
         </div>
       )}
     </div>
@@ -532,32 +838,16 @@ var QUICK_PROMPTS=[
 function AICoach(props){
   var days=props.days;
   var S={bg:"#000",card:"#0a0a0a",border:"#1a1a1a",text:"#e8e8e8",muted:"#555",accent:"#4a9eff",dim:"#111"};
-
   var aks=useState(ldApiKey);var apiKey=aks[0],setApiKey=aks[1];
   var kis=useState(!ldApiKey());var keyInputOpen=kis[0],setKeyInputOpen=kis[1];
   var kvs=useState("");var keyVal=kvs[0],setKeyVal=kvs[1];
-
   var ms=useState([]);var messages=ms[0],setMessages=ms[1];
   var ins=useState("");var input=ins[0],setInput=ins[1];
   var ls=useState(false);var loading=ls[0],setLoading=ls[1];
   var scrollRef=useRef(null);
   var inputRef=useRef(null);
-
-  useEffect(function(){
-    if(scrollRef.current){
-      scrollRef.current.scrollTop=scrollRef.current.scrollHeight;
-    }
-  },[messages,loading]);
-
-  var saveKey=function(){
-    var k=keyVal.trim();
-    if(!k.startsWith("sk-")){alert("Key should start with sk-");return;}
-    svApiKey(k);
-    setApiKey(k);
-    setKeyInputOpen(false);
-    setKeyVal("");
-  };
-
+  useEffect(function(){if(scrollRef.current){scrollRef.current.scrollTop=scrollRef.current.scrollHeight;}},[messages,loading]);
+  var saveKey=function(){var k=keyVal.trim();if(!k.startsWith("sk-")){alert("Key should start with sk-");return;}svApiKey(k);setApiKey(k);setKeyInputOpen(false);setKeyVal("");};
   var sendMessage=function(text){
     var msg=text||input.trim();
     if(!msg||loading)return;
@@ -567,140 +857,29 @@ function AICoach(props){
     var newMsgs=messages.concat([userMsg]);
     setMessages(newMsgs);
     setLoading(true);
-
     var context=buildAIContext(days);
     var systemPrompt="You are the OperAxis AI — an Analyst, Strategist, and System Thinker built for identity tracking and performance optimisation. You have full access to the user's real-time data and protocols. Your function is to track who this man is becoming based on the consistency patterns in his data, assess whether his daily behaviour aligns with his target identity, and identify exactly where the system is leaking.\n\n"+context+"\n\n=== YOUR STYLE ===\nYou are direct, strategic, and brutally honest. You do not motivate, fluff, sugarcoat, or speak emotionally. You are a cold, data-driven intelligence — you read patterns, find leverage, and deliver conclusions. You never speak in generalities.\n\n=== HOW YOU THINK ===\nEvery response starts from the data. You identify the user's current strengths (domains with strong consistency), his current weaknesses (domains that are dragging his identity score down), and the single highest-leverage action that would compound the most. You track identity formation — if a habit has been hit consistently, you acknowledge it as becoming part of who he is. If it is missing, you name it clearly.\n\nWhen analysing nutrition and body composition, use the full historical log. Look at average deficit, consistency of deficit days vs surplus days, weight trend trajectory, and whether the calorie data matches the weight trend. Call out discrepancies. Identify whether the current trajectory will hit the 190lb target by July 2026 based on the rate of change in the data.\n\n=== ON MISSING HABITS ===\nWhen a habit is being neglected, you do not lecture or moralize. Instead, you state the gap and explain specifically how locking that habit in makes him more physically attractive, more disciplined, and more powerful in the way he carries himself. Not generic health benefits — the actual signal it sends and the identity it builds. Keep it sharp and concrete.\n\n=== OUTPUT FORMAT ===\nShort, high-leverage paragraphs. Use bullet points only when listing multiple data points or action items. Maximum 3-4 paragraphs unless the user asks for more detail. No preamble. Start with the data.";
-
     var apiMessages=newMsgs.map(function(m){return{role:m.role,content:m.content};});
-
-    fetch("https://api.anthropic.com/v1/messages",{
-      method:"POST",
-      headers:{"Content-Type":"application/json","x-api-key":apiKey,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},
-      body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1000,system:systemPrompt,messages:apiMessages})
-    })
-    .then(function(r){
-      if(!r.ok){return r.json().then(function(e){throw new Error(e.error&&e.error.message||"API error "+r.status);});}
-      return r.json();
-    })
-    .then(function(data){
-      var reply=data.content&&data.content.map(function(c){return c.type==="text"?c.text:"";}).join("");
-      setMessages(function(prev){return prev.concat([{role:"assistant",content:reply}]);});
-    })
-    .catch(function(err){
-      setMessages(function(prev){return prev.concat([{role:"assistant",content:"Error: "+err.message+"\n\nCheck your API key in the field above."}]);});
-    })
+    fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json","x-api-key":apiKey,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1000,system:systemPrompt,messages:apiMessages})})
+    .then(function(r){if(!r.ok){return r.json().then(function(e){throw new Error(e.error&&e.error.message||"API error "+r.status);});}return r.json();})
+    .then(function(data){var reply=data.content&&data.content.map(function(c){return c.type==="text"?c.text:"";}).join("");setMessages(function(prev){return prev.concat([{role:"assistant",content:reply}]);});})
+    .catch(function(err){setMessages(function(prev){return prev.concat([{role:"assistant",content:"Error: "+err.message+"\n\nCheck your API key in the field above."}]);});})
     .finally(function(){setLoading(false);});
   };
-
   var handleKeyDown=function(e){if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();sendMessage();}};
-
   return(
     <div style={{display:"flex",flexDirection:"column",height:"calc(100vh - 160px)",minHeight:400}}>
-
-      {/* API Key bar */}
       <div style={{background:S.card,border:"1px solid "+S.border,borderRadius:10,padding:"10px 14px",marginBottom:12,display:"flex",alignItems:"center",gap:10}}>
-        {keyInputOpen?(
-          <>
-            <input
-              value={keyVal}
-              onChange={function(e){setKeyVal(e.target.value);}}
-              placeholder="sk-ant-..."
-              type="password"
-              style={{flex:1,background:S.bg,border:"1px solid "+S.border,borderRadius:6,padding:"7px 10px",color:S.text,fontSize:13}}
-            />
-            <button onClick={saveKey} style={{background:S.accent,border:"none",borderRadius:6,padding:"7px 14px",color:"#000",fontSize:13,fontWeight:600,cursor:"pointer",flexShrink:0}}>Save</button>
-            {apiKey&&<button onClick={function(){setKeyInputOpen(false);}} style={{background:"transparent",border:"1px solid "+S.border,borderRadius:6,padding:"7px 10px",color:S.muted,fontSize:12,cursor:"pointer"}}>Cancel</button>}
-          </>
-        ):(
-          <>
-            <div style={{fontSize:12,color:"#34d399",flex:1}}>{"● API key set"}</div>
-            <button onClick={function(){setKeyVal("");setKeyInputOpen(true);}} style={{background:"transparent",border:"1px solid "+S.border,borderRadius:6,padding:"5px 12px",color:S.muted,fontSize:12,cursor:"pointer"}}>Change</button>
-            <button onClick={function(){setMessages([]);}} style={{background:"transparent",border:"1px solid "+S.border,borderRadius:6,padding:"5px 12px",color:S.muted,fontSize:12,cursor:"pointer"}}>Clear chat</button>
-          </>
-        )}
+        {keyInputOpen?(<><input value={keyVal} onChange={function(e){setKeyVal(e.target.value);}} placeholder="sk-ant-..." type="password" style={{flex:1,background:S.bg,border:"1px solid "+S.border,borderRadius:6,padding:"7px 10px",color:S.text,fontSize:13}}/><button onClick={saveKey} style={{background:S.accent,border:"none",borderRadius:6,padding:"7px 14px",color:"#000",fontSize:13,fontWeight:600,cursor:"pointer",flexShrink:0}}>Save</button>{apiKey&&<button onClick={function(){setKeyInputOpen(false);}} style={{background:"transparent",border:"1px solid "+S.border,borderRadius:6,padding:"7px 10px",color:S.muted,fontSize:12,cursor:"pointer"}}>Cancel</button>}</>):(<><div style={{fontSize:12,color:"#34d399",flex:1}}>{"● API key set"}</div><button onClick={function(){setKeyVal("");setKeyInputOpen(true);}} style={{background:"transparent",border:"1px solid "+S.border,borderRadius:6,padding:"5px 12px",color:S.muted,fontSize:12,cursor:"pointer"}}>Change</button><button onClick={function(){setMessages([]);}} style={{background:"transparent",border:"1px solid "+S.border,borderRadius:6,padding:"5px 12px",color:S.muted,fontSize:12,cursor:"pointer"}}>Clear chat</button></>)}
       </div>
-
-      {/* Chat messages */}
       <div ref={scrollRef} style={{flex:1,overflowY:"auto",marginBottom:12,display:"flex",flexDirection:"column",gap:12}}>
-        {messages.length===0&&!loading&&(
-          <div style={{padding:"20px 0"}}>
-            <div style={{fontSize:13,color:S.muted,marginBottom:16,textAlign:"center"}}>Your AI analyst has full access to your data and protocols. Ask anything.</div>
-            <div style={{display:"flex",flexWrap:"wrap",gap:8}}>
-              {QUICK_PROMPTS.map(function(q,i){
-                return(
-                  <button key={i} onClick={function(){sendMessage(q);}}
-                    style={{background:S.card,border:"1px solid "+S.border,borderRadius:20,padding:"7px 14px",color:S.text,fontSize:12,cursor:"pointer",textAlign:"left",WebkitTapHighlightColor:"transparent"}}>
-                    {q}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-        )}
-
-        {messages.map(function(m,i){
-          var isUser=m.role==="user";
-          return(
-            <div key={i} className="ai-msg" style={{display:"flex",flexDirection:"column",alignItems:isUser?"flex-end":"flex-start"}}>
-              {!isUser&&<div style={{fontSize:10,color:"#4a9eff",marginBottom:4,fontWeight:600,letterSpacing:1}}>ANALYST</div>}
-              <div style={{
-                maxWidth:"88%",
-                background:isUser?"#4a9eff22":S.card,
-                border:"1px solid "+(isUser?"#4a9eff44":S.border),
-                borderRadius:isUser?"14px 14px 4px 14px":"14px 14px 14px 4px",
-                padding:"10px 14px",
-                fontSize:14,
-                color:S.text,
-                lineHeight:1.65,
-                whiteSpace:"pre-wrap",
-                wordBreak:"break-word"
-              }}>
-                {m.content}
-              </div>
-            </div>
-          );
-        })}
-
-        {loading&&(
-          <div className="ai-msg" style={{display:"flex",flexDirection:"column",alignItems:"flex-start"}}>
-            <div style={{fontSize:10,color:"#4a9eff",marginBottom:4,fontWeight:600,letterSpacing:1}}>ANALYST</div>
-            <div style={{background:S.card,border:"1px solid "+S.border,borderRadius:"14px 14px 14px 4px",padding:"12px 16px"}}>
-              <div className="ai-thinking" style={{display:"flex",gap:5,alignItems:"center"}}>
-                <span style={{width:7,height:7,borderRadius:"50%",background:"#4a9eff",display:"inline-block"}}>●</span>
-                <span style={{width:7,height:7,borderRadius:"50%",background:"#4a9eff",display:"inline-block"}}>●</span>
-                <span style={{width:7,height:7,borderRadius:"50%",background:"#4a9eff",display:"inline-block"}}>●</span>
-              </div>
-            </div>
-          </div>
-        )}
+        {messages.length===0&&!loading&&(<div style={{padding:"20px 0"}}><div style={{fontSize:13,color:S.muted,marginBottom:16,textAlign:"center"}}>Your AI analyst has full access to your data and protocols. Ask anything.</div><div style={{display:"flex",flexWrap:"wrap",gap:8}}>{QUICK_PROMPTS.map(function(q,i){return(<button key={i} onClick={function(){sendMessage(q);}} style={{background:S.card,border:"1px solid "+S.border,borderRadius:20,padding:"7px 14px",color:S.text,fontSize:12,cursor:"pointer",textAlign:"left",WebkitTapHighlightColor:"transparent"}}>{q}</button>);})}</div></div>)}
+        {messages.map(function(m,i){var isUser=m.role==="user";return(<div key={i} className="ai-msg" style={{display:"flex",flexDirection:"column",alignItems:isUser?"flex-end":"flex-start"}}>{!isUser&&<div style={{fontSize:10,color:"#4a9eff",marginBottom:4,fontWeight:600,letterSpacing:1}}>ANALYST</div>}<div style={{maxWidth:"88%",background:isUser?"#4a9eff22":S.card,border:"1px solid "+(isUser?"#4a9eff44":S.border),borderRadius:isUser?"14px 14px 4px 14px":"14px 14px 14px 4px",padding:"10px 14px",fontSize:14,color:S.text,lineHeight:1.65,whiteSpace:"pre-wrap",wordBreak:"break-word"}}>{m.content}</div></div>);})}
+        {loading&&(<div className="ai-msg" style={{display:"flex",flexDirection:"column",alignItems:"flex-start"}}><div style={{fontSize:10,color:"#4a9eff",marginBottom:4,fontWeight:600,letterSpacing:1}}>ANALYST</div><div style={{background:S.card,border:"1px solid "+S.border,borderRadius:"14px 14px 14px 4px",padding:"12px 16px"}}><div className="ai-thinking" style={{display:"flex",gap:5,alignItems:"center"}}><span style={{width:7,height:7,borderRadius:"50%",background:"#4a9eff",display:"inline-block"}}>●</span><span style={{width:7,height:7,borderRadius:"50%",background:"#4a9eff",display:"inline-block"}}>●</span><span style={{width:7,height:7,borderRadius:"50%",background:"#4a9eff",display:"inline-block"}}>●</span></div></div></div>)}
       </div>
-
-      {/* Input bar */}
       <div style={{display:"flex",gap:10,alignItems:"flex-end"}}>
-        <textarea
-          ref={inputRef}
-          value={input}
-          onChange={function(e){setInput(e.target.value);}}
-          onKeyDown={handleKeyDown}
-          placeholder="Ask your analyst..."
-          rows={2}
-          style={{flex:1,background:S.card,border:"1px solid "+S.border,borderRadius:10,padding:"10px 12px",color:S.text,fontSize:14,resize:"none",lineHeight:1.5}}
-        />
-        <button
-          onClick={function(){sendMessage();}}
-          disabled={!input.trim()||loading}
-          style={{
-            width:44,height:44,borderRadius:"50%",
-            background:input.trim()&&!loading?"#4a9eff":"#1a1a1a",
-            border:"none",
-            color:input.trim()&&!loading?"#000":"#444",
-            fontSize:18,cursor:input.trim()&&!loading?"pointer":"default",
-            display:"flex",alignItems:"center",justifyContent:"center",
-            flexShrink:0,
-            transition:"all 0.2s"
-          }}>
-          {"↑"}
-        </button>
+        <textarea ref={inputRef} value={input} onChange={function(e){setInput(e.target.value);}} onKeyDown={handleKeyDown} placeholder="Ask your analyst..." rows={2} style={{flex:1,background:S.card,border:"1px solid "+S.border,borderRadius:10,padding:"10px 12px",color:S.text,fontSize:14,resize:"none",lineHeight:1.5}}/>
+        <button onClick={function(){sendMessage();}} disabled={!input.trim()||loading} style={{width:44,height:44,borderRadius:"50%",background:input.trim()&&!loading?"#4a9eff":"#1a1a1a",border:"none",color:input.trim()&&!loading?"#000":"#444",fontSize:18,cursor:input.trim()&&!loading?"pointer":"default",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0,transition:"all 0.2s"}}>{"↑"}</button>
       </div>
     </div>
   );
@@ -725,58 +904,24 @@ function App(){
   var bmos=useState(0);var bMOff=bmos[0],setBMOff=bmos[1];
   var aps=useState(null);var activeProt=aps[0],setActiveProt=aps[1];
   var cps=useState(false);var calPickerOpen=cps[0],setCalPickerOpen=cps[1];
+  // Protocol start date
+  var pss=useState(ldProtoStart);var protoStart=pss[0],setProtoStart=pss[1];
+  var pcp=useState(false);var protoCalOpen=pcp[0],setProtoCalOpen=pcp[1];
 
   if(!unlocked)return <LockScreen onUnlock={function(){setUnlocked(true);}}/>;
 
   var upd=function(nd){setDays(nd);sv(nd);};
-
-  var toggle=function(domId,idx){
-    var d=days[logDate]||{checks:{}};
-    var checks=Object.assign({},d.checks);
-    var domain=DOMAINS.find(function(x){return x.id===domId;});
-    var arr=(checks[domId]||domain.habits.map(function(){return false;})).slice();
-    arr[idx]=!arr[idx];
-    checks[domId]=arr;
-    upd(Object.assign({},days,{[logDate]:Object.assign({},d,{checks:checks})}));
-  };
-
-  var toggleModed=function(domId,mode,idx){
-    var d=days[logDate]||{checks:{},modes:{}};
-    var checks=Object.assign({},d.checks);
-    var domainChecks=Object.assign({},checks[domId]||{});
-    var modeChecks=(domainChecks[mode]||[]).slice();
-    modeChecks[idx]=!modeChecks[idx];
-    domainChecks[mode]=modeChecks;
-    checks[domId]=domainChecks;
-    upd(Object.assign({},days,{[logDate]:Object.assign({},d,{checks:checks})}));
-  };
-
-  var changeMode=function(domId,newMode){
-    var d=days[logDate]||{checks:{},modes:{}};
-    var modes=Object.assign({},d.modes||{});
-    modes[domId]=newMode;
-    upd(Object.assign({},days,{[logDate]:Object.assign({},d,{modes:modes})}));
-  };
-
-  var saveDay=function(){
-    var d=days[logDate]||{checks:{}};
-    upd(Object.assign({},days,{[logDate]:Object.assign({},d,{calIn:Number(calIn)||0,calBurn:calcBurn(wType,steps),stepsNum:Number(steps)||0,weight:Number(wt)||0,workoutType:wType,workoutNotes:wNotes})}));
-    alert("Saved!");
-  };
+  var toggle=function(domId,idx){var d=days[logDate]||{checks:{}};var checks=Object.assign({},d.checks);var domain=DOMAINS.find(function(x){return x.id===domId;});var arr=(checks[domId]||domain.habits.map(function(){return false;})).slice();arr[idx]=!arr[idx];checks[domId]=arr;upd(Object.assign({},days,{[logDate]:Object.assign({},d,{checks:checks})}));};
+  var toggleModed=function(domId,mode,idx){var d=days[logDate]||{checks:{},modes:{}};var checks=Object.assign({},d.checks);var domainChecks=Object.assign({},checks[domId]||{});var modeChecks=(domainChecks[mode]||[]).slice();modeChecks[idx]=!modeChecks[idx];domainChecks[mode]=modeChecks;checks[domId]=domainChecks;upd(Object.assign({},days,{[logDate]:Object.assign({},d,{checks:checks})}));};
+  var changeMode=function(domId,newMode){var d=days[logDate]||{checks:{},modes:{}};var modes=Object.assign({},d.modes||{});modes[domId]=newMode;upd(Object.assign({},days,{[logDate]:Object.assign({},d,{modes:modes})}));};
+  var saveDay=function(){var d=days[logDate]||{checks:{}};upd(Object.assign({},days,{[logDate]:Object.assign({},d,{calIn:Number(calIn)||0,calBurn:calcBurn(wType,steps),stepsNum:Number(steps)||0,weight:Number(wt)||0,workoutType:wType,workoutNotes:wNotes})}));alert("Saved!");};
 
   var L7=function(){return Array.from({length:7},function(_,i){var d=new Date();d.setDate(d.getDate()-(6-i));return fmtDate(d);});};
   var L30=function(){return Array.from({length:30},function(_,i){var d=new Date();d.setDate(d.getDate()-(29-i));return fmtDate(d);});};
 
-  var getBodyWeekStart=function(){
-    if(weekStartDate)return weekStartDate;
-    var d=new Date();
-    d.setDate(d.getDate()+(wOff*7)-6);
-    return fmtDate(d);
-  };
-
+  var getBodyWeekStart=function(){if(weekStartDate)return weekStartDate;var d=new Date();d.setDate(d.getDate()+(wOff*7)-6);return fmtDate(d);};
   var bodyWeekStart=getBodyWeekStart();
   var bodyWeek=get7Days(bodyWeekStart);
-
   var bodyWeekNavBack=function(){var newStart=addDays(bodyWeekStart,-7);setWeekStartDate(newStart);setWOff(0);};
   var bodyWeekNavFwd=function(){var newStart=addDays(bodyWeekStart,7);if(newStart<=today){setWeekStartDate(newStart);setWOff(0);}};
   var bodyWeekAtMax=addDays(bodyWeekStart,6)>=today;
@@ -786,7 +931,6 @@ function App(){
   var mLabel=function(off){if(off===undefined)off=0;var n=new Date();n.setDate(1);n.setMonth(n.getMonth()+off);return n.toLocaleString("default",{month:"long",year:"numeric"});};
 
   var streak=function(){var s=0,d=new Date();while(true){var k=fmtDate(d);if(dayPct(days[k])>0){s++;d.setDate(d.getDate()-1);}else break;}return s;};
-
   var avg7=function(d){return Math.round(L7().reduce(function(a,dt){return a+domainPct(days[dt],d);},0)/7);};
 
   var exportD=function(){var b=new Blob([JSON.stringify(days,null,2)],{type:"application/json"});var u=URL.createObjectURL(b);var a=document.createElement("a");a.href=u;a.download="operaxis_"+today+".json";a.click();URL.revokeObjectURL(u);};
@@ -810,13 +954,25 @@ function App(){
   var pBurn=calcBurn(wType,steps),pDef=pBurn-(Number(calIn)||0);
   var calSectionLabel=dRange==="weekly"?(bodyWeekLabel()==="This Week"?"7 Day":rangeLabelFrom(bodyWeekStart)):(bMOff===0?"This Month":mLabel(bMOff));
 
-  var TABS=[{id:"daily",label:"Daily"},{id:"dashboard",label:"Dashboard"},{id:"monthly",label:"Monthly"},{id:"weekly",label:"Weekly"},{id:"body",label:"Body"},{id:"ai",label:"AI"},{id:"system",label:"System"},{id:"settings",label:"Settings"}];
+  var TABS=[
+    {id:"daily",label:"Daily"},
+    {id:"dashboard",label:"Dashboard"},
+    {id:"monthly",label:"Monthly"},
+    {id:"weekly",label:"Weekly"},
+    {id:"body",label:"Body"},
+    {id:"protocol",label:"Protocol"},
+    {id:"ai",label:"AI"},
+    {id:"system",label:"System"},
+    {id:"settings",label:"Settings"}
+  ];
+
   var navBack=function(){var d=new Date(logDate+"T12:00:00");d.setDate(d.getDate()-1);setLogDate(fmtDate(d));};
   var navFwd=function(){var d=new Date(logDate+"T12:00:00");d.setDate(d.getDate()+1);var next=fmtDate(d);if(next<=today)setLogDate(next);};
 
   return(
     <div style={{background:S.bg,minHeight:"100vh",color:S.text,paddingBottom:90}}>
       {calPickerOpen&&(<CalendarPicker selectedStart={weekStartDate} onSelect={function(dateStr){setWeekStartDate(dateStr);setWOff(0);setCalPickerOpen(false);}} onReset={function(){setWeekStartDate(null);setWOff(0);}} onClose={function(){setCalPickerOpen(false);}}/>)}
+      {protoCalOpen&&(<CalendarPicker selectedStart={protoStart} onSelect={function(dateStr){setProtoStart(dateStr);svProtoStart(dateStr);setProtoCalOpen(false);}} onReset={function(){setProtoStart("");svProtoStart("");}} onClose={function(){setProtoCalOpen(false);}}/>)}
 
       <div style={{background:S.card,borderBottom:"1px solid "+S.border,padding:"14px 16px",position:"sticky",top:0,zIndex:10,textAlign:"center"}}>
         <div style={{fontSize:18,fontWeight:600,letterSpacing:1}}>OperAxis System</div>
@@ -825,12 +981,14 @@ function App(){
       <div style={{display:"flex",background:S.card,borderBottom:"1px solid "+S.border,overflowX:"auto"}}>
         {TABS.map(function(t){
           var isAI=t.id==="ai";
+          var isProto=t.id==="protocol";
+          var activeCol=isAI?"#a78bfa":isProto?"#34d399":S.accent;
           return(
             <button key={t.id} onClick={function(){setTab(t.id);setActiveProt(null);}}
               style={{flex:1,minWidth:44,padding:"10px 1px",border:"none",background:"none",
-                color:tab===t.id?(isAI?"#a78bfa":S.accent):S.muted,
+                color:tab===t.id?activeCol:S.muted,
                 fontSize:10,fontWeight:tab===t.id?600:400,
-                borderBottom:tab===t.id?"2px solid "+(isAI?"#a78bfa":S.accent):"2px solid transparent",
+                borderBottom:tab===t.id?"2px solid "+activeCol:"2px solid transparent",
                 cursor:"pointer",whiteSpace:"nowrap",
                 position:"relative"
               }}>
@@ -844,32 +1002,20 @@ function App(){
 
         {tab==="daily"&&(<div>
           <div style={Object.assign({},C({borderRadius:8}),{padding:"10px 14px",marginBottom:14,display:"flex",alignItems:"center",gap:12})}>
-            <button onClick={navBack} style={{background:"transparent",border:"1px solid "+S.border,borderRadius:6,padding:"5px 12px",color:S.muted,fontSize:16,cursor:"pointer"}}>{"\u2039"}</button>
+            <button onClick={navBack} style={{background:"transparent",border:"1px solid "+S.border,borderRadius:6,padding:"5px 12px",color:S.muted,fontSize:16,cursor:"pointer"}}>{"‹"}</button>
             <div style={{flex:1,textAlign:"center"}}>
               <input type="date" value={logDate} max={today} onChange={function(e){setLogDate(e.target.value);}} style={{background:"transparent",border:"none",color:logDate===today?S.accent:S.text,fontSize:13,fontWeight:500,textAlign:"center",cursor:"pointer",width:"100%"}}/>
               {logDate!==today&&<div style={{fontSize:10,color:"#f59e0b",marginTop:2}}>Logging past day</div>}
             </div>
-            <button onClick={navFwd} style={{background:"transparent",border:"1px solid "+S.border,borderRadius:6,padding:"5px 12px",color:logDate===today?S.dim:S.muted,fontSize:16,cursor:logDate===today?"default":"pointer"}}>{"\u203A"}</button>
+            <button onClick={navFwd} style={{background:"transparent",border:"1px solid "+S.border,borderRadius:6,padding:"5px 12px",color:logDate===today?S.dim:S.muted,fontSize:16,cursor:logDate===today?"default":"pointer"}}>{"›"}</button>
           </div>
 
           {DOMAINS.map(function(domain){
-            if(domain.moded){
-              return(<ModedDomainCard key={domain.id} domain={domain} dayData={td} S={S} isOpen={exp[domain.id]!==false} cardStyle={C()} onHeaderToggle={function(){setExp(function(prev){var n=Object.assign({},prev);n[domain.id]=!(prev[domain.id]!==false);return n;});}} onCheckToggle={toggleModed} onModeChange={changeMode}/>);
-            }
+            if(domain.moded){return(<ModedDomainCard key={domain.id} domain={domain} dayData={td} S={S} isOpen={exp[domain.id]!==false} cardStyle={C()} onHeaderToggle={function(){setExp(function(prev){var n=Object.assign({},prev);n[domain.id]=!(prev[domain.id]!==false);return n;});}} onCheckToggle={toggleModed} onModeChange={changeMode}/>);}
             var checks=(td.checks&&td.checks[domain.id])||domain.habits.map(function(){return false;});
             var pct=dPct(checks,domain.habits),isOpen=exp[domain.id]!==false;
             var totalW=domain.habits.reduce(function(a,h){return a+h.w;},0);
-            return(
-              <div key={domain.id} style={Object.assign({},C(),{marginBottom:10,overflow:"hidden"})}>
-                <div onClick={function(){setExp(function(e){var n=Object.assign({},e);n[domain.id]=!isOpen;return n;});}} style={{display:"flex",alignItems:"center",padding:"12px 14px",cursor:"pointer"}}>
-                  <span style={{flex:1,fontWeight:500,fontSize:15}}>{domain.label}</span>
-                  <span style={{fontSize:13,fontWeight:600,color:pc(pct),marginRight:10}}>{pct}%</span>
-                  <span style={{color:S.muted,fontSize:11}}>{isOpen?"\u25B2":"\u25BC"}</span>
-                </div>
-                <div style={{height:2,background:S.border}}><div style={{height:"100%",width:pct+"%",background:pc(pct),transition:"width 0.3s"}}/></div>
-                {isOpen&&(<div style={{borderTop:"1px solid "+S.border,padding:"8px 14px"}}>{domain.habits.map(function(h,i){var hp=Math.round((h.w/totalW)*100);return(<div key={i} onClick={function(){toggle(domain.id,i);}} style={{display:"flex",alignItems:"center",gap:10,padding:"8px 0",cursor:"pointer",borderBottom:i<domain.habits.length-1?"1px solid "+S.dim:"none"}}><div style={{width:18,height:18,border:"1.5px solid "+(checks[i]?S.accent:S.muted),borderRadius:4,background:checks[i]?S.accent:"transparent",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>{checks[i]&&<span style={{color:"#000",fontSize:11,fontWeight:700}}>{"\u2713"}</span>}</div><span style={{flex:1,fontSize:14,color:checks[i]?S.muted:S.text,textDecoration:checks[i]?"line-through":"none"}}>{h.label}</span><span style={{fontSize:11,color:checks[i]?S.accent:S.muted,minWidth:32,textAlign:"right"}}>{hp}%</span></div>);})}</div>)}
-              </div>
-            );
+            return(<div key={domain.id} style={Object.assign({},C(),{marginBottom:10,overflow:"hidden"})}><div onClick={function(){setExp(function(e){var n=Object.assign({},e);n[domain.id]=!isOpen;return n;});}} style={{display:"flex",alignItems:"center",padding:"12px 14px",cursor:"pointer"}}><span style={{flex:1,fontWeight:500,fontSize:15}}>{domain.label}</span><span style={{fontSize:13,fontWeight:600,color:pc(pct),marginRight:10}}>{pct}%</span><span style={{color:S.muted,fontSize:11}}>{isOpen?"▲":"▼"}</span></div><div style={{height:2,background:S.border}}><div style={{height:"100%",width:pct+"%",background:pc(pct),transition:"width 0.3s"}}/></div>{isOpen&&(<div style={{borderTop:"1px solid "+S.border,padding:"8px 14px"}}>{domain.habits.map(function(h,i){var hp=Math.round((h.w/totalW)*100);return(<div key={i} onClick={function(){toggle(domain.id,i);}} style={{display:"flex",alignItems:"center",gap:10,padding:"8px 0",cursor:"pointer",borderBottom:i<domain.habits.length-1?"1px solid "+S.dim:"none"}}><div style={{width:18,height:18,border:"1.5px solid "+(checks[i]?S.accent:S.muted),borderRadius:4,background:checks[i]?S.accent:"transparent",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>{checks[i]&&<span style={{color:"#000",fontSize:11,fontWeight:700}}>{"✓"}</span>}</div><span style={{flex:1,fontSize:14,color:checks[i]?S.muted:S.text,textDecoration:checks[i]?"line-through":"none"}}>{h.label}</span><span style={{fontSize:11,color:checks[i]?S.accent:S.muted,minWidth:32,textAlign:"right"}}>{hp}%</span></div>);})}</div>)}</div>);
           })}
 
           <div style={Object.assign({},C(),{padding:14,marginBottom:10})}>
@@ -877,20 +1023,20 @@ function App(){
             {[["Calories eaten",calIn,setCalIn,"e.g. 2000"],["Steps walked",steps,setSteps,"e.g. 8500"],["Weight (lbs)",wt,setWt,"e.g. 200"]].map(function(row){return(<div key={row[0]} style={{marginBottom:12}}><div style={{fontSize:11,color:S.muted,marginBottom:4}}>{row[0]}</div><input value={row[1]} onChange={function(e){row[2](e.target.value);}} type="number" placeholder={row[3]} style={{width:"100%",background:S.bg,border:"1px solid "+S.border,borderRadius:6,padding:"8px 10px",color:S.text,fontSize:14}}/></div>);})}
             <div style={{marginBottom:12}}><div style={{fontSize:11,color:S.muted,marginBottom:6}}>Workout type</div><div style={{display:"flex",flexWrap:"wrap",gap:6}}>{WTYPES.map(function(t){return(<button key={t} onClick={function(){setWType(wType===t?"":t);}} style={{padding:"5px 12px",borderRadius:20,border:"1px solid "+(wType===t?S.accent:S.border),background:wType===t?"#4a9eff22":"transparent",color:wType===t?S.accent:S.muted,fontSize:12,cursor:"pointer"}}>{t}</button>);})}</div></div>
             <div style={{marginBottom:14}}><div style={{fontSize:11,color:S.muted,marginBottom:4}}>Workout notes / PRs</div><textarea value={wNotes} onChange={function(e){setWNotes(e.target.value);}} rows={2} placeholder="e.g. Bench 3x8 @ 185lbs..." style={{width:"100%",background:S.bg,border:"1px solid "+S.border,borderRadius:6,padding:"8px 10px",color:S.text,fontSize:13,resize:"vertical"}}/></div>
-            {(calIn||steps||wType)&&(<div style={{background:S.dim,borderRadius:8,padding:"10px 12px",marginBottom:14,borderLeft:"3px solid "+(pDef>0?"#34d399":"#f87171")}}><div style={{fontSize:11,color:S.muted,marginBottom:6}}>Estimated burn today</div><div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:8,marginBottom:8}}>{[["Base",BASE,"#555"],["Workout",WBURN[wType]||0,"#60a5fa"],["Steps",Math.round((Number(steps)||0)*KPS),"#34d399"]].map(function(row){return(<div key={row[0]}><div style={{fontSize:10,color:S.muted}}>{row[0]}</div><div style={{fontSize:13,fontWeight:600,color:row[2]}}>{row[1]} kcal</div></div>);})}</div><div style={{display:"flex",justifyContent:"space-between",paddingTop:8,borderTop:"1px solid "+S.border}}><span style={{fontSize:12,color:S.muted}}>Total: <span style={{color:S.text,fontWeight:600}}>{pBurn.toLocaleString()} kcal</span></span><span style={{fontSize:12,fontWeight:600,color:pDef>0?"#34d399":"#f87171"}}>{pDef>0?"\u2713 \u2212":"\u2191 +"}{Math.abs(pDef).toLocaleString()} kcal</span></div></div>)}
+            {(calIn||steps||wType)&&(<div style={{background:S.dim,borderRadius:8,padding:"10px 12px",marginBottom:14,borderLeft:"3px solid "+(pDef>0?"#34d399":"#f87171")}}><div style={{fontSize:11,color:S.muted,marginBottom:6}}>Estimated burn today</div><div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:8,marginBottom:8}}>{[["Base",BASE,"#555"],["Workout",WBURN[wType]||0,"#60a5fa"],["Steps",Math.round((Number(steps)||0)*KPS),"#34d399"]].map(function(row){return(<div key={row[0]}><div style={{fontSize:10,color:S.muted}}>{row[0]}</div><div style={{fontSize:13,fontWeight:600,color:row[2]}}>{row[1]} kcal</div></div>);})}</div><div style={{display:"flex",justifyContent:"space-between",paddingTop:8,borderTop:"1px solid "+S.border}}><span style={{fontSize:12,color:S.muted}}>Total: <span style={{color:S.text,fontWeight:600}}>{pBurn.toLocaleString()} kcal</span></span><span style={{fontSize:12,fontWeight:600,color:pDef>0?"#34d399":"#f87171"}}>{pDef>0?"✓ −":"↑ +"}{Math.abs(pDef).toLocaleString()} kcal</span></div></div>)}
             <button onClick={saveDay} style={{background:S.accent,color:"#000",border:"none",borderRadius:6,padding:"8px 16px",fontSize:13,fontWeight:600,cursor:"pointer"}}>Save Day</button>
           </div>
         </div>)}
 
         {tab==="dashboard"&&(<div>
           <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:10,marginBottom:16}}>{[["Streak",str+"d"],["Today",tPct+"%"],["7d Avg",Math.round(last7.reduce(function(a,d){return a+dayPct(days[d]);},0)/7)+"%"]].map(function(row){return(<div key={row[0]} style={Object.assign({},C({borderRadius:8}),{padding:"10px 12px"})}><div style={{fontSize:10,color:S.muted,marginBottom:4}}>{row[0]}</div><div style={{fontSize:20,fontWeight:600}}>{row[1]}</div></div>);})}</div>
-          <div style={Object.assign({},C(),{marginBottom:14,overflow:"hidden"})}><div style={{padding:"10px 14px",fontSize:13,fontWeight:500,borderBottom:"1px solid "+S.border}}>Last 7 Days</div><div style={{overflowX:"auto"}}><table style={{width:"100%",borderCollapse:"collapse",fontSize:11,minWidth:420}}><thead><tr style={{borderBottom:"1px solid "+S.border}}><th style={{padding:"8px 10px",textAlign:"left",color:S.muted,fontWeight:500}}>Date</th>{DOMAINS.map(function(d){return <th key={d.id} style={{padding:"8px 4px",color:DOM_COL[d.id]||S.muted,fontWeight:500,fontSize:10}}>{d.label.slice(0,3)}</th>;})}<th style={{padding:"8px 8px",color:S.muted,fontWeight:500}}>Day</th></tr></thead><tbody>{last7.map(function(dt){var dd=days[dt]||{},dp2=dayPct(dd),isT=dt===today;return(<tr key={dt} style={{borderBottom:"1px solid "+S.dim,background:isT?"#0d1a2a":"transparent"}}><td style={{padding:"7px 10px",color:isT?S.accent:S.muted,fontSize:11}}>{dt.slice(5)}</td>{DOMAINS.map(function(d){var p=domainPct(dd,d);return <td key={d.id} style={{padding:"7px 4px",textAlign:"center",fontSize:10,color:pc(p)}}>{p>0?p+"%":"\u00B7"}</td>;})}<td style={{padding:"7px 8px",textAlign:"center",fontWeight:600,fontSize:11,color:pc(dp2)}}>{dp2>0?dp2+"%":"\u00B7"}</td></tr>);})}</tbody></table></div></div>
+          <div style={Object.assign({},C(),{marginBottom:14,overflow:"hidden"})}><div style={{padding:"10px 14px",fontSize:13,fontWeight:500,borderBottom:"1px solid "+S.border}}>Last 7 Days</div><div style={{overflowX:"auto"}}><table style={{width:"100%",borderCollapse:"collapse",fontSize:11,minWidth:420}}><thead><tr style={{borderBottom:"1px solid "+S.border}}><th style={{padding:"8px 10px",textAlign:"left",color:S.muted,fontWeight:500}}>Date</th>{DOMAINS.map(function(d){return <th key={d.id} style={{padding:"8px 4px",color:DOM_COL[d.id]||S.muted,fontWeight:500,fontSize:10}}>{d.label.slice(0,3)}</th>;})}<th style={{padding:"8px 8px",color:S.muted,fontWeight:500}}>Day</th></tr></thead><tbody>{last7.map(function(dt){var dd=days[dt]||{},dp2=dayPct(dd),isT=dt===today;return(<tr key={dt} style={{borderBottom:"1px solid "+S.dim,background:isT?"#0d1a2a":"transparent"}}><td style={{padding:"7px 10px",color:isT?S.accent:S.muted,fontSize:11}}>{dt.slice(5)}</td>{DOMAINS.map(function(d){var p=domainPct(dd,d);return <td key={d.id} style={{padding:"7px 4px",textAlign:"center",fontSize:10,color:pc(p)}}>{p>0?p+"%":"·"}</td>;})}<td style={{padding:"7px 8px",textAlign:"center",fontWeight:600,fontSize:11,color:pc(dp2)}}>{dp2>0?dp2+"%":"·"}</td></tr>);})}</tbody></table></div></div>
           <div style={Object.assign({},C(),{overflow:"hidden"})}><div style={{padding:"10px 14px",fontSize:13,fontWeight:500,borderBottom:"1px solid "+S.border}}>7-Day Averages</div>{DOMAINS.map(function(d){var avg=avg7(d);return(<div key={d.id} style={{padding:"10px 14px",borderBottom:"1px solid "+S.dim}}><div style={{display:"flex",justifyContent:"space-between",marginBottom:5}}><span style={{fontSize:13}}>{d.label}</span><span style={{fontSize:13,fontWeight:600,color:pc(avg)}}>{avg}%</span></div><div style={{height:3,background:S.border,borderRadius:2}}><div style={{height:"100%",width:avg+"%",background:pc(avg),borderRadius:2}}/></div></div>);})}</div>
         </div>)}
 
         {tab==="monthly"&&(<div>
-          <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:14}}><button onClick={function(){setMOff(function(o){return o-1;});}} style={{background:"transparent",border:"1px solid "+S.border,borderRadius:6,padding:"6px 14px",color:S.muted,fontSize:16,cursor:"pointer"}}>{"\u2039"}</button><div style={{fontSize:15,fontWeight:500}}>{mLabel(mOff)}</div><button onClick={function(){setMOff(function(o){return Math.min(0,o+1);});}} style={{background:"transparent",border:"1px solid "+S.border,borderRadius:6,padding:"6px 14px",color:mOff===0?S.dim:S.muted,fontSize:16,cursor:mOff===0?"default":"pointer"}}>{"\u203A"}</button></div>
-          <div style={Object.assign({},C(),{overflow:"hidden",marginBottom:14})}><div style={{overflowX:"auto"}}><table style={{width:"100%",borderCollapse:"collapse",fontSize:11,minWidth:560}}><thead><tr style={{borderBottom:"1px solid "+S.border}}><th style={{padding:"8px 10px",textAlign:"left",color:S.muted,whiteSpace:"nowrap"}}>Day</th>{DOMAINS.map(function(d){return <th key={d.id} style={{padding:"8px 5px",color:DOM_COL[d.id]||S.muted,minWidth:26,fontSize:10}}>{d.label.slice(0,3)}</th>;})}<th style={{padding:"8px 8px",color:S.muted,fontSize:10}}>Day%</th></tr></thead><tbody>{mDays(mOff).map(function(dt){var dd=days[dt]||{},dp2=dayPct(dd),isT=dt===today;return(<tr key={dt} style={{borderBottom:"1px solid "+S.dim,background:isT?"#0d1a2a":"transparent"}}><td style={{padding:"6px 10px",color:isT?S.accent:S.muted}}>{dt.slice(8)}</td>{DOMAINS.map(function(d){var p=domainPct(dd,d);return <td key={d.id} style={{padding:"6px 5px",textAlign:"center",fontSize:10,color:pc(p)}}>{p>0?p+"%":"\u00B7"}</td>;})}<td style={{padding:"6px 8px",textAlign:"center",fontWeight:600,fontSize:11,color:pc(dp2)}}>{dp2>0?dp2+"%":"\u00B7"}</td></tr>);})}</tbody></table></div></div>
+          <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:14}}><button onClick={function(){setMOff(function(o){return o-1;});}} style={{background:"transparent",border:"1px solid "+S.border,borderRadius:6,padding:"6px 14px",color:S.muted,fontSize:16,cursor:"pointer"}}>{"‹"}</button><div style={{fontSize:15,fontWeight:500}}>{mLabel(mOff)}</div><button onClick={function(){setMOff(function(o){return Math.min(0,o+1);});}} style={{background:"transparent",border:"1px solid "+S.border,borderRadius:6,padding:"6px 14px",color:mOff===0?S.dim:S.muted,fontSize:16,cursor:mOff===0?"default":"pointer"}}>{"›"}</button></div>
+          <div style={Object.assign({},C(),{overflow:"hidden",marginBottom:14})}><div style={{overflowX:"auto"}}><table style={{width:"100%",borderCollapse:"collapse",fontSize:11,minWidth:560}}><thead><tr style={{borderBottom:"1px solid "+S.border}}><th style={{padding:"8px 10px",textAlign:"left",color:S.muted,whiteSpace:"nowrap"}}>Day</th>{DOMAINS.map(function(d){return <th key={d.id} style={{padding:"8px 5px",color:DOM_COL[d.id]||S.muted,minWidth:26,fontSize:10}}>{d.label.slice(0,3)}</th>;})}<th style={{padding:"8px 8px",color:S.muted,fontSize:10}}>Day%</th></tr></thead><tbody>{mDays(mOff).map(function(dt){var dd=days[dt]||{},dp2=dayPct(dd),isT=dt===today;return(<tr key={dt} style={{borderBottom:"1px solid "+S.dim,background:isT?"#0d1a2a":"transparent"}}><td style={{padding:"6px 10px",color:isT?S.accent:S.muted}}>{dt.slice(8)}</td>{DOMAINS.map(function(d){var p=domainPct(dd,d);return <td key={d.id} style={{padding:"6px 5px",textAlign:"center",fontSize:10,color:pc(p)}}>{p>0?p+"%":"·"}</td>;})}<td style={{padding:"6px 8px",textAlign:"center",fontWeight:600,fontSize:11,color:pc(dp2)}}>{dp2>0?dp2+"%":"·"}</td></tr>);})}</tbody></table></div></div>
           <div style={Object.assign({},C(),{overflow:"hidden"})}><div style={{padding:"10px 14px",fontSize:13,fontWeight:500,borderBottom:"1px solid "+S.border}}>Month Averages</div>{DOMAINS.map(function(d){var md=mDays(mOff),avg=Math.round(md.reduce(function(a,dt){return a+domainPct(days[dt],d);},0)/md.length);return(<div key={d.id} style={{display:"flex",alignItems:"center",padding:"9px 14px",borderBottom:"1px solid "+S.dim}}><div style={{flex:1}}><div style={{display:"flex",justifyContent:"space-between",marginBottom:4}}><span style={{fontSize:13}}>{d.label}</span><span style={{fontSize:13,fontWeight:600,color:pc(avg)}}>{avg}%</span></div><div style={{height:3,background:S.border,borderRadius:2}}><div style={{height:"100%",width:avg+"%",background:pc(avg),borderRadius:2}}/></div></div></div>);})}</div>
         </div>)}
 
@@ -903,23 +1049,31 @@ function App(){
         {tab==="body"&&(<div>
           <div style={{display:"flex",gap:8,marginBottom:8}}>{["weekly","monthly"].map(function(r){return(<button key={r} onClick={function(){setDRange(r);setWOff(0);setBMOff(0);}} style={{flex:1,padding:"8px 0",borderRadius:8,border:"1px solid "+(dRange===r?S.accent:S.border),background:dRange===r?"#4a9eff22":"transparent",color:dRange===r?S.accent:S.muted,fontSize:13,fontWeight:dRange===r?600:400,cursor:"pointer"}}>{r==="weekly"?"7 Days":"This Month"}</button>);})}</div>
           {dRange==="weekly"&&(<div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:14}}>
-            <button onClick={bodyWeekNavBack} style={{background:"transparent",border:"1px solid "+S.border,borderRadius:6,padding:"5px 12px",color:S.muted,fontSize:16,cursor:"pointer"}}>{"\u2039"}</button>
+            <button onClick={bodyWeekNavBack} style={{background:"transparent",border:"1px solid "+S.border,borderRadius:6,padding:"5px 12px",color:S.muted,fontSize:16,cursor:"pointer"}}>{"‹"}</button>
             <div onClick={function(){setCalPickerOpen(true);}} style={{fontSize:13,fontWeight:500,color:isTodayWeek(bodyWeekStart)?S.accent:S.text,cursor:"pointer",padding:"4px 12px",borderRadius:6,border:"1px solid "+(calPickerOpen?S.accent:S.border),WebkitTapHighlightColor:"transparent"}}>
               {bodyWeekLabel()==="This Week"?"This Week":rangeLabelFrom(bodyWeekStart)}
             </div>
-            <button onClick={bodyWeekNavFwd} style={{background:"transparent",border:"1px solid "+S.border,borderRadius:6,padding:"5px 12px",color:bodyWeekAtMax?S.dim:S.muted,fontSize:16,cursor:bodyWeekAtMax?"default":"pointer"}} disabled={bodyWeekAtMax}>{"\u203A"}</button>
+            <button onClick={bodyWeekNavFwd} style={{background:"transparent",border:"1px solid "+S.border,borderRadius:6,padding:"5px 12px",color:bodyWeekAtMax?S.dim:S.muted,fontSize:16,cursor:bodyWeekAtMax?"default":"pointer"}} disabled={bodyWeekAtMax}>{"›"}</button>
           </div>)}
-          {dRange==="monthly"&&(<div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:14}}><button onClick={function(){setBMOff(function(o){return o-1;});}} style={{background:"transparent",border:"1px solid "+S.border,borderRadius:6,padding:"5px 12px",color:S.muted,fontSize:16,cursor:"pointer"}}>{"\u2039"}</button><div style={{fontSize:13,fontWeight:500,color:bMOff===0?S.accent:S.text}}>{bMOff===0?"This Month":mLabel(bMOff)}</div><button onClick={function(){setBMOff(function(o){return Math.min(0,o+1);});}} style={{background:"transparent",border:"1px solid "+S.border,borderRadius:6,padding:"5px 12px",color:bMOff===0?S.dim:S.muted,fontSize:16,cursor:bMOff===0?"default":"pointer"}}>{"\u203A"}</button></div>)}
+          {dRange==="monthly"&&(<div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:14}}><button onClick={function(){setBMOff(function(o){return o-1;});}} style={{background:"transparent",border:"1px solid "+S.border,borderRadius:6,padding:"5px 12px",color:S.muted,fontSize:16,cursor:"pointer"}}>{"‹"}</button><div style={{fontSize:13,fontWeight:500,color:bMOff===0?S.accent:S.text}}>{bMOff===0?"This Month":mLabel(bMOff)}</div><button onClick={function(){setBMOff(function(o){return Math.min(0,o+1);});}} style={{background:"transparent",border:"1px solid "+S.border,borderRadius:6,padding:"5px 12px",color:bMOff===0?S.dim:S.muted,fontSize:16,cursor:bMOff===0?"default":"pointer"}}>{"›"}</button></div>)}
           <div style={Object.assign({},C(),{overflow:"hidden",marginBottom:14})}>
-            <div style={{padding:"10px 14px",fontSize:13,fontWeight:500,borderBottom:"1px solid "+S.border}}>{"Calories \u2014 "+calSectionLabel}</div>
+            <div style={{padding:"10px 14px",fontSize:13,fontWeight:500,borderBottom:"1px solid "+S.border}}>{"Calories — "+calSectionLabel}</div>
             <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:1,borderBottom:"1px solid "+S.border}}>{[["Eaten",rIn,"#4a9eff"],["Burned",rBurn,"#34d399"],[rDef>=0?"Deficit":"Surplus",Math.abs(rDef),rDef>=0?"#34d399":"#f87171"]].map(function(row){return(<div key={row[0]} style={{padding:"12px 10px",background:S.dim}}><div style={{fontSize:10,color:S.muted,marginBottom:4}}>{row[0]}</div><div style={{fontSize:16,fontWeight:600,color:row[2]}}>{Number(row[1]).toLocaleString()}</div><div style={{fontSize:10,color:S.muted}}>kcal</div></div>);})}</div>
             <div style={{padding:"10px 14px",borderBottom:"1px solid "+S.border,display:"flex",gap:20}}><div><div style={{fontSize:10,color:S.muted,marginBottom:2}}>Total steps</div><div style={{fontSize:15,fontWeight:600}}>{rSteps.toLocaleString()}</div></div><div><div style={{fontSize:10,color:S.muted,marginBottom:2}}>Avg/day</div><div style={{fontSize:15,fontWeight:600}}>{Math.round(rSteps/rDays.length).toLocaleString()}</div></div><div><div style={{fontSize:10,color:S.muted,marginBottom:2}}>Days deficit</div><div style={{fontSize:15,fontWeight:600,color:"#34d399"}}>{rDays.filter(function(dt){return((days[dt]&&days[dt].calBurn)||0)>((days[dt]&&days[dt].calIn)||0);}).length}</div></div></div>
-            <div style={{padding:14}}><div style={{display:"flex",gap:16,marginBottom:10}}>{[["\u25A0 Eaten","#4a9eff"],["\u25A0 Burned","#34d399"],["\u2014 Deficit","#f59e0b"],["\u2014 Surplus","#f87171"]].map(function(row){return <span key={row[0]} style={{fontSize:11,color:row[1]}}>{row[0]}</span>;})}</div><div style={{position:"relative",height:200}}><CalChart data={chartD}/></div></div>
+            <div style={{padding:14}}><div style={{display:"flex",gap:16,marginBottom:10}}>{[["■ Eaten","#4a9eff"],["■ Burned","#34d399"],["— Deficit","#f59e0b"],["— Surplus","#f87171"]].map(function(row){return <span key={row[0]} style={{fontSize:11,color:row[1]}}>{row[0]}</span>;})}</div><div style={{position:"relative",height:200}}><CalChart data={chartD}/></div></div>
           </div>
-          <div style={Object.assign({},C(),{overflow:"hidden",marginBottom:14})}><div style={{padding:"10px 14px",fontSize:13,fontWeight:500,borderBottom:"1px solid "+S.border}}>{"Workouts \u2014 "+(dRange==="weekly"?(bodyWeekLabel()==="This Week"?"7 Day":rangeLabelFrom(bodyWeekStart)):"Month")}</div><div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:1,borderBottom:"1px solid "+S.border}}>{[["Sessions",gym7.length+"/7"],["Avg steps",Math.round(bodyWeek.reduce(function(a,dt){return a+((days[dt]&&days[dt].stepsNum)||0);},0)/7).toLocaleString()],["Step burn",Math.round(bodyWeek.reduce(function(a,dt){return a+Math.round(((days[dt]&&days[dt].stepsNum)||0)*KPS);},0)).toLocaleString()+" kcal"]].map(function(row){return(<div key={row[0]} style={{padding:"12px 10px",background:S.dim}}><div style={{fontSize:10,color:S.muted,marginBottom:4}}>{row[0]}</div><div style={{fontSize:13,fontWeight:600,color:S.text}}>{row[1]}</div></div>);})}</div>
+          <div style={Object.assign({},C(),{overflow:"hidden",marginBottom:14})}><div style={{padding:"10px 14px",fontSize:13,fontWeight:500,borderBottom:"1px solid "+S.border}}>{"Workouts — "+(dRange==="weekly"?(bodyWeekLabel()==="This Week"?"7 Day":rangeLabelFrom(bodyWeekStart)):"Month")}</div><div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:1,borderBottom:"1px solid "+S.border}}>{[["Sessions",gym7.length+"/7"],["Avg steps",Math.round(bodyWeek.reduce(function(a,dt){return a+((days[dt]&&days[dt].stepsNum)||0);},0)/7).toLocaleString()],["Step burn",Math.round(bodyWeek.reduce(function(a,dt){return a+Math.round(((days[dt]&&days[dt].stepsNum)||0)*KPS);},0)).toLocaleString()+" kcal"]].map(function(row){return(<div key={row[0]} style={{padding:"12px 10px",background:S.dim}}><div style={{fontSize:10,color:S.muted,marginBottom:4}}>{row[0]}</div><div style={{fontSize:13,fontWeight:600,color:S.text}}>{row[1]}</div></div>);})}</div>
           {wSum.length>0?(<div style={{padding:"10px 14px"}}>{wSum.map(function(w,i){var bc=w.type==="Rest"?"#34d39922":S.accent+"22";var bbc=w.type==="Rest"?"#34d39944":S.accent+"44";var tc=w.type==="Rest"?"#34d399":S.accent;return(<div key={i} style={{padding:"8px 0",borderBottom:i<wSum.length-1?"1px solid "+S.dim:"none"}}><div style={{display:"flex",gap:10,alignItems:"center",marginBottom:w.notes?4:0}}><div style={{fontSize:11,color:S.muted,minWidth:44}}>{w.date.slice(5)}</div><div style={{padding:"2px 8px",background:bc,border:"1px solid "+bbc,borderRadius:10,fontSize:11,color:tc}}>{w.type}</div>{w.steps>0&&<div style={{fontSize:11,color:S.muted}}>{w.steps.toLocaleString()} steps</div>}</div>{w.notes&&<div style={{fontSize:12,color:S.muted,paddingLeft:54,lineHeight:1.5}}>{w.notes}</div>}</div>);})}</div>):<div style={{padding:14,fontSize:13,color:S.muted}}>No workouts logged this week.</div>}</div>
-          <div style={Object.assign({},C(),{overflow:"hidden"})}><div style={{padding:"10px 14px",fontSize:13,fontWeight:500,borderBottom:"1px solid "+S.border}}>{"Weight \u2014 30 Day"}</div><div style={{padding:"12px 14px",borderBottom:"1px solid "+S.border,display:"flex",gap:24,flexWrap:"wrap"}}><div><div style={{fontSize:10,color:S.muted,marginBottom:4}}>Latest</div><div style={{fontSize:22,fontWeight:600,color:"#a78bfa"}}>{latWt?(days[latWt].weight+" lbs"):"\u2014"}</div></div>{(function(){var wd=last30.filter(function(dt){return days[dt]&&days[dt].weight;});if(wd.length<2)return null;var diff=(days[wd[wd.length-1]].weight-days[wd[0]].weight).toFixed(1);return <div><div style={{fontSize:10,color:S.muted,marginBottom:4}}>30d change</div><div style={{fontSize:22,fontWeight:600,color:Number(diff)<0?"#34d399":"#f87171"}}>{diff>0?"+":""}{diff} lbs</div></div>;})()}</div><div style={{padding:14}}><div style={{position:"relative",height:160}}><WtChart data={wtD}/></div>{!wtD.some(function(d){return d.weight;})&&<div style={{fontSize:13,color:S.muted,textAlign:"center",paddingTop:20}}>Log your weight in Daily to see the chart.</div>}</div></div>
+          <div style={Object.assign({},C(),{overflow:"hidden"})}><div style={{padding:"10px 14px",fontSize:13,fontWeight:500,borderBottom:"1px solid "+S.border}}>{"Weight — 30 Day"}</div><div style={{padding:"12px 14px",borderBottom:"1px solid "+S.border,display:"flex",gap:24,flexWrap:"wrap"}}><div><div style={{fontSize:10,color:S.muted,marginBottom:4}}>Latest</div><div style={{fontSize:22,fontWeight:600,color:"#a78bfa"}}>{latWt?(days[latWt].weight+" lbs"):"—"}</div></div>{(function(){var wd=last30.filter(function(dt){return days[dt]&&days[dt].weight;});if(wd.length<2)return null;var diff=(days[wd[wd.length-1]].weight-days[wd[0]].weight).toFixed(1);return <div><div style={{fontSize:10,color:S.muted,marginBottom:4}}>30d change</div><div style={{fontSize:22,fontWeight:600,color:Number(diff)<0?"#34d399":"#f87171"}}>{diff>0?"+":""}{diff} lbs</div></div>;})()}</div><div style={{padding:14}}><div style={{position:"relative",height:160}}><WtChart data={wtD}/></div>{!wtD.some(function(d){return d.weight;})&&<div style={{fontSize:13,color:S.muted,textAlign:"center",paddingTop:20}}>Log your weight in Daily to see the chart.</div>}</div></div>
         </div>)}
+
+        {tab==="protocol"&&(
+          <ProtocolTab
+            days={days}
+            protoStart={protoStart}
+            onSetStart={function(){setProtoCalOpen(true);}}
+          />
+        )}
 
         {tab==="ai"&&<AICoach days={days}/>}
 
@@ -927,8 +1081,28 @@ function App(){
         {tab==="system"&&activeProt&&<ProtocolDetail id={activeProt} onBack={function(){setActiveProt(null);}}/>}
 
         {tab==="settings"&&(<div>
-          <div style={Object.assign({},C(),{overflow:"hidden",marginBottom:14})}><div style={{padding:"10px 14px",fontSize:13,fontWeight:500,borderBottom:"1px solid "+S.border}}>Backup &amp; Restore</div><div style={{padding:14}}><div style={{fontSize:12,color:S.muted,marginBottom:14,lineHeight:1.6}}>Export saves your data to a JSON file. Import restores from a previously exported file. Do this weekly to avoid data loss on Safari.</div><div style={{display:"flex",flexDirection:"column",gap:10}}><button onClick={exportD} style={{background:"transparent",border:"1px solid "+S.accent,borderRadius:8,padding:"12px 16px",color:S.accent,fontSize:14,fontWeight:500,cursor:"pointer",textAlign:"left"}}>{"\u2B07 Export backup"}<div style={{fontSize:11,color:S.muted,marginTop:3,fontWeight:400}}>Download all data as a JSON file</div></button><label style={{background:"transparent",border:"1px solid "+S.border,borderRadius:8,padding:"12px 16px",color:S.muted,fontSize:14,fontWeight:500,cursor:"pointer",display:"block"}}>{"\u2B06 Import backup"}<div style={{fontSize:11,color:S.muted,marginTop:3,fontWeight:400}}>Restore from a previously exported file</div><input type="file" accept=".json" onChange={importD} style={{display:"none"}}/></label></div></div></div>
-          <div style={Object.assign({},C(),{overflow:"hidden",marginBottom:14})}><div style={{padding:"10px 14px",fontSize:13,fontWeight:500,borderBottom:"1px solid "+S.border}}>About</div><div style={{padding:14}}>{[["Profile","Male \u00B7 25y \u00B7 200lb \u00B7 5'10\""],["Base burn",BASE+" kcal/day"],["Step burn","~0.045 kcal per step"],["Scoring","Weighted % per domain, avg 9 domains"],["PIN","Change APP_PIN in the source file"]].map(function(row){return(<div key={row[0]} style={{display:"flex",justifyContent:"space-between",padding:"8px 0",borderBottom:"1px solid "+S.dim}}><span style={{fontSize:13,color:S.muted}}>{row[0]}</span><span style={{fontSize:13,color:S.text}}>{row[1]}</span></div>);})}</div></div>
+          {/* Protocol Start Date Setting */}
+          <div style={Object.assign({},C(),{overflow:"hidden",marginBottom:14})}>
+            <div style={{padding:"10px 14px",fontSize:13,fontWeight:500,borderBottom:"1px solid "+S.border,color:"#34d399"}}>16-Week Protocol</div>
+            <div style={{padding:14}}>
+              <div style={{fontSize:12,color:S.muted,marginBottom:12,lineHeight:1.6}}>Set your protocol start date to enable Protocol tab tracking. All cumulative targets are calculated from this date.</div>
+              <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"10px 12px",background:S.dim,borderRadius:8,marginBottom:10}}>
+                <div>
+                  <div style={{fontSize:11,color:S.muted,marginBottom:2}}>Start date</div>
+                  <div style={{fontSize:15,fontWeight:600,color:protoStart?S.text:"#555"}}>{protoStart||"Not set"}</div>
+                </div>
+                <button onClick={function(){setProtoCalOpen(true);}} style={{background:"transparent",border:"1px solid #34d399",borderRadius:8,padding:"7px 14px",color:"#34d399",fontSize:12,fontWeight:600,cursor:"pointer"}}>{protoStart?"Change":"Set Date"}</button>
+              </div>
+              {protoStart&&(function(){
+                var tg=calcProtoTargets(protoStart,today);
+                if(!tg)return null;
+                return <div style={{fontSize:12,color:"#555"}}>Currently on Week {tg.currentWeek}, Day {tg.totalDays} of 112 ({Math.round(tg.totalDays/112*100)}% complete)</div>;
+              })()}
+            </div>
+          </div>
+
+          <div style={Object.assign({},C(),{overflow:"hidden",marginBottom:14})}><div style={{padding:"10px 14px",fontSize:13,fontWeight:500,borderBottom:"1px solid "+S.border}}>Backup &amp; Restore</div><div style={{padding:14}}><div style={{fontSize:12,color:S.muted,marginBottom:14,lineHeight:1.6}}>Export saves your data to a JSON file. Import restores from a previously exported file. Do this weekly to avoid data loss on Safari.</div><div style={{display:"flex",flexDirection:"column",gap:10}}><button onClick={exportD} style={{background:"transparent",border:"1px solid "+S.accent,borderRadius:8,padding:"12px 16px",color:S.accent,fontSize:14,fontWeight:500,cursor:"pointer",textAlign:"left"}}>{"⬇ Export backup"}<div style={{fontSize:11,color:S.muted,marginTop:3,fontWeight:400}}>Download all data as a JSON file</div></button><label style={{background:"transparent",border:"1px solid "+S.border,borderRadius:8,padding:"12px 16px",color:S.muted,fontSize:14,fontWeight:500,cursor:"pointer",display:"block"}}>{"⬆ Import backup"}<div style={{fontSize:11,color:S.muted,marginTop:3,fontWeight:400}}>Restore from a previously exported file</div><input type="file" accept=".json" onChange={importD} style={{display:"none"}}/></label></div></div></div>
+          <div style={Object.assign({},C(),{overflow:"hidden",marginBottom:14})}><div style={{padding:"10px 14px",fontSize:13,fontWeight:500,borderBottom:"1px solid "+S.border}}>About</div><div style={{padding:14}}>{[["Profile","Male · 25y · 200lb · 5'10\""],["Base burn",BASE+" kcal/day"],["Step burn","~0.045 kcal per step"],["Scoring","Weighted % per domain, avg 9 domains"],["PIN","Change APP_PIN in the source file"]].map(function(row){return(<div key={row[0]} style={{display:"flex",justifyContent:"space-between",padding:"8px 0",borderBottom:"1px solid "+S.dim}}><span style={{fontSize:13,color:S.muted}}>{row[0]}</span><span style={{fontSize:13,color:S.text}}>{row[1]}</span></div>);})}</div></div>
           <div style={Object.assign({},C(),{overflow:"hidden"})}><div style={{padding:"10px 14px",fontSize:13,fontWeight:500,borderBottom:"1px solid "+S.border}}>Danger Zone</div><div style={{padding:14}}><div style={{fontSize:12,color:S.muted,marginBottom:12,lineHeight:1.6}}>Permanently deletes all data. Export first.</div><button onClick={function(){if(window.confirm("Delete ALL data? Cannot be undone.")){upd({});alert("Cleared.");}}} style={{background:"transparent",border:"1px solid #f87171",borderRadius:8,padding:"10px 16px",color:"#f87171",fontSize:13,fontWeight:500,cursor:"pointer",width:"100%"}}>Clear all data</button></div></div>
         </div>)}
 
@@ -937,7 +1111,7 @@ function App(){
       <div style={{background:S.card,borderTop:"1px solid "+S.border,padding:"10px 16px",position:"sticky",bottom:0,zIndex:10}}>
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:6}}>
           <div style={{fontSize:11,color:S.muted}}>{today}</div>
-          <div style={{display:"flex",alignItems:"center",gap:6}}><span>{"\u26A1"}</span><span style={{fontSize:13,fontWeight:500}}>{str}d streak</span></div>
+          <div style={{display:"flex",alignItems:"center",gap:6}}><span>{"⚡"}</span><span style={{fontSize:13,fontWeight:500}}>{str}d streak</span></div>
           <div style={{fontSize:13,color:pc(tPct),fontWeight:600}}>{tPct}%</div>
         </div>
         <div style={{height:3,background:S.border,borderRadius:2}}><div style={{height:"100%",width:tPct+"%",background:pc(tPct),borderRadius:2,transition:"width 0.3s"}}/></div>
