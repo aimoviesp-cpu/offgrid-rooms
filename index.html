@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 <meta name="apple-mobile-web-app-title" content="OperAxis"/>
-
+<link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAIAAACyr5FlAAAP4klEQVR4nO2dS2xbV3rHz7lvkRT1JkW937LlWHZsN54042QGSaeYBCmCArPKoF20BbqYRTdtN0UXRZdtF01RzKrTFjMFiqCZzqBT15PW6dQxkkxiO7Etx7Js60WJoihRFN/33QVj2ZZ0yI/k5b1U5/vhLiTyvMj7v9855zvfOaTKmeMEQQ6D87oBSPOC4kCYoDgQJigOhAnOVhAmaDkQJigOhAnOVhAmaDkQJigOhAmKA2GC4kCYoDgQJhgJhjBBy4EwQXEgTFAcCBMUB8IExYEwwbUVhAlaDoQJigNhgmeCIUzQciBMUBwIE5ytIEzQciBMUBwIE8HrBlSG8ytCd1DoCvKtLVxA4XwyFQQqcJTnbMsmhmkbplXQzGzRyhWM7YyxlTZ3c163+v8Aw=="/>
 <title>OperAxis System</title>
 <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
 <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
@@ -45,26 +45,31 @@ function buildFlywheel(){var svg=document.getElementById('fw-svg');if(!svg)retur
 function fwSel(key){var d=FW_DET[key];if(!d)return;var panel=document.getElementById('detail-panel'),dt=document.getElementById('detail-title'),db=document.getElementById('detail-body');if(dt)dt.textContent=d.t;if(db)db.textContent=d.b;if(panel)panel.style.display='block';document.querySelectorAll('.nc').forEach(function(g){g.style.opacity='0.35';});var nk=document.getElementById('fw-'+key),nf=document.getElementById('fw-financial');if(nk)nk.style.opacity='1';if(nf)nf.style.opacity='1';setTimeout(function(){if(window._fwOnSelect)window._fwOnSelect(key);},300);}
 var _fwBuilt=false;var _fwObs=new MutationObserver(function(){var svg=document.getElementById('fw-svg');if(!_fwBuilt&&svg){_fwBuilt=true;buildFlywheel();}if(_fwBuilt&&!svg){_fwBuilt=false;}});
 
-// ── 8-WEEK PROTOCOL DATA (May 26 → July 23, 2026) ─────────────────────────────
-// 100 kcal stepdown every 2 weeks, floor at 1800 kcal
-// Calibrated for ~205 lb body weight
+// ── 16-WEEK PROTOCOL DATA ─────────────────────────────────────────────────────
 var PROTOCOL_WEEKS = [
-  {wk:1,  phase:"Block 1 — 2000",  eatWk:14000, burnWk:20391, defWk:6391,  stepsDay:9000, workouts:5, refeeds:0, calDay:2000, macros:"200P / 200C / 45F"},
-  {wk:2,  phase:"Block 1 — 2000",  eatWk:14000, burnWk:20391, defWk:6391,  stepsDay:9000, workouts:5, refeeds:0, calDay:2000, macros:"200P / 200C / 45F"},
-  {wk:3,  phase:"Block 2 — 1900",  eatWk:13300, burnWk:20300, defWk:7000,  stepsDay:9000, workouts:5, refeeds:0, calDay:1900, macros:"200P / 175C / 45F"},
-  {wk:4,  phase:"Block 2 — 1900",  eatWk:13300, burnWk:20300, defWk:7000,  stepsDay:9000, workouts:5, refeeds:0, calDay:1900, macros:"200P / 175C / 45F"},
-  {wk:5,  phase:"Block 3 — 1800",  eatWk:12600, burnWk:20200, defWk:7600,  stepsDay:9000, workouts:5, refeeds:0, calDay:1800, macros:"200P / 150C / 45F"},
-  {wk:6,  phase:"Block 3 — 1800",  eatWk:12600, burnWk:20200, defWk:7600,  stepsDay:9000, workouts:5, refeeds:0, calDay:1800, macros:"200P / 150C / 45F"},
-  {wk:7,  phase:"Block 4 — 1800",  eatWk:12600, burnWk:20100, defWk:7500,  stepsDay:9000, workouts:5, refeeds:0, calDay:1800, macros:"200P / 150C / 45F"},
-  {wk:8,  phase:"Block 4 — 1800",  eatWk:12600, burnWk:20100, defWk:7500,  stepsDay:9000, workouts:5, refeeds:0, calDay:1800, macros:"200P / 150C / 45F"},
-  {wk:9,  phase:"Block 4 — 1800",  eatWk:5400,  burnWk:8614,  defWk:3214,  stepsDay:9000, workouts:2, refeeds:0, calDay:1800, macros:"200P / 150C / 45F (3-day partial)"},
+  {wk:1,  phase:"Phase 1 — Cut",   eatWk:14000, burnWk:20300, defWk:6300,  stepsDay:9000, workouts:5, refeeds:0, calDay:2000, macros:"200P / 200C / 45F"},
+  {wk:2,  phase:"Phase 1 — Cut",   eatWk:14000, burnWk:20090, defWk:6090,  stepsDay:9000, workouts:5, refeeds:0, calDay:2000, macros:"200P / 200C / 45F"},
+  {wk:3,  phase:"Phase 1 — Cut",   eatWk:14000, burnWk:19880, defWk:5880,  stepsDay:9000, workouts:5, refeeds:0, calDay:2000, macros:"200P / 200C / 45F"},
+  {wk:4,  phase:"Phase 1 — Cut",   eatWk:14000, burnWk:19670, defWk:5670,  stepsDay:9000, workouts:5, refeeds:0, calDay:2000, macros:"200P / 200C / 45F"},
+  {wk:5,  phase:"Phase 1 — Cut",   eatWk:14000, burnWk:19509, defWk:5509,  stepsDay:9000, workouts:5, refeeds:0, calDay:2000, macros:"200P / 200C / 45F"},
+  {wk:6,  phase:"Phase 1 — Cut",   eatWk:14000, burnWk:19299, defWk:5299,  stepsDay:9000, workouts:5, refeeds:0, calDay:2000, macros:"200P / 200C / 45F"},
+  {wk:7,  phase:"Diet Break",       eatWk:18550, burnWk:19040, defWk:490,   stepsDay:9000, workouts:5, refeeds:0, calDay:2650, macros:"200P / 300C / 60F"},
+  {wk:8,  phase:"Phase 2 — Cut",   eatWk:15500, burnWk:18690, defWk:3190,  stepsDay:9000, workouts:5, refeeds:2, calDay:2100, macros:"200P / 220C / 45F (cut) / 200P / 325C / 35F (refeed)"},
+  {wk:9,  phase:"Phase 2 — Cut",   eatWk:15500, burnWk:18529, defWk:3029,  stepsDay:9000, workouts:5, refeeds:2, calDay:2100, macros:"200P / 220C / 45F (cut) / 200P / 325C / 35F (refeed)"},
+  {wk:10, phase:"Phase 2 — Cut",   eatWk:15500, burnWk:18375, defWk:2875,  stepsDay:9000, workouts:5, refeeds:2, calDay:2100, macros:"200P / 220C / 45F (cut) / 200P / 325C / 35F (refeed)"},
+  {wk:11, phase:"Phase 2 — Cut",   eatWk:15500, burnWk:18214, defWk:2714,  stepsDay:9000, workouts:5, refeeds:2, calDay:2100, macros:"200P / 220C / 45F (cut) / 200P / 325C / 35F (refeed)"},
+  {wk:12, phase:"Phase 2 — Cut",   eatWk:15500, burnWk:17885, defWk:2385,  stepsDay:9000, workouts:5, refeeds:2, calDay:2100, macros:"200P / 220C / 45F (cut) / 200P / 325C / 35F (refeed)"},
+  {wk:13, phase:"Phase 2 — Cut",   eatWk:15500, burnWk:17780, defWk:2280,  stepsDay:9000, workouts:5, refeeds:2, calDay:2100, macros:"200P / 220C / 45F (cut) / 200P / 325C / 35F (refeed)"},
+  {wk:14, phase:"Diet Break",       eatWk:17150, burnWk:17780, defWk:630,   stepsDay:9000, workouts:5, refeeds:0, calDay:2450, macros:"200P / 270C / 55F"},
+  {wk:15, phase:"Phase 3 — Cut",   eatWk:15500, burnWk:17500, defWk:2000,  stepsDay:9000, workouts:5, refeeds:2, calDay:2100, macros:"200P / 220C / 45F (cut) / 200P / 325C / 35F (refeed)"},
+  {wk:16, phase:"Phase 3 — Cut",   eatWk:15500, burnWk:17339, defWk:1839,  stepsDay:9000, workouts:5, refeeds:2, calDay:2100, macros:"200P / 220C / 45F (cut) / 200P / 325C / 35F (refeed)"},
 ];
 
 var PHASE_COL = {
-  "Block 1 — 2000":  {bg:"#042C53", border:"#378ADD", text:"#60a5fa"},
-  "Block 2 — 1900":  {bg:"#412402", border:"#EF9F27", text:"#fcd34d"},
-  "Block 3 — 1800":  {bg:"#4A1B0C", border:"#D85A30", text:"#fb923c"},
-  "Block 4 — 1800":  {bg:"#3a0a0a", border:"#f87171", text:"#fca5a5"},
+  "Phase 1 — Cut":  {bg:"#042C53", border:"#378ADD", text:"#60a5fa"},
+  "Diet Break":     {bg:"#173404", border:"#639922", text:"#86efac"},
+  "Phase 2 — Cut":  {bg:"#412402", border:"#EF9F27", text:"#fcd34d"},
+  "Phase 3 — Cut":  {bg:"#3a0a0a", border:"#f87171", text:"#fca5a5"},
 };
 
 var PROTOCOLS=[
@@ -107,8 +112,7 @@ var DOMAINS=[
 
 var DOM_COL={mental:"#7F77DD",recovery:"#e8e8e8",energy:"#EF9F27",looks:"#D4537E",nutrition:"#639922",fitness:"#378ADD",financial:"#1D9E75",charisma:"#BA7517",seduction:"#D85A30"};
 var WTYPES=["Push","Pull","Lower","Calisthenics","Rest"];
-// Updated for 205 lb middle value (Mifflin-St Jeor, male 25y, 5'10")
-var BMR=1923,BASE=Math.round(BMR*1.2);
+var BMR=1969,BASE=Math.round(BMR*1.2);
 var WBURN={Push:250,Pull:250,Lower:320,Calisthenics:400,Rest:0};
 var KPS=0.045;
 var calcBurn=function(wt,st){return BASE+(WBURN[wt]||0)+Math.round((Number(st)||0)*KPS);};
@@ -120,22 +124,6 @@ var ldApiKey=function(){try{return localStorage.getItem("operaxis_api_key")||"";
 var svApiKey=function(k){try{localStorage.setItem("operaxis_api_key",k);}catch(e){}};
 var ldProtoStart=function(){try{return localStorage.getItem("operaxis_proto_start")||"";}catch(e){return "";}};
 var svProtoStart=function(d){try{localStorage.setItem("operaxis_proto_start",d);}catch(e){}};
-
-// ── ENVIRONMENT LOG HELPER ────────────────────────────────────────────────────
-// Returns number of triggers (alcohol/weed) on a given day. 0, 1, or 2.
-var envCount=function(dd){
-  if(!dd||!dd.env)return 0;
-  var n=0;
-  if(dd.env.alcohol)n++;
-  if(dd.env.weed)n++;
-  return n;
-};
-var envWarn=function(dd){
-  var n=envCount(dd);
-  if(n===0)return "";
-  if(n===1)return "⚠️";
-  return "⚠️⚠️";
-};
 
 var MODE_HABIT_PTS={
   fitness:{lite:15,rest:50},
@@ -222,30 +210,24 @@ var protoWeekDates=function(startDate,weekNum){
   return Array.from({length:7},function(_,i){return addDays(weekStart,i);});
 };
 
-// PROTOCOL_TOTAL_DAYS is now 8 full weeks + 3 partial = 59 days
-var PROTOCOL_TOTAL_DAYS=8*7+3;
-var PROTOCOL_TOTAL_WEEKS=PROTOCOL_WEEKS.length;
-
 var calcProtoTargets=function(startDate,today){
   if(!startDate) return null;
   var dayIdx=protoDayIndex(startDate,today);
   if(dayIdx<0) return null;
 
-  var totalDays=Math.min(dayIdx+1,PROTOCOL_TOTAL_DAYS);
+  var totalDays=dayIdx+1;
   var result={eatCum:0,burnCum:0,defCum:0,stepsCum:0,workoutsCum:0,refeedsCum:0};
 
   for(var d=0;d<totalDays;d++){
     var wkNum=Math.floor(d/7)+1;
-    if(wkNum>PROTOCOL_TOTAL_WEEKS)wkNum=PROTOCOL_TOTAL_WEEKS;
+    if(wkNum>16)wkNum=16;
     var wkData=PROTOCOL_WEEKS[wkNum-1];
-    // Use per-week daily averages (handles partial final week correctly)
-    var daysInThisWeek=(wkNum===PROTOCOL_TOTAL_WEEKS&&wkNum===9)?3:7;
-    result.eatCum+=wkData.eatWk/daysInThisWeek;
-    result.burnCum+=wkData.burnWk/daysInThisWeek;
-    result.defCum+=wkData.defWk/daysInThisWeek;
+    result.eatCum+=wkData.eatWk/7;
+    result.burnCum+=wkData.burnWk/7;
+    result.defCum+=wkData.defWk/7;
     result.stepsCum+=wkData.stepsDay;
-    result.workoutsCum+=wkData.workouts/daysInThisWeek;
-    result.refeedsCum+=wkData.refeeds/daysInThisWeek;
+    result.workoutsCum+=wkData.workouts/7;
+    result.refeedsCum+=wkData.refeeds/7;
   }
 
   return {
@@ -256,7 +238,7 @@ var calcProtoTargets=function(startDate,today){
     workoutsCum: Math.round(result.workoutsCum),
     refeedsCum:  Math.round(result.refeedsCum),
     totalDays:   totalDays,
-    currentWeek: Math.min(PROTOCOL_TOTAL_WEEKS, Math.floor(dayIdx/7)+1),
+    currentWeek: Math.min(16, Math.floor(dayIdx/7)+1),
     dayOfWeek:   (dayIdx%7)+1,
   };
 };
@@ -266,10 +248,9 @@ var calcProtoActuals=function(days,startDate,today){
   var dayIdx=protoDayIndex(startDate,today);
   if(dayIdx<0) return null;
 
-  var maxDay=Math.min(dayIdx,PROTOCOL_TOTAL_DAYS-1);
   var eatCum=0,burnCum=0,stepsCum=0,workoutsCum=0,refeedsCum=0,loggedDays=0;
 
-  for(var d=0;d<=maxDay;d++){
+  for(var d=0;d<=dayIdx;d++){
     var dt=addDays(startDate,d);
     var dd=days[dt];
     if(dd){
@@ -338,15 +319,11 @@ function buildAIContext(days){
   var wtChange30=null;
   var wt30=L30.filter(function(dt){return days[dt]&&days[dt].weight;});
   if(wt30.length>=2)wtChange30=(days[wt30[wt30.length-1]].weight-days[wt30[0]].weight).toFixed(1);
-  // ENV LOG STATS (last 30 days)
-  var envAlc=L30.filter(function(dt){return days[dt]&&days[dt].env&&days[dt].env.alcohol;}).length;
-  var envWeed=L30.filter(function(dt){return days[dt]&&days[dt].env&&days[dt].env.weed;}).length;
-  var envClean=L30.filter(function(dt){var d=days[dt];return d&&(d.calIn||d.calBurn||d.weight||d.workoutType)&&envCount(d)===0;}).length;
-  var last30Log=L30.map(function(dt){var d=days[dt]||{};var ci=d.calIn||0;var cb=d.calBurn||0;var def=cb-ci;var parts=[];if(ci||cb){parts.push("in="+ci+" burn="+cb+" "+(def>=0?"deficit=+"+def:"surplus="+Math.abs(def)));}if(d.stepsNum){parts.push("steps="+d.stepsNum);}if(d.workoutType){parts.push("workout="+d.workoutType);}if(d.weight){parts.push("weight="+d.weight+"lbs");}if(d.env){var et=[];if(d.env.alcohol)et.push("alcohol");if(d.env.weed)et.push("weed");if(et.length)parts.push("triggers="+et.join("+"));}return dt.slice(5)+": "+(parts.length?parts.join(" "):"no data");}).join("\n");
-  var weekBlocks=[];for(var wi=0;wi<L30.length;wi+=7){var wk=L30.slice(wi,wi+7);var wkDef=wk.reduce(function(a,dt){var d=days[dt]||{};return a+((d.calBurn||0)-(d.calIn||0));},0);var wkTrig=wk.reduce(function(a,dt){return a+envCount(days[dt]);},0);weekBlocks.push({range:wk[0].slice(5)+" to "+wk[wk.length-1].slice(5),deficit:wkDef,triggers:wkTrig});}
+  var last30Log=L30.map(function(dt){var d=days[dt]||{};var ci=d.calIn||0;var cb=d.calBurn||0;var def=cb-ci;var parts=[];if(ci||cb){parts.push("in="+ci+" burn="+cb+" "+(def>=0?"deficit=+"+def:"surplus="+Math.abs(def)));}if(d.stepsNum){parts.push("steps="+d.stepsNum);}if(d.workoutType){parts.push("workout="+d.workoutType);}if(d.weight){parts.push("weight="+d.weight+"lbs");}return dt.slice(5)+": "+(parts.length?parts.join(" "):"no data");}).join("\n");
+  var weekBlocks=[];for(var wi=0;wi<L30.length;wi+=7){var wk=L30.slice(wi,wi+7);var wkDef=wk.reduce(function(a,dt){var d=days[dt]||{};return a+((d.calBurn||0)-(d.calIn||0));},0);weekBlocks.push({range:wk[0].slice(5)+" to "+wk[wk.length-1].slice(5),deficit:wkDef});}
   weekBlocks.sort(function(a,b){return b.deficit-a.deficit;});
   var protocolSummary=PROTOCOLS.map(function(p){var items=[];if(p.items)items=p.items;else if(p.sections){p.sections.forEach(function(s){if(s.items)items=items.concat(s.items);if(s.layers)s.layers.forEach(function(l){items=items.concat(l.items);});});}return p.label+": "+items.slice(0,4).join("; ");}).join("\n");
-  return "=== OPERAXIS SYSTEM CONTEXT ===\n"+"Date: "+today+"\n"+"Streak: "+str+" days\n"+"Today's overall score: "+todayPct+"%\n"+"7-day average score: "+weekAvg+"%\n\n"+"TODAY'S DOMAIN SCORES:\n"+Object.entries(domainScores).map(function(e){return"  "+e[0]+": "+e[1];}).join("\n")+"\n\n"+"7-DAY DOMAIN AVERAGES:\n"+Object.entries(avgs7).map(function(e){return"  "+e[0]+": "+e[1];}).join("\n")+"\n\n"+"TODAY'S NUTRITION & TRAINING:\n"+"  Calories eaten: "+(calIn||"not logged")+"\n"+"  Calories burned: "+(calBurn||"not logged")+"\n"+"  Deficit/Surplus: "+(calBurn?(deficit>=0?"deficit +"+deficit+" kcal":"surplus "+Math.abs(deficit)+" kcal"):"not logged")+"\n"+"  Workout: "+workout+(workoutNotes?" — "+workoutNotes:"")+"\n\n"+"=== ENVIRONMENT TRIGGERS (last 30 days) ===\n"+"  Alcohol days: "+envAlc+"\n"+"  Weed days: "+envWeed+"\n"+"  Clean training days: "+envClean+"\n\n"+"=== ALL-TIME STATS ("+loggedDays.length+" logged days total) ===\n\n"+"CALORIES ALL-TIME ("+calDays.length+" days logged):\n"+"  Avg calories in per day: "+avgCalIn+" kcal\n"+"  Avg calories burned per day: "+avgCalBurn+" kcal\n"+"  Avg daily deficit: "+(avgDeficit>=0?"+"+avgDeficit:String(avgDeficit))+" kcal\n"+"  Total accumulated deficit: "+(totalDeficit>=0?"+"+totalDeficit:String(totalDeficit))+" kcal\n"+"  Days in deficit: "+deficitDays+" / "+calDays.length+"\n"+"  Days in surplus: "+surplusDays+" / "+calDays.length+"\n\n"+"STEPS ALL-TIME ("+stepDays.length+" days logged):\n"+"  Total steps logged: "+totalSteps.toLocaleString()+"\n"+"  Average steps per day: "+avgSteps.toLocaleString()+"\n\n"+"WORKOUTS ALL-TIME ("+totalSessions+" training sessions):\n"+WTYPES.map(function(t){return"  "+t+": "+workoutCounts[t]+" sessions";}).join("\n")+"\n\n"+"WEIGHT TREND:\n"+"  Starting weight: "+(firstWeight?firstWeight+" lbs":"not logged")+"\n"+"  Latest weight: "+(latestWeight?latestWeight+" lbs":"not logged")+"\n"+"  All-time change: "+(wtChangeAll!==null?wtChangeAll+" lbs":"insufficient data")+"\n"+"  30-day change: "+(wtChange30!==null?wtChange30+" lbs":"insufficient data")+"\n\n"+"BEST DEFICIT WEEKS (last 30 days, with trigger count):\n"+weekBlocks.slice(0,2).map(function(w){return"  "+w.range+": "+(w.deficit>=0?"+":"")+w.deficit+" kcal (triggers: "+w.triggers+")";}).join("\n")+"\n"+"WORST SURPLUS WEEKS (last 30 days, with trigger count):\n"+weekBlocks.slice(-2).reverse().map(function(w){return"  "+w.range+": "+(w.deficit>=0?"+":"")+w.deficit+" kcal (triggers: "+w.triggers+")";}).join("\n")+"\n\n"+"LAST 30 DAYS DETAIL LOG:\n"+last30Log+"\n\n"+"SYSTEM PROTOCOLS (summary):\n"+protocolSummary;
+  return "=== OPERAXIS SYSTEM CONTEXT ===\n"+"Date: "+today+"\n"+"Streak: "+str+" days\n"+"Today's overall score: "+todayPct+"%\n"+"7-day average score: "+weekAvg+"%\n\n"+"TODAY'S DOMAIN SCORES:\n"+Object.entries(domainScores).map(function(e){return"  "+e[0]+": "+e[1];}).join("\n")+"\n\n"+"7-DAY DOMAIN AVERAGES:\n"+Object.entries(avgs7).map(function(e){return"  "+e[0]+": "+e[1];}).join("\n")+"\n\n"+"TODAY'S NUTRITION & TRAINING:\n"+"  Calories eaten: "+(calIn||"not logged")+"\n"+"  Calories burned: "+(calBurn||"not logged")+"\n"+"  Deficit/Surplus: "+(calBurn?(deficit>=0?"deficit +"+deficit+" kcal":"surplus "+Math.abs(deficit)+" kcal"):"not logged")+"\n"+"  Workout: "+workout+(workoutNotes?" — "+workoutNotes:"")+"\n\n"+"=== ALL-TIME STATS ("+loggedDays.length+" logged days total) ===\n\n"+"CALORIES ALL-TIME ("+calDays.length+" days logged):\n"+"  Avg calories in per day: "+avgCalIn+" kcal\n"+"  Avg calories burned per day: "+avgCalBurn+" kcal\n"+"  Avg daily deficit: "+(avgDeficit>=0?"+"+avgDeficit:String(avgDeficit))+" kcal\n"+"  Total accumulated deficit: "+(totalDeficit>=0?"+"+totalDeficit:String(totalDeficit))+" kcal\n"+"  Days in deficit: "+deficitDays+" / "+calDays.length+"\n"+"  Days in surplus: "+surplusDays+" / "+calDays.length+"\n\n"+"STEPS ALL-TIME ("+stepDays.length+" days logged):\n"+"  Total steps logged: "+totalSteps.toLocaleString()+"\n"+"  Average steps per day: "+avgSteps.toLocaleString()+"\n\n"+"WORKOUTS ALL-TIME ("+totalSessions+" training sessions):\n"+WTYPES.map(function(t){return"  "+t+": "+workoutCounts[t]+" sessions";}).join("\n")+"\n\n"+"WEIGHT TREND:\n"+"  Starting weight: "+(firstWeight?firstWeight+" lbs":"not logged")+"\n"+"  Latest weight: "+(latestWeight?latestWeight+" lbs":"not logged")+"\n"+"  All-time change: "+(wtChangeAll!==null?wtChangeAll+" lbs":"insufficient data")+"\n"+"  30-day change: "+(wtChange30!==null?wtChange30+" lbs":"insufficient data")+"\n\n"+"BEST DEFICIT WEEKS (last 30 days):\n"+weekBlocks.slice(0,2).map(function(w){return"  "+w.range+": "+(w.deficit>=0?"+":"")+w.deficit+" kcal";}).join("\n")+"\n"+"WORST SURPLUS WEEKS (last 30 days):\n"+weekBlocks.slice(-2).reverse().map(function(w){return"  "+w.range+": "+(w.deficit>=0?"+":"")+w.deficit+" kcal";}).join("\n")+"\n\n"+"LAST 30 DAYS DETAIL LOG:\n"+last30Log+"\n\n"+"SYSTEM PROTOCOLS (summary):\n"+protocolSummary;
 }
 
 function CalendarPicker(props){
@@ -582,7 +559,7 @@ function ProtocolTab(props){
     return(
       <div style={{textAlign:"center",padding:"40px 20px"}}>
         <div style={{fontSize:16,fontWeight:600,marginBottom:8}}>Protocol Start Date</div>
-        <div style={{fontSize:13,color:S.muted,marginBottom:24,lineHeight:1.6}}>Set your 8-week cutting protocol start date to begin tracking your compliance vs targets.</div>
+        <div style={{fontSize:13,color:S.muted,marginBottom:24,lineHeight:1.6}}>Set your 16-week cutting protocol start date to begin tracking your compliance vs targets.</div>
         <button onClick={onSetStart} style={{background:S.accent,color:"#000",border:"none",borderRadius:10,padding:"12px 28px",fontSize:14,fontWeight:700,cursor:"pointer"}}>Set Start Date</button>
       </div>
     );
@@ -601,42 +578,39 @@ function ProtocolTab(props){
   }
 
   var currentWeek=targets.currentWeek;
-  var currentWeekData=PROTOCOL_WEEKS[Math.min(currentWeek-1,PROTOCOL_TOTAL_WEEKS-1)];
+  var currentWeekData=PROTOCOL_WEEKS[Math.min(currentWeek-1,15)];
   var phaseCol=PHASE_COL[currentWeekData.phase]||{bg:"#1a1a1a",border:"#333",text:"#888"};
 
   var totalProtoDef=PROTOCOL_WEEKS.reduce(function(a,w){return a+w.defWk;},0);
   var totalProtoEat=PROTOCOL_WEEKS.reduce(function(a,w){return a+w.eatWk;},0);
-  var totalProtoSteps=PROTOCOL_WEEKS.reduce(function(a,w){
-    // Final partial week only has 3 days
-    var d=(w.wk===PROTOCOL_TOTAL_WEEKS&&w.wk===9)?3:7;
-    return a+w.stepsDay*d;
-  },0);
+  var totalProtoSteps=PROTOCOL_WEEKS.reduce(function(a,w){return a+w.stepsDay*7;},0);
   var totalProtoWorkouts=PROTOCOL_WEEKS.reduce(function(a,w){return a+w.workouts;},0);
 
-  var daysTotal=PROTOCOL_TOTAL_DAYS;
+  var daysTotal=16*7;
   var daysElapsed=targets.totalDays;
   var daysRemaining=daysTotal-daysElapsed;
   var pctComplete=Math.round((daysElapsed/daysTotal)*100);
 
+  // ── FIX: divide by ALL days elapsed (targets.totalDays), not just logged days
+  // This gives an honest average that includes silent/zero days
   var currentRate=actuals.defCum>0&&targets.totalDays>0?(actuals.defCum/targets.totalDays):0;
   var projectedTotalDef=Math.round(actuals.defCum+(currentRate*daysRemaining));
 
   var weekRows=[];
-  for(var wk=1;wk<=Math.min(currentWeek,PROTOCOL_TOTAL_WEEKS);wk++){
-    var pwk=PROTOCOL_WEEKS[wk-1];
-    var daysInWk=(wk===PROTOCOL_TOTAL_WEEKS&&wk===9)?3:7;
-    var wkDates=Array.from({length:daysInWk},function(_,i){return addDays(protoStart,(wk-1)*7+i);});
+  for(var wk=1;wk<=Math.min(currentWeek,16);wk++){
+    var wkDates=protoWeekDates(protoStart,wk);
     var wkEat=wkDates.reduce(function(a,dt){return a+((days[dt]&&days[dt].calIn)||0);},0);
     var wkBurn=wkDates.reduce(function(a,dt){return a+((days[dt]&&days[dt].calBurn)||0);},0);
     var wkDef=wkBurn-wkEat;
     var wkSteps=wkDates.reduce(function(a,dt){return a+((days[dt]&&days[dt].stepsNum)||0);},0);
     var wkWorkouts=wkDates.filter(function(dt){return days[dt]&&days[dt].workoutType&&days[dt].workoutType!=="Rest";}).length;
+    var pwk=PROTOCOL_WEEKS[wk-1];
     var isCurrentWk=wk===currentWeek;
-    var daysCounted=isCurrentWk?targets.dayOfWeek:daysInWk;
-    var pDefTarget=Math.round(pwk.defWk/daysInWk*daysCounted);
-    var pEatTarget=Math.round(pwk.eatWk/daysInWk*daysCounted);
-    var pStepsTarget=pwk.stepsDay*daysCounted;
-    var pWorkoutsTarget=Math.round(pwk.workouts/daysInWk*daysCounted);
+    var daysInWk=isCurrentWk?targets.dayOfWeek:7;
+    var pDefTarget=Math.round(pwk.defWk/7*daysInWk);
+    var pEatTarget=Math.round(pwk.eatWk/7*daysInWk);
+    var pStepsTarget=pwk.stepsDay*daysInWk;
+    var pWorkoutsTarget=Math.round(pwk.workouts/7*daysInWk);
     weekRows.push({wk:wk,phase:pwk.phase,defTarget:pDefTarget,defActual:wkDef,eatTarget:pEatTarget,eatActual:wkEat,stepsTarget:pStepsTarget,stepsActual:wkSteps,workoutsTarget:pWorkoutsTarget,workoutsActual:wkWorkouts,isCurrent:isCurrentWk});
   }
 
@@ -646,7 +620,7 @@ function ProtocolTab(props){
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:10}}>
           <div>
             <div style={{fontSize:11,color:phaseCol.text,fontWeight:600,letterSpacing:1,textTransform:"uppercase",marginBottom:4}}>{currentWeekData.phase}</div>
-            <div style={{fontSize:22,fontWeight:700,color:"#e8e8e8"}}>Week {currentWeek} <span style={{fontSize:13,color:"#666",fontWeight:400}}>/ {PROTOCOL_TOTAL_WEEKS}</span></div>
+            <div style={{fontSize:22,fontWeight:700,color:"#e8e8e8"}}>Week {currentWeek} <span style={{fontSize:13,color:"#666",fontWeight:400}}>/ 16</span></div>
             <div style={{fontSize:12,color:"#555",marginTop:2}}>Day {targets.dayOfWeek} of week · Day {daysElapsed} total</div>
           </div>
           <div style={{textAlign:"right"}}>
@@ -686,7 +660,7 @@ function ProtocolTab(props){
           </div>
 
           <div style={{background:S.card,border:"1px solid "+S.border,borderRadius:10,padding:"14px 16px",marginBottom:14}}>
-            <div style={{fontSize:12,color:S.muted,fontWeight:600,letterSpacing:1,textTransform:"uppercase",marginBottom:12}}>{PROTOCOL_TOTAL_WEEKS}-Week Projection</div>
+            <div style={{fontSize:12,color:S.muted,fontWeight:600,letterSpacing:1,textTransform:"uppercase",marginBottom:12}}>16-Week Projection</div>
             <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10}}>
               {[
                 ["Protocol Target",totalProtoDef.toLocaleString()+" kcal","#4a9eff"],
@@ -702,34 +676,33 @@ function ProtocolTab(props){
             </div>
             {projectedTotalDef<totalProtoDef&&(
               <div style={{marginTop:10,padding:"8px 12px",background:"#3a0a0a",border:"1px solid #f8717144",borderRadius:8,fontSize:12,color:"#fca5a5",lineHeight:1.5}}>
-                At your current rate you will finish {(totalProtoDef-projectedTotalDef).toLocaleString()} kcal short of the {PROTOCOL_TOTAL_WEEKS}-week target — roughly {Math.round((totalProtoDef-projectedTotalDef)/3500*10)/10} lbs of fat left on the table.
+                At your current rate you will finish {(totalProtoDef-projectedTotalDef).toLocaleString()} kcal short of the 16-week target — roughly {Math.round((totalProtoDef-projectedTotalDef)/3500*10)/10} lbs of fat left on the table.
               </div>
             )}
             {projectedTotalDef>=totalProtoDef&&(
               <div style={{marginTop:10,padding:"8px 12px",background:"#042C53",border:"1px solid #34d39944",borderRadius:8,fontSize:12,color:"#86efac",lineHeight:1.5}}>
-                On pace to hit or exceed the {PROTOCOL_TOTAL_WEEKS}-week deficit target. Keep the rate consistent.
+                On pace to hit or exceed the 16-week deficit target. Keep the rate consistent.
               </div>
             )}
           </div>
 
           <div style={{background:S.card,border:"1px solid "+S.border,borderRadius:10,overflow:"hidden"}}>
-            <div style={{padding:"10px 14px",fontSize:12,fontWeight:600,color:S.muted,textTransform:"uppercase",letterSpacing:1,borderBottom:"1px solid "+S.border}}>{PROTOCOL_TOTAL_WEEKS}-Week Schedule</div>
+            <div style={{padding:"10px 14px",fontSize:12,fontWeight:600,color:S.muted,textTransform:"uppercase",letterSpacing:1,borderBottom:"1px solid "+S.border}}>16-Week Schedule</div>
             {PROTOCOL_WEEKS.map(function(w){
               var isCur=w.wk===currentWeek;
               var isPast=w.wk<currentWeek;
               var pc2=PHASE_COL[w.phase]||{bg:"#111",border:"#333",text:"#888"};
-              var isFinalPartial=w.wk===PROTOCOL_TOTAL_WEEKS&&w.wk===9;
               return(
                 <div key={w.wk} style={{padding:"10px 14px",borderBottom:"1px solid "+S.dim,background:isCur?(pc2.bg+"cc"):"transparent",borderLeft:isCur?"3px solid "+pc2.border:"3px solid transparent",opacity:isPast?0.5:1}}>
                   <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:3}}>
                     <div style={{display:"flex",alignItems:"center",gap:8}}>
-                      <span style={{fontSize:13,fontWeight:isCur?700:400,color:isCur?pc2.text:S.text}}>Wk {w.wk}{isFinalPartial?" (3d)":""}</span>
+                      <span style={{fontSize:13,fontWeight:isCur?700:400,color:isCur?pc2.text:S.text}}>Wk {w.wk}</span>
                       <span style={{fontSize:10,color:pc2.text,background:pc2.bg,border:"1px solid "+pc2.border,borderRadius:10,padding:"1px 7px"}}>{w.phase}</span>
                       {isCur&&<span style={{fontSize:10,color:"#34d399",fontWeight:600}}>← NOW</span>}
                     </div>
                     <span style={{fontSize:11,color:S.muted}}>{w.defWk.toLocaleString()} kcal deficit</span>
                   </div>
-                  <div style={{fontSize:11,color:"#444"}}>{w.calDay.toLocaleString()} kcal/day · {w.stepsDay.toLocaleString()} steps · {w.workouts}x workouts</div>
+                  <div style={{fontSize:11,color:"#444"}}>{w.calDay.toLocaleString()} kcal/day · {w.stepsDay.toLocaleString()} steps · {w.workouts}x workouts{w.refeeds>0?" · "+w.refeeds+" refeeds":""}</div>
                 </div>
               );
             })}
@@ -766,7 +739,7 @@ function ProtocolTab(props){
                   <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8}}>
                     <div style={{display:"flex",alignItems:"center",gap:6}}>
                       <span style={{fontSize:13,fontWeight:600,color:row.isCurrent?pc2.text:S.text}}>Wk {row.wk}</span>
-                      <span style={{fontSize:10,color:pc2.text,background:pc2.bg,border:"1px solid "+pc2.border,borderRadius:10,padding:"1px 7px"}}>{row.phase.split(" — ")[0]}</span>
+                      <span style={{fontSize:10,color:pc2.text,background:pc2.bg,border:"1px solid "+pc2.border,borderRadius:10,padding:"1px 7px"}}>{row.phase.replace(" — Cut","").replace("Phase ","P")}</span>
                       {row.isCurrent&&<span style={{fontSize:10,color:"#34d399",fontWeight:600}}>← current</span>}
                     </div>
                     <span style={{fontSize:12,fontWeight:700,color:defColor}}>{defPct}%</span>
@@ -860,7 +833,7 @@ function AICoach(props){
     setMessages(newMsgs);
     setLoading(true);
     var context=buildAIContext(days);
-    var systemPrompt="You are the OperAxis AI — an Analyst, Strategist, and System Thinker built for identity tracking and performance optimisation. You have full access to the user's real-time data and protocols. Your function is to track who this man is becoming based on the consistency patterns in his data, assess whether his daily behaviour aligns with his target identity, and identify exactly where the system is leaking.\n\n"+context+"\n\n=== YOUR STYLE ===\nYou are direct, strategic, and brutally honest. You do not motivate, fluff, sugarcoat, or speak emotionally. You are a cold, data-driven intelligence — you read patterns, find leverage, and deliver conclusions. You never speak in generalities.\n\n=== HOW YOU THINK ===\nEvery response starts from the data. You identify the user's current strengths (domains with strong consistency), his current weaknesses (domains that are dragging his identity score down), and the single highest-leverage action that would compound the most. You track identity formation — if a habit has been hit consistently, you acknowledge it as becoming part of who he is. If it is missing, you name it clearly.\n\nPay attention to the ENVIRONMENT TRIGGERS data (alcohol and weed days). These are leading indicators of system collapse — when a man is leaning on substances socially, his cut is at risk. Cross-reference trigger counts with weekly deficit performance to identify whether his environment is the actual leak. If a clear correlation exists between trigger days and missed targets, name it directly.\n\nWhen analysing nutrition and body composition, use the full historical log. Look at average deficit, consistency of deficit days vs surplus days, weight trend trajectory, and whether the calorie data matches the weight trend. Call out discrepancies. Identify whether the current trajectory will hit his target by the protocol end date based on the rate of change in the data.\n\n=== ON MISSING HABITS ===\nWhen a habit is being neglected, you do not lecture or moralize. Instead, you state the gap and explain specifically how locking that habit in makes him more physically attractive, more disciplined, and more powerful in the way he carries himself. Not generic health benefits — the actual signal it sends and the identity it builds. Keep it sharp and concrete.\n\n=== OUTPUT FORMAT ===\nShort, high-leverage paragraphs. Use bullet points only when listing multiple data points or action items. Maximum 3-4 paragraphs unless the user asks for more detail. No preamble. Start with the data.";
+    var systemPrompt="You are the OperAxis AI — an Analyst, Strategist, and System Thinker built for identity tracking and performance optimisation. You have full access to the user's real-time data and protocols. Your function is to track who this man is becoming based on the consistency patterns in his data, assess whether his daily behaviour aligns with his target identity, and identify exactly where the system is leaking.\n\n"+context+"\n\n=== YOUR STYLE ===\nYou are direct, strategic, and brutally honest. You do not motivate, fluff, sugarcoat, or speak emotionally. You are a cold, data-driven intelligence — you read patterns, find leverage, and deliver conclusions. You never speak in generalities.\n\n=== HOW YOU THINK ===\nEvery response starts from the data. You identify the user's current strengths (domains with strong consistency), his current weaknesses (domains that are dragging his identity score down), and the single highest-leverage action that would compound the most. You track identity formation — if a habit has been hit consistently, you acknowledge it as becoming part of who he is. If it is missing, you name it clearly.\n\nWhen analysing nutrition and body composition, use the full historical log. Look at average deficit, consistency of deficit days vs surplus days, weight trend trajectory, and whether the calorie data matches the weight trend. Call out discrepancies. Identify whether the current trajectory will hit the 190lb target by July 2026 based on the rate of change in the data.\n\n=== ON MISSING HABITS ===\nWhen a habit is being neglected, you do not lecture or moralize. Instead, you state the gap and explain specifically how locking that habit in makes him more physically attractive, more disciplined, and more powerful in the way he carries himself. Not generic health benefits — the actual signal it sends and the identity it builds. Keep it sharp and concrete.\n\n=== OUTPUT FORMAT ===\nShort, high-leverage paragraphs. Use bullet points only when listing multiple data points or action items. Maximum 3-4 paragraphs unless the user asks for more detail. No preamble. Start with the data.";
     var apiMessages=newMsgs.map(function(m){return{role:m.role,content:m.content};});
     fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json","x-api-key":apiKey,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1000,system:systemPrompt,messages:apiMessages})})
     .then(function(r){if(!r.ok){return r.json().then(function(e){throw new Error(e.error&&e.error.message||"API error "+r.status);});}return r.json();})
@@ -887,481 +860,240 @@ function AICoach(props){
   );
 }
 
-// ── MAIN APP COMPONENT ────────────────────────────────────────────────────────
 function App(){
   var us=useState(false);var unlocked=us[0],setUnlocked=us[1];
-  var ds=useState(ld);var days=ds[0],setDays=ds[1];
   var ts=useState("daily");var tab=ts[0],setTab=ts[1];
-  var ws=useState(null);var weekStart=ws[0],setWeekStart=ws[1];
-  var bts=useState("days");var bodyTab=bts[0],setBodyTab=bts[1];
-  var bvs=useState("week");var bodyView=bvs[0],setBodyView=bvs[1];
-  var bws=useState(null);var bodyWeekStart=bws[0],setBodyWeekStart=bws[1];
-  var bms=useState(null);var bodyMonthStart=bms[0],setBodyMonthStart=bms[1];
-  var cps=useState(false);var calOpen=cps[0],setCalOpen=cps[1];
-  var pds=useState(null);var protoDetail=pds[0],setProtoDetail=pds[1];
+  var ds=useState(ld);var days=ds[0],setDays=ds[1];
+  var tds=useState(toDay());var today=tds[0];
+  var lds=useState(toDay());var logDate=lds[0],setLogDate=lds[1];
+  var es2=useState({});var exp=es2[0],setExp=es2[1];
+  var cis=useState("");var calIn=cis[0],setCalIn=cis[1];
+  var sts=useState("");var steps=sts[0],setSteps=sts[1];
+  var wts=useState("");var wt=wts[0],setWt=wts[1];
+  var wTs=useState("");var wType=wTs[0],setWType=wTs[1];
+  var wNs=useState("");var wNotes=wNs[0],setWNotes=wNs[1];
+  var drs=useState("weekly");var dRange=drs[0],setDRange=drs[1];
+  var mos=useState(0);var mOff=mos[0],setMOff=mos[1];
+  var wss=useState(null);var weekStartDate=wss[0],setWeekStartDate=wss[1];
+  var wos=useState(0);var wOff=wos[0],setWOff=wos[1];
+  var bmos=useState(0);var bMOff=bmos[0],setBMOff=bmos[1];
+  var aps=useState(null);var activeProt=aps[0],setActiveProt=aps[1];
+  var cps=useState(false);var calPickerOpen=cps[0],setCalPickerOpen=cps[1];
   var pss=useState(ldProtoStart);var protoStart=pss[0],setProtoStart=pss[1];
-  var spcs=useState(false);var startCalOpen=spcs[0],setStartCalOpen=spcs[1];
-  var sts=useState({});var sysToggle=sts[0],setSysToggle=sts[1];
-  var os=useState({});var openDomains=os[0],setOpenDomains=os[1];
-
-  var today=toDay();
-  var todayData=days[today]||{};
-
-  useEffect(function(){if(unlocked&&!weekStart){var d=new Date();var dow=d.getDay();var diff=dow===0?-6:1-dow;d.setDate(d.getDate()+diff);setWeekStart(fmtDate(d));}},[unlocked]);
-  useEffect(function(){if(unlocked&&!bodyWeekStart){var d=new Date();var dow=d.getDay();var diff=dow===0?-6:1-dow;d.setDate(d.getDate()+diff);setBodyWeekStart(fmtDate(d));}if(unlocked&&!bodyMonthStart){var d=new Date();setBodyMonthStart(d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-01");}},[unlocked]);
+  var pcp=useState(false);var protoCalOpen=pcp[0],setProtoCalOpen=pcp[1];
 
   if(!unlocked)return <LockScreen onUnlock={function(){setUnlocked(true);}}/>;
 
+  var upd=function(nd){setDays(nd);sv(nd);};
+  var toggle=function(domId,idx){var d=days[logDate]||{checks:{}};var checks=Object.assign({},d.checks);var domain=DOMAINS.find(function(x){return x.id===domId;});var arr=(checks[domId]||domain.habits.map(function(){return false;})).slice();arr[idx]=!arr[idx];checks[domId]=arr;upd(Object.assign({},days,{[logDate]:Object.assign({},d,{checks:checks})}));};
+  var toggleModed=function(domId,mode,idx){var d=days[logDate]||{checks:{},modes:{}};var checks=Object.assign({},d.checks);var domainChecks=Object.assign({},checks[domId]||{});var modeChecks=(domainChecks[mode]||[]).slice();modeChecks[idx]=!modeChecks[idx];domainChecks[mode]=modeChecks;checks[domId]=domainChecks;upd(Object.assign({},days,{[logDate]:Object.assign({},d,{checks:checks})}));};
+  var changeMode=function(domId,newMode){var d=days[logDate]||{checks:{},modes:{}};var modes=Object.assign({},d.modes||{});modes[domId]=newMode;upd(Object.assign({},days,{[logDate]:Object.assign({},d,{modes:modes})}));};
+  var saveDay=function(){var d=days[logDate]||{checks:{}};upd(Object.assign({},days,{[logDate]:Object.assign({},d,{calIn:Number(calIn)||0,calBurn:calcBurn(wType,steps),stepsNum:Number(steps)||0,weight:Number(wt)||0,workoutType:wType,workoutNotes:wNotes})}));alert("Saved!");};
+
+  var L7=function(){return Array.from({length:7},function(_,i){var d=new Date();d.setDate(d.getDate()-(6-i));return fmtDate(d);});};
+  var L30=function(){return Array.from({length:30},function(_,i){var d=new Date();d.setDate(d.getDate()-(29-i));return fmtDate(d);});};
+
+  var getBodyWeekStart=function(){if(weekStartDate)return weekStartDate;var d=new Date();d.setDate(d.getDate()+(wOff*7)-6);return fmtDate(d);};
+  var bodyWeekStart=getBodyWeekStart();
+  var bodyWeek=get7Days(bodyWeekStart);
+  var bodyWeekNavBack=function(){var newStart=addDays(bodyWeekStart,-7);setWeekStartDate(newStart);setWOff(0);};
+  var bodyWeekNavFwd=function(){var newStart=addDays(bodyWeekStart,7);if(newStart<=today){setWeekStartDate(newStart);setWOff(0);}};
+  var bodyWeekAtMax=addDays(bodyWeekStart,6)>=today;
+  var bodyWeekLabel=function(){if(isTodayWeek(bodyWeekStart))return "This Week";return rangeLabelFrom(bodyWeekStart);};
+
+  var mDays=function(off){if(off===undefined)off=0;var n=new Date();n.setDate(1);n.setMonth(n.getMonth()+off);var y=n.getFullYear(),m=n.getMonth();return Array.from({length:new Date(y,m+1,0).getDate()},function(_,i){return y+"-"+String(m+1).padStart(2,"0")+"-"+String(i+1).padStart(2,"0");});};
+  var mLabel=function(off){if(off===undefined)off=0;var n=new Date();n.setDate(1);n.setMonth(n.getMonth()+off);return n.toLocaleString("default",{month:"long",year:"numeric"});};
+
+  var streak=function(){var s=0,d=new Date();while(true){var k=fmtDate(d);if(dayPct(days[k])>0){s++;d.setDate(d.getDate()-1);}else break;}return s;};
+  var avg7=function(d){return Math.round(L7().reduce(function(a,dt){return a+domainPct(days[dt],d);},0)/7);};
+
+  var exportD=function(){var b=new Blob([JSON.stringify(days,null,2)],{type:"application/json"});var u=URL.createObjectURL(b);var a=document.createElement("a");a.href=u;a.download="operaxis_"+today+".json";a.click();URL.revokeObjectURL(u);};
+  var importD=function(e){var f=e.target.files[0];if(!f)return;var r=new FileReader();r.onload=function(ev){try{var p=JSON.parse(ev.target.result);if(typeof p==="object"&&p!==null){upd(p);alert("Imported!");}else alert("Invalid.");}catch(err){alert("Error.");}};r.readAsText(f);e.target.value="";};
+
   var S={bg:"#000",card:"#0a0a0a",border:"#1a1a1a",text:"#e8e8e8",muted:"#555",accent:"#4a9eff",dim:"#111"};
+  var C=function(ex){return Object.assign({background:S.card,border:"1px solid "+S.border,borderRadius:10},ex||{});};
 
-  var updateDay=function(date,patch){
-    setDays(function(prev){
-      var next=Object.assign({},prev);
-      next[date]=Object.assign({},next[date]||{},patch);
-      sv(next);
-      return next;
-    });
-  };
-
-  var toggleHabit=function(domainId,modeOrIdx,maybeIdx){
-    var dd=days[today]||{};
-    var checks=Object.assign({},dd.checks||{});
-    if(typeof modeOrIdx==="string"){
-      var dCheckMode=Object.assign({},checks[domainId]||{});
-      var arr=(dCheckMode[modeOrIdx]||[]).slice();
-      arr[maybeIdx]=!arr[maybeIdx];
-      dCheckMode[modeOrIdx]=arr;
-      checks[domainId]=dCheckMode;
-    } else {
-      var arr2=(checks[domainId]||[]).slice();
-      arr2[modeOrIdx]=!arr2[modeOrIdx];
-      checks[domainId]=arr2;
-    }
-    updateDay(today,{checks:checks});
-  };
-
-  var setMode=function(domainId,mode){
-    var dd=days[today]||{};
-    var modes=Object.assign({},dd.modes||{});
-    modes[domainId]=mode;
-    updateDay(today,{modes:modes});
-  };
-
-  // ENV TOGGLE — pure tracking, no score impact
-  var toggleEnv=function(key){
-    var dd=days[today]||{};
-    var env=Object.assign({},dd.env||{});
-    env[key]=!env[key];
-    updateDay(today,{env:env});
-  };
-
-  var updateField=function(field,value){updateDay(today,Object.assign({},{},(function(){var o={};o[field]=value;return o;})()));};
-  var setCalIn=function(v){var n=parseInt(v)||0;updateField("calIn",n);};
-  var setSteps=function(v){var n=parseInt(v)||0;updateDay(today,{stepsNum:n,calBurn:calcBurn(todayData.workoutType||"Rest",n)});};
-  var setWeight=function(v){updateField("weight",parseFloat(v)||0);};
-  var setWorkout=function(v){updateDay(today,{workoutType:v,calBurn:calcBurn(v,todayData.stepsNum||0)});};
-
-  var prevWeek=function(){setWeekStart(addDays(weekStart,-7));};
-  var nextWeek=function(){setWeekStart(addDays(weekStart,7));};
-  var prevBodyWeek=function(){setBodyWeekStart(addDays(bodyWeekStart,-7));};
-  var nextBodyWeek=function(){setBodyWeekStart(addDays(bodyWeekStart,7));};
-  var prevBodyMonth=function(){var d=new Date(bodyMonthStart+"T12:00:00");d.setMonth(d.getMonth()-1);setBodyMonthStart(d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-01");};
-  var nextBodyMonth=function(){var d=new Date(bodyMonthStart+"T12:00:00");d.setMonth(d.getMonth()+1);setBodyMonthStart(d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-01");};
-
-  // ── DAILY TAB ───────────────────────────────────────────────────────────────
-  var renderDaily=function(){
-    var todayPct=dayPct(todayData);
-    var todayEnv=todayData.env||{};
-    return(
-      <div>
-        <div style={{background:S.card,border:"1px solid "+S.border,borderRadius:10,padding:"12px 14px",marginBottom:12,display:"flex",alignItems:"center",justifyContent:"space-between"}}>
-          <div>
-            <div style={{fontSize:11,color:S.muted,letterSpacing:1,textTransform:"uppercase"}}>{today}</div>
-            <div style={{fontSize:22,fontWeight:700,color:S.text,marginTop:2}}>Today</div>
-          </div>
-          <div style={{textAlign:"right"}}>
-            <div style={{fontSize:26,fontWeight:700,color:pc(todayPct)}}>{todayPct}%</div>
-            <div style={{fontSize:10,color:S.muted}}>overall</div>
-          </div>
-        </div>
-
-        <div style={{background:S.card,border:"1px solid "+S.border,borderRadius:10,padding:"12px 14px",marginBottom:12}}>
-          <div style={{fontSize:11,color:S.muted,fontWeight:600,letterSpacing:1,textTransform:"uppercase",marginBottom:10}}>Nutrition & Body</div>
-          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginBottom:10}}>
-            <div>
-              <div style={{fontSize:10,color:S.muted,marginBottom:3}}>Calories in</div>
-              <input type="number" inputMode="numeric" value={todayData.calIn||""} onChange={function(e){setCalIn(e.target.value);}} placeholder="0" style={{width:"100%",background:S.bg,border:"1px solid "+S.border,borderRadius:6,padding:"7px 9px",color:S.text,fontSize:14}}/>
-            </div>
-            <div>
-              <div style={{fontSize:10,color:S.muted,marginBottom:3}}>Steps</div>
-              <input type="number" inputMode="numeric" value={todayData.stepsNum||""} onChange={function(e){setSteps(e.target.value);}} placeholder="0" style={{width:"100%",background:S.bg,border:"1px solid "+S.border,borderRadius:6,padding:"7px 9px",color:S.text,fontSize:14}}/>
-            </div>
-            <div>
-              <div style={{fontSize:10,color:S.muted,marginBottom:3}}>Weight (lbs)</div>
-              <input type="number" inputMode="decimal" step="0.1" value={todayData.weight||""} onChange={function(e){setWeight(e.target.value);}} placeholder="0" style={{width:"100%",background:S.bg,border:"1px solid "+S.border,borderRadius:6,padding:"7px 9px",color:S.text,fontSize:14}}/>
-            </div>
-            <div>
-              <div style={{fontSize:10,color:S.muted,marginBottom:3}}>Burn (auto)</div>
-              <div style={{padding:"7px 9px",background:S.dim,borderRadius:6,fontSize:14,color:"#34d399",fontWeight:600}}>{todayData.calBurn||0}</div>
-            </div>
-          </div>
-          <div style={{fontSize:10,color:S.muted,marginBottom:5}}>Workout type</div>
-          <div style={{display:"flex",gap:6,flexWrap:"wrap"}}>
-            {WTYPES.map(function(t){var sel=todayData.workoutType===t;return(<button key={t} onClick={function(){setWorkout(t);}} style={{background:sel?S.accent:S.dim,border:"1px solid "+(sel?S.accent:S.border),borderRadius:6,padding:"6px 12px",color:sel?"#000":S.text,fontSize:12,fontWeight:sel?700:400,cursor:"pointer"}}>{t}</button>);})}
-          </div>
-        </div>
-
-        {DOMAINS.map(function(d){
-          var isOpen=openDomains[d.id]||false;
-          var headerToggle=function(){setOpenDomains(function(prev){var n=Object.assign({},prev);n[d.id]=!n[d.id];return n;});};
-          var cardStyle={background:S.card,border:"1px solid "+S.border,borderRadius:10};
-          if(d.moded){
-            return(
-              <ModedDomainCard key={d.id} domain={d} dayData={todayData} onCheckToggle={toggleHabit} onModeChange={setMode} S={S} isOpen={isOpen} onHeaderToggle={headerToggle} cardStyle={cardStyle}/>
-            );
-          }
-          var pct=domainPct(todayData,d);
-          var checks=(todayData.checks&&todayData.checks[d.id])||[];
-          var totalW=d.habits.reduce(function(a,h){return a+h.w;},0);
-          return(
-            <div key={d.id} style={Object.assign({},cardStyle,{marginBottom:10,overflow:"hidden"})}>
-              <div onClick={headerToggle} style={{display:"flex",alignItems:"center",padding:"12px 14px",cursor:"pointer",gap:8}}>
-                <span style={{flex:1,fontWeight:500,fontSize:15}}>{d.label}</span>
-                <span style={{fontSize:13,fontWeight:600,color:pc(pct),marginLeft:4}}>{pct}%</span>
-                <span style={{color:S.muted,fontSize:11,marginLeft:4}}>{isOpen?"▲":"▼"}</span>
-              </div>
-              <div style={{height:2,background:S.border}}><div style={{height:"100%",width:pct+"%",background:pc(pct),transition:"width 0.3s"}}/></div>
-              {isOpen&&(
-                <div style={{borderTop:"1px solid "+S.border,padding:"8px 14px"}}>
-                  {d.habits.map(function(h,i){
-                    var checked=checks[i]||false;
-                    var hp=totalW>0?Math.round((h.w/totalW)*100):0;
-                    return(
-                      <div key={i} onClick={function(){toggleHabit(d.id,i);}} style={{display:"flex",alignItems:"center",gap:10,padding:"8px 0",cursor:"pointer",borderBottom:i<d.habits.length-1?"1px solid "+S.dim:"none"}}>
-                        <div style={{width:18,height:18,border:"1.5px solid "+(checked?S.accent:S.muted),borderRadius:4,background:checked?S.accent:"transparent",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
-                          {checked&&<span style={{color:"#000",fontSize:11,fontWeight:700}}>{"✓"}</span>}
-                        </div>
-                        <span style={{flex:1,fontSize:14,color:checked?S.muted:S.text,textDecoration:checked?"line-through":"none"}}>{h.label}</span>
-                        <span style={{fontSize:11,color:checked?S.accent:S.muted,minWidth:32,textAlign:"right"}}>{hp}%</span>
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
-            </div>
-          );
-        })}
-
-        {/* ── ENVIRONMENT TRIGGER CARD — last, after Seduction ────────────── */}
-        <div style={{background:S.card,border:"1px solid "+S.border,borderRadius:10,padding:"12px 14px",marginBottom:12}}>
-          <div style={{display:"flex",alignItems:"baseline",justifyContent:"space-between",marginBottom:10}}>
-            <div style={{fontSize:11,color:S.muted,fontWeight:600,letterSpacing:1,textTransform:"uppercase"}}>Environment Log</div>
-            <div style={{fontSize:10,color:"#444",fontStyle:"italic"}}>tracking only · no score impact</div>
-          </div>
-          <div style={{display:"flex",gap:10}}>
-            {[
-              {key:"alcohol",label:"Alcohol",emoji:"🍺",color:"#f59e0b"},
-              {key:"weed",label:"Weed",emoji:"🌿",color:"#34d399"},
-            ].map(function(item){
-              var active=todayEnv[item.key]||false;
-              return(
-                <div key={item.key} onClick={function(){toggleEnv(item.key);}}
-                  style={{flex:1,padding:"12px 10px",borderRadius:10,border:"1.5px solid "+(active?item.color:"#1a1a1a"),background:active?item.color+"22":S.dim,cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center",gap:8,WebkitTapHighlightColor:"transparent",transition:"all 0.15s"}}>
-                  <span style={{fontSize:18,filter:active?"none":"grayscale(1) opacity(0.5)"}}>{item.emoji}</span>
-                  <span style={{fontSize:14,fontWeight:active?700:500,color:active?item.color:S.muted}}>{item.label}</span>
-                </div>
-              );
-            })}
-          </div>
-          {envCount(todayData)>0&&(
-            <div style={{marginTop:10,fontSize:11,color:"#888",textAlign:"center"}}>
-              {envCount(todayData)===2?"Both triggers active today ⚠️⚠️":"Trigger flagged ⚠️"}
-            </div>
-          )}
-        </div>
-      </div>
-    );
-  };
-
-  // ── DASHBOARD TAB ───────────────────────────────────────────────────────────
-  var renderDashboard=function(){
-    var L7=Array.from({length:7},function(_,i){var d=new Date();d.setDate(d.getDate()-(6-i));return fmtDate(d);});
-    var weekAvg=Math.round(L7.reduce(function(a,dt){return a+dayPct(days[dt]||{});},0)/7);
-    var str=0;var d2=new Date();while(true){var k=fmtDate(d2);if(dayPct(days[k]||{})>0){str++;d2.setDate(d2.getDate()-1);}else break;}
-    return(
-      <div>
-        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginBottom:14}}>
-          <div style={{background:S.card,border:"1px solid "+S.border,borderRadius:10,padding:"12px 14px"}}>
-            <div style={{fontSize:11,color:S.muted,fontWeight:600,letterSpacing:1,textTransform:"uppercase"}}>7-day avg</div>
-            <div style={{fontSize:28,fontWeight:700,color:pc(weekAvg),marginTop:4}}>{weekAvg}%</div>
-          </div>
-          <div style={{background:S.card,border:"1px solid "+S.border,borderRadius:10,padding:"12px 14px"}}>
-            <div style={{fontSize:11,color:S.muted,fontWeight:600,letterSpacing:1,textTransform:"uppercase"}}>Streak</div>
-            <div style={{fontSize:28,fontWeight:700,color:"#f59e0b",marginTop:4}}>{str}<span style={{fontSize:13,color:S.muted,marginLeft:4,fontWeight:400}}>days</span></div>
-          </div>
-        </div>
-
-        <div style={{background:S.card,border:"1px solid "+S.border,borderRadius:10,overflow:"hidden",marginBottom:14}}>
-          <div style={{padding:"10px 14px",fontSize:12,fontWeight:600,color:S.muted,textTransform:"uppercase",letterSpacing:1,borderBottom:"1px solid "+S.border}}>Last 7 Days</div>
-          <table style={{width:"100%",borderCollapse:"collapse",fontSize:12}}>
-            <thead><tr style={{borderBottom:"1px solid "+S.border,background:S.dim}}>
-              <th style={{padding:"7px 10px",textAlign:"left",color:"#777",fontWeight:500}}>Date</th>
-              <th style={{padding:"7px 10px",textAlign:"right",color:"#777",fontWeight:500}}>Score</th>
-              <th style={{padding:"7px 10px",textAlign:"right",color:"#777",fontWeight:500}}>Eat</th>
-              <th style={{padding:"7px 10px",textAlign:"right",color:"#777",fontWeight:500}}>Burn</th>
-              <th style={{padding:"7px 10px",textAlign:"right",color:"#777",fontWeight:500}}>Wt</th>
-            </tr></thead>
-            <tbody>
-              {L7.map(function(dt){
-                var dd=days[dt]||{};
-                var p=dayPct(dd);
-                var warn=envWarn(dd);
-                return(
-                  <tr key={dt} style={{borderBottom:"1px solid "+S.dim}}>
-                    <td style={{padding:"7px 10px",color:S.text}}>
-                      {dt.slice(5)}{warn&&<span style={{marginLeft:6,fontSize:11}}>{warn}</span>}
-                    </td>
-                    <td style={{padding:"7px 10px",textAlign:"right",color:pc(p),fontWeight:600}}>{p}%</td>
-                    <td style={{padding:"7px 10px",textAlign:"right",color:dd.calIn?S.text:"#333"}}>{dd.calIn||"—"}</td>
-                    <td style={{padding:"7px 10px",textAlign:"right",color:dd.calBurn?"#34d399":"#333"}}>{dd.calBurn||"—"}</td>
-                    <td style={{padding:"7px 10px",textAlign:"right",color:dd.weight?"#a78bfa":"#333"}}>{dd.weight||"—"}</td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
-
-        <Flywheel onSelect={function(key){setProtoDetail(key);setTab("protocols");}}/>
-      </div>
-    );
-  };
-
-  // ── PROTOCOLS TAB ───────────────────────────────────────────────────────────
-  var renderProtocols=function(){
-    if(protoDetail)return <ProtocolDetail id={protoDetail} onBack={function(){setProtoDetail(null);}}/>;
-    return(
-      <div>
-        <div style={{fontSize:11,color:S.muted,fontWeight:600,letterSpacing:1,textTransform:"uppercase",marginBottom:10}}>Protocol Library</div>
-        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10}}>
-          {PROTOCOLS.map(function(p){return(
-            <div key={p.id} onClick={function(){setProtoDetail(p.id);}} style={{background:p.color,border:"1px solid "+p.border,borderRadius:10,padding:"14px 12px",cursor:"pointer",WebkitTapHighlightColor:"transparent"}}>
-              <div style={{fontSize:14,fontWeight:600,color:"#fff"}}>{p.label}</div>
-            </div>
-          );})}
-        </div>
-      </div>
-    );
-  };
-
-  // ── BODY TAB ────────────────────────────────────────────────────────────────
-  var renderBody=function(){
-    if(bodyView==="week"){
-      if(!bodyWeekStart)return null;
-      var weekDates=get7Days(bodyWeekStart);
-      var weekData=weekDates.map(function(dt){return Object.assign({date:dt},days[dt]||{});});
-      var totEat=weekData.reduce(function(a,d){return a+(d.calIn||0);},0);
-      var totBurn=weekData.reduce(function(a,d){return a+(d.calBurn||0);},0);
-      var totSteps=weekData.reduce(function(a,d){return a+(d.stepsNum||0);},0);
-      var workoutCount=weekData.filter(function(d){return d.workoutType&&d.workoutType!=="Rest";}).length;
-      var wts=weekData.filter(function(d){return d.weight;});
-      var wtChange=wts.length>=2?(wts[wts.length-1].weight-wts[0].weight).toFixed(1):null;
-      return(
-        <div>
-          <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:14,gap:8}}>
-            <button onClick={prevBodyWeek} style={{background:S.card,border:"1px solid "+S.border,borderRadius:8,padding:"8px 14px",color:S.text,fontSize:14,cursor:"pointer"}}>{"‹"}</button>
-            <div style={{flex:1,textAlign:"center"}}>
-              <div style={{fontSize:13,color:S.text,fontWeight:600}}>{rangeLabelFrom(bodyWeekStart)}</div>
-              <div style={{fontSize:10,color:S.muted,marginTop:2}}>{isTodayWeek(bodyWeekStart)?"Current week":"Past week"}</div>
-            </div>
-            <button onClick={nextBodyWeek} style={{background:S.card,border:"1px solid "+S.border,borderRadius:8,padding:"8px 14px",color:S.text,fontSize:14,cursor:"pointer"}}>{"›"}</button>
-          </div>
-          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginBottom:14}}>
-            <div style={{background:S.card,border:"1px solid "+S.border,borderRadius:10,padding:"10px 12px"}}><div style={{fontSize:10,color:S.muted}}>Calories in</div><div style={{fontSize:18,fontWeight:700,color:"#4a9eff"}}>{totEat.toLocaleString()}</div></div>
-            <div style={{background:S.card,border:"1px solid "+S.border,borderRadius:10,padding:"10px 12px"}}><div style={{fontSize:10,color:S.muted}}>Calories burned</div><div style={{fontSize:18,fontWeight:700,color:"#34d399"}}>{totBurn.toLocaleString()}</div></div>
-            <div style={{background:S.card,border:"1px solid "+S.border,borderRadius:10,padding:"10px 12px"}}><div style={{fontSize:10,color:S.muted}}>Net</div><div style={{fontSize:18,fontWeight:700,color:totBurn-totEat>=0?"#34d399":"#f87171"}}>{totBurn-totEat>=0?"+":""}{(totBurn-totEat).toLocaleString()}</div></div>
-            <div style={{background:S.card,border:"1px solid "+S.border,borderRadius:10,padding:"10px 12px"}}><div style={{fontSize:10,color:S.muted}}>Wt change</div><div style={{fontSize:18,fontWeight:700,color:wtChange?(wtChange<0?"#34d399":"#f87171"):"#555"}}>{wtChange?wtChange+" lbs":"—"}</div></div>
-          </div>
-          <div style={{background:S.card,border:"1px solid "+S.border,borderRadius:10,padding:"10px 12px",marginBottom:14,height:200}}>
-            <div style={{fontSize:11,color:S.muted,marginBottom:6,fontWeight:600,letterSpacing:1,textTransform:"uppercase"}}>Calories</div>
-            <div style={{height:170}}><CalChart data={weekData}/></div>
-          </div>
-          <div style={{background:S.card,border:"1px solid "+S.border,borderRadius:10,padding:"10px 12px",height:200}}>
-            <div style={{fontSize:11,color:S.muted,marginBottom:6,fontWeight:600,letterSpacing:1,textTransform:"uppercase"}}>Weight</div>
-            <div style={{height:170}}><WtChart data={weekData}/></div>
-          </div>
-        </div>
-      );
-    } else {
-      if(!bodyMonthStart)return null;
-      var d=new Date(bodyMonthStart+"T12:00:00");
-      var year=d.getFullYear(),month=d.getMonth();
-      var daysInMonth=new Date(year,month+1,0).getDate();
-      var monthDates=Array.from({length:daysInMonth},function(_,i){return year+"-"+String(month+1).padStart(2,"0")+"-"+String(i+1).padStart(2,"0");});
-      var monthData=monthDates.map(function(dt){return Object.assign({date:dt},days[dt]||{});});
-      var totEat=monthData.reduce(function(a,d){return a+(d.calIn||0);},0);
-      var totBurn=monthData.reduce(function(a,d){return a+(d.calBurn||0);},0);
-      var totSteps=monthData.reduce(function(a,d){return a+(d.stepsNum||0);},0);
-      var workoutCount=monthData.filter(function(d){return d.workoutType&&d.workoutType!=="Rest";}).length;
-      var wts=monthData.filter(function(d){return d.weight;});
-      var wtChange=wts.length>=2?(wts[wts.length-1].weight-wts[0].weight).toFixed(1):null;
-      var MONTH_NAMES=["January","February","March","April","May","June","July","August","September","October","November","December"];
-      return(
-        <div>
-          <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:14,gap:8}}>
-            <button onClick={prevBodyMonth} style={{background:S.card,border:"1px solid "+S.border,borderRadius:8,padding:"8px 14px",color:S.text,fontSize:14,cursor:"pointer"}}>{"‹"}</button>
-            <div style={{flex:1,textAlign:"center"}}>
-              <div style={{fontSize:13,color:S.text,fontWeight:600}}>{MONTH_NAMES[month]+" "+year}</div>
-              <div style={{fontSize:10,color:S.muted,marginTop:2}}>{daysInMonth} days</div>
-            </div>
-            <button onClick={nextBodyMonth} style={{background:S.card,border:"1px solid "+S.border,borderRadius:8,padding:"8px 14px",color:S.text,fontSize:14,cursor:"pointer"}}>{"›"}</button>
-          </div>
-          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginBottom:14}}>
-            <div style={{background:S.card,border:"1px solid "+S.border,borderRadius:10,padding:"10px 12px"}}><div style={{fontSize:10,color:S.muted}}>Calories in</div><div style={{fontSize:18,fontWeight:700,color:"#4a9eff"}}>{totEat.toLocaleString()}</div></div>
-            <div style={{background:S.card,border:"1px solid "+S.border,borderRadius:10,padding:"10px 12px"}}><div style={{fontSize:10,color:S.muted}}>Calories burned</div><div style={{fontSize:18,fontWeight:700,color:"#34d399"}}>{totBurn.toLocaleString()}</div></div>
-            <div style={{background:S.card,border:"1px solid "+S.border,borderRadius:10,padding:"10px 12px"}}><div style={{fontSize:10,color:S.muted}}>Net</div><div style={{fontSize:18,fontWeight:700,color:totBurn-totEat>=0?"#34d399":"#f87171"}}>{totBurn-totEat>=0?"+":""}{(totBurn-totEat).toLocaleString()}</div></div>
-            <div style={{background:S.card,border:"1px solid "+S.border,borderRadius:10,padding:"10px 12px"}}><div style={{fontSize:10,color:S.muted}}>Wt change</div><div style={{fontSize:18,fontWeight:700,color:wtChange?(wtChange<0?"#34d399":"#f87171"):"#555"}}>{wtChange?wtChange+" lbs":"—"}</div></div>
-          </div>
-
-          <div style={{background:S.card,border:"1px solid "+S.border,borderRadius:10,overflow:"hidden"}}>
-            <div style={{padding:"10px 14px",fontSize:12,fontWeight:600,color:S.muted,textTransform:"uppercase",letterSpacing:1,borderBottom:"1px solid "+S.border}}>Day by Day</div>
-            <table style={{width:"100%",borderCollapse:"collapse",fontSize:12}}>
-              <thead><tr style={{borderBottom:"1px solid "+S.border,background:S.dim}}>
-                <th style={{padding:"7px 10px",textAlign:"left",color:"#777",fontWeight:500}}>Date</th>
-                <th style={{padding:"7px 10px",textAlign:"right",color:"#777",fontWeight:500}}>Score</th>
-                <th style={{padding:"7px 10px",textAlign:"right",color:"#777",fontWeight:500}}>Eat</th>
-                <th style={{padding:"7px 10px",textAlign:"right",color:"#777",fontWeight:500}}>Burn</th>
-                <th style={{padding:"7px 10px",textAlign:"right",color:"#777",fontWeight:500}}>Wt</th>
-              </tr></thead>
-              <tbody>
-                {monthData.map(function(dd){
-                  var p=dayPct(dd);
-                  var warn=envWarn(dd);
-                  var isFuture=dd.date>today;
-                  return(
-                    <tr key={dd.date} style={{borderBottom:"1px solid "+S.dim,opacity:isFuture?0.3:1}}>
-                      <td style={{padding:"7px 10px",color:S.text}}>
-                        {dd.date.slice(8)}{warn&&<span style={{marginLeft:6,fontSize:11}}>{warn}</span>}
-                      </td>
-                      <td style={{padding:"7px 10px",textAlign:"right",color:pc(p),fontWeight:600}}>{p?p+"%":"—"}</td>
-                      <td style={{padding:"7px 10px",textAlign:"right",color:dd.calIn?S.text:"#333"}}>{dd.calIn||"—"}</td>
-                      <td style={{padding:"7px 10px",textAlign:"right",color:dd.calBurn?"#34d399":"#333"}}>{dd.calBurn||"—"}</td>
-                      <td style={{padding:"7px 10px",textAlign:"right",color:dd.weight?"#a78bfa":"#333"}}>{dd.weight||"—"}</td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      );
-    }
-  };
-
-  var renderBodyWrapper=function(){
-    return(
-      <div>
-        <div style={{display:"flex",gap:8,marginBottom:14}}>
-          {[["week","7 Days"],["month","This Month"]].map(function(opt){return(
-            <button key={opt[0]} onClick={function(){setBodyView(opt[0]);}} style={{flex:1,padding:"8px 0",borderRadius:8,border:"1px solid "+(bodyView===opt[0]?S.accent:S.border),background:bodyView===opt[0]?"#4a9eff22":"transparent",color:bodyView===opt[0]?S.accent:S.muted,fontSize:13,fontWeight:bodyView===opt[0]?600:400,cursor:"pointer"}}>{opt[1]}</button>
-          );})}
-        </div>
-        {renderBody()}
-      </div>
-    );
-  };
-
-  // ── SETTINGS TAB ────────────────────────────────────────────────────────────
-  var renderSettings=function(){
-    var exportData=function(){
-      var blob=new Blob([JSON.stringify(days,null,2)],{type:"application/json"});
-      var url=URL.createObjectURL(blob);
-      var a=document.createElement("a");a.href=url;a.download="operaxis_"+toDay()+".json";a.click();URL.revokeObjectURL(url);
-    };
-    var importData=function(){
-      var inp=document.createElement("input");inp.type="file";inp.accept=".json";
-      inp.onchange=function(e){
-        var f=e.target.files[0];if(!f)return;
-        var rd=new FileReader();
-        rd.onload=function(ev){try{var parsed=JSON.parse(ev.target.result);if(confirm("Import will merge with existing data. Continue?")){var merged=Object.assign({},days,parsed);setDays(merged);sv(merged);alert("Imported successfully");}}catch(err){alert("Invalid JSON file");}};
-        rd.readAsText(f);
-      };
-      inp.click();
-    };
-    var clearAll=function(){if(confirm("Clear ALL data? This cannot be undone.")){if(confirm("Are you absolutely sure?")){setDays({});sv({});alert("All data cleared");}}};
-    return(
-      <div>
-        <div style={{background:S.card,border:"1px solid "+S.border,borderRadius:10,padding:"14px 16px",marginBottom:14}}>
-          <div style={{fontSize:11,color:S.muted,fontWeight:600,letterSpacing:1,textTransform:"uppercase",marginBottom:10}}>Protocol</div>
-          <div style={{fontSize:13,color:S.muted,marginBottom:8}}>8-Week Cutting Protocol</div>
-          <div style={{display:"flex",alignItems:"center",justifyContent:"space-between"}}>
-            <div>
-              <div style={{fontSize:10,color:"#444",marginBottom:3}}>Start date</div>
-              <div style={{fontSize:14,color:S.text,fontWeight:600}}>{protoStart||"Not set"}</div>
-            </div>
-            <button onClick={function(){setStartCalOpen(true);}} style={{background:S.accent,color:"#000",border:"none",borderRadius:8,padding:"8px 16px",fontSize:13,fontWeight:600,cursor:"pointer"}}>{protoStart?"Change":"Set"}</button>
-          </div>
-          {protoStart&&(
-            <div style={{fontSize:11,color:"#444",marginTop:8,lineHeight:1.5}}>59 days total · 8 full weeks + 3-day partial · floor 1800 kcal</div>
-          )}
-        </div>
-
-        <div style={{background:S.card,border:"1px solid "+S.border,borderRadius:10,padding:"14px 16px",marginBottom:14}}>
-          <div style={{fontSize:11,color:S.muted,fontWeight:600,letterSpacing:1,textTransform:"uppercase",marginBottom:10}}>About</div>
-          <div style={{fontSize:13,color:S.text,marginBottom:4}}>OperAxis System v3</div>
-          <div style={{fontSize:11,color:S.muted}}>Male · 25y · 205lb · 5'10"</div>
-          <div style={{fontSize:11,color:"#444",marginTop:4}}>BMR {BMR} · BASE {BASE} kcal/day</div>
-        </div>
-
-        <div style={{background:S.card,border:"1px solid "+S.border,borderRadius:10,padding:"14px 16px",marginBottom:14}}>
-          <div style={{fontSize:11,color:S.muted,fontWeight:600,letterSpacing:1,textTransform:"uppercase",marginBottom:10}}>Data</div>
-          <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
-            <button onClick={exportData} style={{background:S.dim,border:"1px solid "+S.border,borderRadius:8,padding:"8px 14px",color:S.text,fontSize:12,cursor:"pointer"}}>Export JSON</button>
-            <button onClick={importData} style={{background:S.dim,border:"1px solid "+S.border,borderRadius:8,padding:"8px 14px",color:S.text,fontSize:12,cursor:"pointer"}}>Import JSON</button>
-            <button onClick={clearAll} style={{background:"#3a0a0a",border:"1px solid #f8717144",borderRadius:8,padding:"8px 14px",color:"#fca5a5",fontSize:12,cursor:"pointer"}}>Clear all</button>
-          </div>
-        </div>
-      </div>
-    );
-  };
+  var td=days[logDate]||{checks:{},modes:{}};
+  var tPct=dayPct(days[today]||{}),str=streak();
+  var last7=L7(),last30=L30();
+  var rDays=dRange==="weekly"?bodyWeek:mDays(bMOff);
+  var rIn=rDays.reduce(function(a,dt){return a+((days[dt]&&days[dt].calIn)||0);},0);
+  var rBurn=rDays.reduce(function(a,dt){return a+((days[dt]&&days[dt].calBurn)||0);},0);
+  var rDef=rBurn-rIn,rSteps=rDays.reduce(function(a,dt){return a+((days[dt]&&days[dt].stepsNum)||0);},0);
+  var chartD=rDays.map(function(dt){return{date:dt,calIn:(days[dt]&&days[dt].calIn)||0,calBurn:(days[dt]&&days[dt].calBurn)||0};});
+  var gym7=bodyWeek.filter(function(dt){return days[dt]&&days[dt].workoutType&&days[dt].workoutType!=="Rest";});
+  var wSum=bodyWeek.map(function(dt){return{date:dt,type:(days[dt]&&days[dt].workoutType)||"",notes:(days[dt]&&days[dt].workoutNotes)||"",steps:(days[dt]&&days[dt].stepsNum)||0};}).filter(function(d){return d.type;});
+  var latWt=last30.slice().reverse().find(function(dt){return days[dt]&&days[dt].weight;});
+  var wtD=last30.map(function(dt){return{date:dt,weight:(days[dt]&&days[dt].weight)||0};});
+  var pBurn=calcBurn(wType,steps),pDef=pBurn-(Number(calIn)||0);
+  var calSectionLabel=dRange==="weekly"?(bodyWeekLabel()==="This Week"?"7 Day":rangeLabelFrom(bodyWeekStart)):(bMOff===0?"This Month":mLabel(bMOff));
 
   var TABS=[
     {id:"daily",label:"Daily"},
     {id:"dashboard",label:"Dashboard"},
+    {id:"monthly",label:"Monthly"},
+    {id:"weekly",label:"Weekly"},
     {id:"body",label:"Body"},
     {id:"protocol",label:"Protocol"},
-    {id:"protocols",label:"System"},
     {id:"ai",label:"AI"},
-    {id:"settings",label:"⚙"}
+    {id:"system",label:"System"},
+    {id:"settings",label:"Settings"}
   ];
 
+  var navBack=function(){var d=new Date(logDate+"T12:00:00");d.setDate(d.getDate()-1);setLogDate(fmtDate(d));};
+  var navFwd=function(){var d=new Date(logDate+"T12:00:00");d.setDate(d.getDate()+1);var next=fmtDate(d);if(next<=today)setLogDate(next);};
+
   return(
-    <div style={{background:S.bg,minHeight:"100vh",color:S.text,paddingBottom:80}}>
-      <div style={{maxWidth:560,margin:"0 auto",padding:"16px 14px"}}>
-        <div style={{textAlign:"center",marginBottom:14}}>
-          <div style={{fontSize:11,letterSpacing:6,textTransform:"uppercase",color:"#3a3a3a",fontWeight:500}}>OperAxis System</div>
-        </div>
-        {tab==="daily"&&renderDaily()}
-        {tab==="dashboard"&&renderDashboard()}
-        {tab==="body"&&renderBodyWrapper()}
-        {tab==="protocol"&&<ProtocolTab days={days} protoStart={protoStart} onSetStart={function(){setStartCalOpen(true);}}/>}
-        {tab==="protocols"&&renderProtocols()}
-        {tab==="ai"&&<AICoach days={days}/>}
-        {tab==="settings"&&renderSettings()}
+    <div style={{background:S.bg,minHeight:"100vh",color:S.text,paddingBottom:90}}>
+      {calPickerOpen&&(<CalendarPicker selectedStart={weekStartDate} onSelect={function(dateStr){setWeekStartDate(dateStr);setWOff(0);setCalPickerOpen(false);}} onReset={function(){setWeekStartDate(null);setWOff(0);}} onClose={function(){setCalPickerOpen(false);}}/>)}
+      {protoCalOpen&&(<CalendarPicker selectedStart={protoStart} onSelect={function(dateStr){setProtoStart(dateStr);svProtoStart(dateStr);setProtoCalOpen(false);}} onReset={function(){setProtoStart("");svProtoStart("");}} onClose={function(){setProtoCalOpen(false);}}/>)}
+
+      <div style={{background:S.card,borderBottom:"1px solid "+S.border,padding:"14px 16px",position:"sticky",top:0,zIndex:10,textAlign:"center"}}>
+        <div style={{fontSize:18,fontWeight:600,letterSpacing:1}}>OperAxis System</div>
       </div>
-      <div style={{position:"fixed",bottom:0,left:0,right:0,background:"#0a0a0a",borderTop:"1px solid "+S.border,padding:"6px 4px",display:"flex",justifyContent:"space-around",alignItems:"center",zIndex:50}}>
-        {TABS.map(function(t){var active=tab===t.id;return(
-          <div key={t.id} onClick={function(){setTab(t.id);if(t.id==="protocols")setProtoDetail(null);}} style={{flex:1,textAlign:"center",padding:"8px 4px",cursor:"pointer",WebkitTapHighlightColor:"transparent"}}>
-            <div style={{fontSize:11,fontWeight:active?700:400,color:active?S.accent:S.muted}}>{t.label}</div>
+
+      <div style={{display:"flex",background:S.card,borderBottom:"1px solid "+S.border,overflowX:"auto"}}>
+        {TABS.map(function(t){
+          var isAI=t.id==="ai";
+          var isProto=t.id==="protocol";
+          var activeCol=isAI?"#a78bfa":isProto?"#34d399":S.accent;
+          return(
+            <button key={t.id} onClick={function(){setTab(t.id);setActiveProt(null);}}
+              style={{flex:1,minWidth:44,padding:"10px 1px",border:"none",background:"none",
+                color:tab===t.id?activeCol:S.muted,
+                fontSize:10,fontWeight:tab===t.id?600:400,
+                borderBottom:tab===t.id?"2px solid "+activeCol:"2px solid transparent",
+                cursor:"pointer",whiteSpace:"nowrap",
+                position:"relative"
+              }}>
+              {t.label}
+            </button>
+          );
+        })}
+      </div>
+
+      <div style={{padding:16}}>
+
+        {tab==="daily"&&(<div>
+          <div style={Object.assign({},C({borderRadius:8}),{padding:"10px 14px",marginBottom:14,display:"flex",alignItems:"center",gap:12})}>
+            <button onClick={navBack} style={{background:"transparent",border:"1px solid "+S.border,borderRadius:6,padding:"5px 12px",color:S.muted,fontSize:16,cursor:"pointer"}}>{"‹"}</button>
+            <div style={{flex:1,textAlign:"center"}}>
+              <input type="date" value={logDate} max={today} onChange={function(e){setLogDate(e.target.value);}} style={{background:"transparent",border:"none",color:logDate===today?S.accent:S.text,fontSize:13,fontWeight:500,textAlign:"center",cursor:"pointer",width:"100%"}}/>
+              {logDate!==today&&<div style={{fontSize:10,color:"#f59e0b",marginTop:2}}>Logging past day</div>}
+            </div>
+            <button onClick={navFwd} style={{background:"transparent",border:"1px solid "+S.border,borderRadius:6,padding:"5px 12px",color:logDate===today?S.dim:S.muted,fontSize:16,cursor:logDate===today?"default":"pointer"}}>{"›"}</button>
           </div>
-        );})}
+
+          {DOMAINS.map(function(domain){
+            if(domain.moded){return(<ModedDomainCard key={domain.id} domain={domain} dayData={td} S={S} isOpen={exp[domain.id]!==false} cardStyle={C()} onHeaderToggle={function(){setExp(function(prev){var n=Object.assign({},prev);n[domain.id]=!(prev[domain.id]!==false);return n;});}} onCheckToggle={toggleModed} onModeChange={changeMode}/>);}
+            var checks=(td.checks&&td.checks[domain.id])||domain.habits.map(function(){return false;});
+            var pct=dPct(checks,domain.habits),isOpen=exp[domain.id]!==false;
+            var totalW=domain.habits.reduce(function(a,h){return a+h.w;},0);
+            return(<div key={domain.id} style={Object.assign({},C(),{marginBottom:10,overflow:"hidden"})}><div onClick={function(){setExp(function(e){var n=Object.assign({},e);n[domain.id]=!isOpen;return n;});}} style={{display:"flex",alignItems:"center",padding:"12px 14px",cursor:"pointer"}}><span style={{flex:1,fontWeight:500,fontSize:15}}>{domain.label}</span><span style={{fontSize:13,fontWeight:600,color:pc(pct),marginRight:10}}>{pct}%</span><span style={{color:S.muted,fontSize:11}}>{isOpen?"▲":"▼"}</span></div><div style={{height:2,background:S.border}}><div style={{height:"100%",width:pct+"%",background:pc(pct),transition:"width 0.3s"}}/></div>{isOpen&&(<div style={{borderTop:"1px solid "+S.border,padding:"8px 14px"}}>{domain.habits.map(function(h,i){var hp=Math.round((h.w/totalW)*100);return(<div key={i} onClick={function(){toggle(domain.id,i);}} style={{display:"flex",alignItems:"center",gap:10,padding:"8px 0",cursor:"pointer",borderBottom:i<domain.habits.length-1?"1px solid "+S.dim:"none"}}><div style={{width:18,height:18,border:"1.5px solid "+(checks[i]?S.accent:S.muted),borderRadius:4,background:checks[i]?S.accent:"transparent",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>{checks[i]&&<span style={{color:"#000",fontSize:11,fontWeight:700}}>{"✓"}</span>}</div><span style={{flex:1,fontSize:14,color:checks[i]?S.muted:S.text,textDecoration:checks[i]?"line-through":"none"}}>{h.label}</span><span style={{fontSize:11,color:checks[i]?S.accent:S.muted,minWidth:32,textAlign:"right"}}>{hp}%</span></div>);})}</div>)}</div>);
+          })}
+
+          <div style={Object.assign({},C(),{padding:14,marginBottom:10})}>
+            <div style={{fontSize:14,fontWeight:500,marginBottom:14}}>Nutrition &amp; Body</div>
+            {[["Calories eaten",calIn,setCalIn,"e.g. 2000"],["Steps walked",steps,setSteps,"e.g. 8500"],["Weight (lbs)",wt,setWt,"e.g. 200"]].map(function(row){return(<div key={row[0]} style={{marginBottom:12}}><div style={{fontSize:11,color:S.muted,marginBottom:4}}>{row[0]}</div><input value={row[1]} onChange={function(e){row[2](e.target.value);}} type="number" placeholder={row[3]} style={{width:"100%",background:S.bg,border:"1px solid "+S.border,borderRadius:6,padding:"8px 10px",color:S.text,fontSize:14}}/></div>);})}
+            <div style={{marginBottom:12}}><div style={{fontSize:11,color:S.muted,marginBottom:6}}>Workout type</div><div style={{display:"flex",flexWrap:"wrap",gap:6}}>{WTYPES.map(function(t){return(<button key={t} onClick={function(){setWType(wType===t?"":t);}} style={{padding:"5px 12px",borderRadius:20,border:"1px solid "+(wType===t?S.accent:S.border),background:wType===t?"#4a9eff22":"transparent",color:wType===t?S.accent:S.muted,fontSize:12,cursor:"pointer"}}>{t}</button>);})}</div></div>
+            <div style={{marginBottom:14}}><div style={{fontSize:11,color:S.muted,marginBottom:4}}>Workout notes / PRs</div><textarea value={wNotes} onChange={function(e){setWNotes(e.target.value);}} rows={2} placeholder="e.g. Bench 3x8 @ 185lbs..." style={{width:"100%",background:S.bg,border:"1px solid "+S.border,borderRadius:6,padding:"8px 10px",color:S.text,fontSize:13,resize:"vertical"}}/></div>
+            {(calIn||steps||wType)&&(<div style={{background:S.dim,borderRadius:8,padding:"10px 12px",marginBottom:14,borderLeft:"3px solid "+(pDef>0?"#34d399":"#f87171")}}><div style={{fontSize:11,color:S.muted,marginBottom:6}}>Estimated burn today</div><div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:8,marginBottom:8}}>{[["Base",BASE,"#555"],["Workout",WBURN[wType]||0,"#60a5fa"],["Steps",Math.round((Number(steps)||0)*KPS),"#34d399"]].map(function(row){return(<div key={row[0]}><div style={{fontSize:10,color:S.muted}}>{row[0]}</div><div style={{fontSize:13,fontWeight:600,color:row[2]}}>{row[1]} kcal</div></div>);})}</div><div style={{display:"flex",justifyContent:"space-between",paddingTop:8,borderTop:"1px solid "+S.border}}><span style={{fontSize:12,color:S.muted}}>Total: <span style={{color:S.text,fontWeight:600}}>{pBurn.toLocaleString()} kcal</span></span><span style={{fontSize:12,fontWeight:600,color:pDef>0?"#34d399":"#f87171"}}>{pDef>0?"✓ −":"↑ +"}{Math.abs(pDef).toLocaleString()} kcal</span></div></div>)}
+            <button onClick={saveDay} style={{background:S.accent,color:"#000",border:"none",borderRadius:6,padding:"8px 16px",fontSize:13,fontWeight:600,cursor:"pointer"}}>Save Day</button>
+          </div>
+        </div>)}
+
+        {tab==="dashboard"&&(<div>
+          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:10,marginBottom:16}}>{[["Streak",str+"d"],["Today",tPct+"%"],["7d Avg",Math.round(last7.reduce(function(a,d){return a+dayPct(days[d]);},0)/7)+"%"]].map(function(row){return(<div key={row[0]} style={Object.assign({},C({borderRadius:8}),{padding:"10px 12px"})}><div style={{fontSize:10,color:S.muted,marginBottom:4}}>{row[0]}</div><div style={{fontSize:20,fontWeight:600}}>{row[1]}</div></div>);})}</div>
+          <div style={Object.assign({},C(),{marginBottom:14,overflow:"hidden"})}><div style={{padding:"10px 14px",fontSize:13,fontWeight:500,borderBottom:"1px solid "+S.border}}>Last 7 Days</div><div style={{overflowX:"auto"}}><table style={{width:"100%",borderCollapse:"collapse",fontSize:11,minWidth:420}}><thead><tr style={{borderBottom:"1px solid "+S.border}}><th style={{padding:"8px 10px",textAlign:"left",color:S.muted,fontWeight:500}}>Date</th>{DOMAINS.map(function(d){return <th key={d.id} style={{padding:"8px 4px",color:DOM_COL[d.id]||S.muted,fontWeight:500,fontSize:10}}>{d.label.slice(0,3)}</th>;})}<th style={{padding:"8px 8px",color:S.muted,fontWeight:500}}>Day</th></tr></thead><tbody>{last7.map(function(dt){var dd=days[dt]||{},dp2=dayPct(dd),isT=dt===today;return(<tr key={dt} style={{borderBottom:"1px solid "+S.dim,background:isT?"#0d1a2a":"transparent"}}><td style={{padding:"7px 10px",color:isT?S.accent:S.muted,fontSize:11}}>{dt.slice(5)}</td>{DOMAINS.map(function(d){var p=domainPct(dd,d);return <td key={d.id} style={{padding:"7px 4px",textAlign:"center",fontSize:10,color:pc(p)}}>{p>0?p+"%":"·"}</td>;})}<td style={{padding:"7px 8px",textAlign:"center",fontWeight:600,fontSize:11,color:pc(dp2)}}>{dp2>0?dp2+"%":"·"}</td></tr>);})}</tbody></table></div></div>
+          <div style={Object.assign({},C(),{overflow:"hidden"})}><div style={{padding:"10px 14px",fontSize:13,fontWeight:500,borderBottom:"1px solid "+S.border}}>7-Day Averages</div>{DOMAINS.map(function(d){var avg=avg7(d);return(<div key={d.id} style={{padding:"10px 14px",borderBottom:"1px solid "+S.dim}}><div style={{display:"flex",justifyContent:"space-between",marginBottom:5}}><span style={{fontSize:13}}>{d.label}</span><span style={{fontSize:13,fontWeight:600,color:pc(avg)}}>{avg}%</span></div><div style={{height:3,background:S.border,borderRadius:2}}><div style={{height:"100%",width:avg+"%",background:pc(avg),borderRadius:2}}/></div></div>);})}</div>
+        </div>)}
+
+        {tab==="monthly"&&(<div>
+          <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:14}}><button onClick={function(){setMOff(function(o){return o-1;});}} style={{background:"transparent",border:"1px solid "+S.border,borderRadius:6,padding:"6px 14px",color:S.muted,fontSize:16,cursor:"pointer"}}>{"‹"}</button><div style={{fontSize:15,fontWeight:500}}>{mLabel(mOff)}</div><button onClick={function(){setMOff(function(o){return Math.min(0,o+1);});}} style={{background:"transparent",border:"1px solid "+S.border,borderRadius:6,padding:"6px 14px",color:mOff===0?S.dim:S.muted,fontSize:16,cursor:mOff===0?"default":"pointer"}}>{"›"}</button></div>
+          <div style={Object.assign({},C(),{overflow:"hidden",marginBottom:14})}><div style={{overflowX:"auto"}}><table style={{width:"100%",borderCollapse:"collapse",fontSize:11,minWidth:560}}><thead><tr style={{borderBottom:"1px solid "+S.border}}><th style={{padding:"8px 10px",textAlign:"left",color:S.muted,whiteSpace:"nowrap"}}>Day</th>{DOMAINS.map(function(d){return <th key={d.id} style={{padding:"8px 5px",color:DOM_COL[d.id]||S.muted,minWidth:26,fontSize:10}}>{d.label.slice(0,3)}</th>;})}<th style={{padding:"8px 8px",color:S.muted,fontSize:10}}>Day%</th></tr></thead><tbody>{mDays(mOff).map(function(dt){var dd=days[dt]||{},dp2=dayPct(dd),isT=dt===today;return(<tr key={dt} style={{borderBottom:"1px solid "+S.dim,background:isT?"#0d1a2a":"transparent"}}><td style={{padding:"6px 10px",color:isT?S.accent:S.muted}}>{dt.slice(8)}</td>{DOMAINS.map(function(d){var p=domainPct(dd,d);return <td key={d.id} style={{padding:"6px 5px",textAlign:"center",fontSize:10,color:pc(p)}}>{p>0?p+"%":"·"}</td>;})}<td style={{padding:"6px 8px",textAlign:"center",fontWeight:600,fontSize:11,color:pc(dp2)}}>{dp2>0?dp2+"%":"·"}</td></tr>);})}</tbody></table></div></div>
+          <div style={Object.assign({},C(),{overflow:"hidden"})}><div style={{padding:"10px 14px",fontSize:13,fontWeight:500,borderBottom:"1px solid "+S.border}}>Month Averages</div>{DOMAINS.map(function(d){var md=mDays(mOff),avg=Math.round(md.reduce(function(a,dt){return a+domainPct(days[dt],d);},0)/md.length);return(<div key={d.id} style={{display:"flex",alignItems:"center",padding:"9px 14px",borderBottom:"1px solid "+S.dim}}><div style={{flex:1}}><div style={{display:"flex",justifyContent:"space-between",marginBottom:4}}><span style={{fontSize:13}}>{d.label}</span><span style={{fontSize:13,fontWeight:600,color:pc(avg)}}>{avg}%</span></div><div style={{height:3,background:S.border,borderRadius:2}}><div style={{height:"100%",width:avg+"%",background:pc(avg),borderRadius:2}}/></div></div></div>);})}</div>
+        </div>)}
+
+        {tab==="weekly"&&(<div>
+          <div style={{fontSize:13,color:S.muted,marginBottom:14}}>Week ending {today}</div>
+          {DOMAINS.map(function(d){var avg=avg7(d);return(<div key={d.id} style={Object.assign({},C({borderRadius:8}),{padding:"12px 14px",marginBottom:8,display:"flex",alignItems:"center"})}><div style={{flex:1}}><div style={{fontSize:13,fontWeight:500,marginBottom:5}}>{d.label}</div><div style={{height:3,background:S.border,borderRadius:2}}><div style={{height:"100%",width:avg+"%",background:pc(avg),borderRadius:2}}/></div></div><div style={{textAlign:"right",marginLeft:14}}><div style={{fontSize:18,fontWeight:600,color:pc(avg)}}>{avg}%</div><div style={{fontSize:10,color:S.muted}}>7d avg</div></div></div>);})}
+          <div style={Object.assign({},C(),{padding:14,marginTop:6})}><div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-end",marginBottom:14}}><div style={{fontSize:13,fontWeight:500}}>Overall Week</div><div><span style={{fontSize:28,fontWeight:700,color:pc(Math.round(last7.reduce(function(a,d){return a+dayPct(days[d]);},0)/7))}}>{Math.round(last7.reduce(function(a,d){return a+dayPct(days[d]);},0)/7)}%</span><div style={{fontSize:10,color:S.muted,textAlign:"right"}}>avg daily score</div></div></div><div style={{fontSize:12,color:S.muted,marginBottom:6}}>Reflection</div><textarea rows={3} placeholder="What went well? What didn't?" style={{width:"100%",background:S.bg,border:"1px solid "+S.border,borderRadius:6,padding:"10px 12px",color:S.text,fontSize:13,resize:"vertical",marginBottom:10}}/><div style={{fontSize:12,color:S.muted,marginBottom:6}}>Focus next week</div><textarea rows={2} style={{width:"100%",background:S.bg,border:"1px solid "+S.border,borderRadius:6,padding:"10px 12px",color:S.text,fontSize:13,resize:"vertical"}}/></div>
+        </div>)}
+
+        {tab==="body"&&(<div>
+          <div style={{display:"flex",gap:8,marginBottom:8}}>{["weekly","monthly"].map(function(r){return(<button key={r} onClick={function(){setDRange(r);setWOff(0);setBMOff(0);}} style={{flex:1,padding:"8px 0",borderRadius:8,border:"1px solid "+(dRange===r?S.accent:S.border),background:dRange===r?"#4a9eff22":"transparent",color:dRange===r?S.accent:S.muted,fontSize:13,fontWeight:dRange===r?600:400,cursor:"pointer"}}>{r==="weekly"?"7 Days":"This Month"}</button>);})}</div>
+          {dRange==="weekly"&&(<div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:14}}>
+            <button onClick={bodyWeekNavBack} style={{background:"transparent",border:"1px solid "+S.border,borderRadius:6,padding:"5px 12px",color:S.muted,fontSize:16,cursor:"pointer"}}>{"‹"}</button>
+            <div onClick={function(){setCalPickerOpen(true);}} style={{fontSize:13,fontWeight:500,color:isTodayWeek(bodyWeekStart)?S.accent:S.text,cursor:"pointer",padding:"4px 12px",borderRadius:6,border:"1px solid "+(calPickerOpen?S.accent:S.border),WebkitTapHighlightColor:"transparent"}}>
+              {bodyWeekLabel()==="This Week"?"This Week":rangeLabelFrom(bodyWeekStart)}
+            </div>
+            <button onClick={bodyWeekNavFwd} style={{background:"transparent",border:"1px solid "+S.border,borderRadius:6,padding:"5px 12px",color:bodyWeekAtMax?S.dim:S.muted,fontSize:16,cursor:bodyWeekAtMax?"default":"pointer"}} disabled={bodyWeekAtMax}>{"›"}</button>
+          </div>)}
+          {dRange==="monthly"&&(<div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:14}}><button onClick={function(){setBMOff(function(o){return o-1;});}} style={{background:"transparent",border:"1px solid "+S.border,borderRadius:6,padding:"5px 12px",color:S.muted,fontSize:16,cursor:"pointer"}}>{"‹"}</button><div style={{fontSize:13,fontWeight:500,color:bMOff===0?S.accent:S.text}}>{bMOff===0?"This Month":mLabel(bMOff)}</div><button onClick={function(){setBMOff(function(o){return Math.min(0,o+1);});}} style={{background:"transparent",border:"1px solid "+S.border,borderRadius:6,padding:"5px 12px",color:bMOff===0?S.dim:S.muted,fontSize:16,cursor:bMOff===0?"default":"pointer"}}>{"›"}</button></div>)}
+          <div style={Object.assign({},C(),{overflow:"hidden",marginBottom:14})}>
+            <div style={{padding:"10px 14px",fontSize:13,fontWeight:500,borderBottom:"1px solid "+S.border}}>{"Calories — "+calSectionLabel}</div>
+            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:1,borderBottom:"1px solid "+S.border}}>{[["Eaten",rIn,"#4a9eff"],["Burned",rBurn,"#34d399"],[rDef>=0?"Deficit":"Surplus",Math.abs(rDef),rDef>=0?"#34d399":"#f87171"]].map(function(row){return(<div key={row[0]} style={{padding:"12px 10px",background:S.dim}}><div style={{fontSize:10,color:S.muted,marginBottom:4}}>{row[0]}</div><div style={{fontSize:16,fontWeight:600,color:row[2]}}>{Number(row[1]).toLocaleString()}</div><div style={{fontSize:10,color:S.muted}}>kcal</div></div>);})}</div>
+            <div style={{padding:"10px 14px",borderBottom:"1px solid "+S.border,display:"flex",gap:20}}><div><div style={{fontSize:10,color:S.muted,marginBottom:2}}>Total steps</div><div style={{fontSize:15,fontWeight:600}}>{rSteps.toLocaleString()}</div></div><div><div style={{fontSize:10,color:S.muted,marginBottom:2}}>Avg/day</div><div style={{fontSize:15,fontWeight:600}}>{Math.round(rSteps/rDays.length).toLocaleString()}</div></div><div><div style={{fontSize:10,color:S.muted,marginBottom:2}}>Days deficit</div><div style={{fontSize:15,fontWeight:600,color:"#34d399"}}>{rDays.filter(function(dt){return((days[dt]&&days[dt].calBurn)||0)>((days[dt]&&days[dt].calIn)||0);}).length}</div></div></div>
+            <div style={{padding:14}}><div style={{display:"flex",gap:16,marginBottom:10}}>{[["■ Eaten","#4a9eff"],["■ Burned","#34d399"],["— Deficit","#f59e0b"],["— Surplus","#f87171"]].map(function(row){return <span key={row[0]} style={{fontSize:11,color:row[1]}}>{row[0]}</span>;})}</div><div style={{position:"relative",height:200}}><CalChart data={chartD}/></div></div>
+          </div>
+          <div style={Object.assign({},C(),{overflow:"hidden",marginBottom:14})}><div style={{padding:"10px 14px",fontSize:13,fontWeight:500,borderBottom:"1px solid "+S.border}}>{"Workouts — "+(dRange==="weekly"?(bodyWeekLabel()==="This Week"?"7 Day":rangeLabelFrom(bodyWeekStart)):"Month")}</div><div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:1,borderBottom:"1px solid "+S.border}}>{[["Sessions",gym7.length+"/7"],["Avg steps",Math.round(bodyWeek.reduce(function(a,dt){return a+((days[dt]&&days[dt].stepsNum)||0);},0)/7).toLocaleString()],["Step burn",Math.round(bodyWeek.reduce(function(a,dt){return a+Math.round(((days[dt]&&days[dt].stepsNum)||0)*KPS);},0)).toLocaleString()+" kcal"]].map(function(row){return(<div key={row[0]} style={{padding:"12px 10px",background:S.dim}}><div style={{fontSize:10,color:S.muted,marginBottom:4}}>{row[0]}</div><div style={{fontSize:13,fontWeight:600,color:S.text}}>{row[1]}</div></div>);})}</div>
+          {wSum.length>0?(<div style={{padding:"10px 14px"}}>{wSum.map(function(w,i){var bc=w.type==="Rest"?"#34d39922":S.accent+"22";var bbc=w.type==="Rest"?"#34d39944":S.accent+"44";var tc=w.type==="Rest"?"#34d399":S.accent;return(<div key={i} style={{padding:"8px 0",borderBottom:i<wSum.length-1?"1px solid "+S.dim:"none"}}><div style={{display:"flex",gap:10,alignItems:"center",marginBottom:w.notes?4:0}}><div style={{fontSize:11,color:S.muted,minWidth:44}}>{w.date.slice(5)}</div><div style={{padding:"2px 8px",background:bc,border:"1px solid "+bbc,borderRadius:10,fontSize:11,color:tc}}>{w.type}</div>{w.steps>0&&<div style={{fontSize:11,color:S.muted}}>{w.steps.toLocaleString()} steps</div>}</div>{w.notes&&<div style={{fontSize:12,color:S.muted,paddingLeft:54,lineHeight:1.5}}>{w.notes}</div>}</div>);})}</div>):<div style={{padding:14,fontSize:13,color:S.muted}}>No workouts logged this week.</div>}</div>
+          <div style={Object.assign({},C(),{overflow:"hidden"})}><div style={{padding:"10px 14px",fontSize:13,fontWeight:500,borderBottom:"1px solid "+S.border}}>{"Weight — 30 Day"}</div><div style={{padding:"12px 14px",borderBottom:"1px solid "+S.border,display:"flex",gap:24,flexWrap:"wrap"}}><div><div style={{fontSize:10,color:S.muted,marginBottom:4}}>Latest</div><div style={{fontSize:22,fontWeight:600,color:"#a78bfa"}}>{latWt?(days[latWt].weight+" lbs"):"—"}</div></div>{(function(){var wd=last30.filter(function(dt){return days[dt]&&days[dt].weight;});if(wd.length<2)return null;var diff=(days[wd[wd.length-1]].weight-days[wd[0]].weight).toFixed(1);return <div><div style={{fontSize:10,color:S.muted,marginBottom:4}}>30d change</div><div style={{fontSize:22,fontWeight:600,color:Number(diff)<0?"#34d399":"#f87171"}}>{diff>0?"+":""}{diff} lbs</div></div>;})()}</div><div style={{padding:14}}><div style={{position:"relative",height:160}}><WtChart data={wtD}/></div>{!wtD.some(function(d){return d.weight;})&&<div style={{fontSize:13,color:S.muted,textAlign:"center",paddingTop:20}}>Log your weight in Daily to see the chart.</div>}</div></div>
+        </div>)}
+
+        {tab==="protocol"&&(
+          <ProtocolTab
+            days={days}
+            protoStart={protoStart}
+            onSetStart={function(){setProtoCalOpen(true);}}
+          />
+        )}
+
+        {tab==="ai"&&<AICoach days={days}/>}
+
+        {tab==="system"&&!activeProt&&<Flywheel onSelect={function(key){if(PROTOCOLS.find(function(d){return d.id===key;}))setActiveProt(key);}}/>}
+        {tab==="system"&&activeProt&&<ProtocolDetail id={activeProt} onBack={function(){setActiveProt(null);}}/>}
+
+        {tab==="settings"&&(<div>
+          <div style={Object.assign({},C(),{overflow:"hidden",marginBottom:14})}>
+            <div style={{padding:"10px 14px",fontSize:13,fontWeight:500,borderBottom:"1px solid "+S.border,color:"#34d399"}}>16-Week Protocol</div>
+            <div style={{padding:14}}>
+              <div style={{fontSize:12,color:S.muted,marginBottom:12,lineHeight:1.6}}>Set your protocol start date to enable Protocol tab tracking. All cumulative targets are calculated from this date.</div>
+              <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"10px 12px",background:S.dim,borderRadius:8,marginBottom:10}}>
+                <div>
+                  <div style={{fontSize:11,color:S.muted,marginBottom:2}}>Start date</div>
+                  <div style={{fontSize:15,fontWeight:600,color:protoStart?S.text:"#555"}}>{protoStart||"Not set"}</div>
+                </div>
+                <button onClick={function(){setProtoCalOpen(true);}} style={{background:"transparent",border:"1px solid #34d399",borderRadius:8,padding:"7px 14px",color:"#34d399",fontSize:12,fontWeight:600,cursor:"pointer"}}>{protoStart?"Change":"Set Date"}</button>
+              </div>
+              {protoStart&&(function(){
+                var tg=calcProtoTargets(protoStart,today);
+                if(!tg)return null;
+                return <div style={{fontSize:12,color:"#555"}}>Currently on Week {tg.currentWeek}, Day {tg.totalDays} of 112 ({Math.round(tg.totalDays/112*100)}% complete)</div>;
+              })()}
+            </div>
+          </div>
+
+          <div style={Object.assign({},C(),{overflow:"hidden",marginBottom:14})}><div style={{padding:"10px 14px",fontSize:13,fontWeight:500,borderBottom:"1px solid "+S.border}}>Backup &amp; Restore</div><div style={{padding:14}}><div style={{fontSize:12,color:S.muted,marginBottom:14,lineHeight:1.6}}>Export saves your data to a JSON file. Import restores from a previously exported file. Do this weekly to avoid data loss on Safari.</div><div style={{display:"flex",flexDirection:"column",gap:10}}><button onClick={exportD} style={{background:"transparent",border:"1px solid "+S.accent,borderRadius:8,padding:"12px 16px",color:S.accent,fontSize:14,fontWeight:500,cursor:"pointer",textAlign:"left"}}>{"⬇ Export backup"}<div style={{fontSize:11,color:S.muted,marginTop:3,fontWeight:400}}>Download all data as a JSON file</div></button><label style={{background:"transparent",border:"1px solid "+S.border,borderRadius:8,padding:"12px 16px",color:S.muted,fontSize:14,fontWeight:500,cursor:"pointer",display:"block"}}>{"⬆ Import backup"}<div style={{fontSize:11,color:S.muted,marginTop:3,fontWeight:400}}>Restore from a previously exported file</div><input type="file" accept=".json" onChange={importD} style={{display:"none"}}/></label></div></div></div>
+          <div style={Object.assign({},C(),{overflow:"hidden",marginBottom:14})}><div style={{padding:"10px 14px",fontSize:13,fontWeight:500,borderBottom:"1px solid "+S.border}}>About</div><div style={{padding:14}}>{[["Profile","Male · 25y · 200lb · 5'10\""],["Base burn",BASE+" kcal/day"],["Step burn","~0.045 kcal per step"],["Scoring","Weighted % per domain, avg 9 domains"],["PIN","Change APP_PIN in the source file"]].map(function(row){return(<div key={row[0]} style={{display:"flex",justifyContent:"space-between",padding:"8px 0",borderBottom:"1px solid "+S.dim}}><span style={{fontSize:13,color:S.muted}}>{row[0]}</span><span style={{fontSize:13,color:S.text}}>{row[1]}</span></div>);})}</div></div>
+          <div style={Object.assign({},C(),{overflow:"hidden"})}><div style={{padding:"10px 14px",fontSize:13,fontWeight:500,borderBottom:"1px solid "+S.border}}>Danger Zone</div><div style={{padding:14}}><div style={{fontSize:12,color:S.muted,marginBottom:12,lineHeight:1.6}}>Permanently deletes all data. Export first.</div><button onClick={function(){if(window.confirm("Delete ALL data? Cannot be undone.")){upd({});alert("Cleared.");}}} style={{background:"transparent",border:"1px solid #f87171",borderRadius:8,padding:"10px 16px",color:"#f87171",fontSize:13,fontWeight:500,cursor:"pointer",width:"100%"}}>Clear all data</button></div></div>
+        </div>)}
+
       </div>
-      {startCalOpen&&<CalendarPicker selectedStart={protoStart} onSelect={function(d){setProtoStart(d);svProtoStart(d);}} onReset={function(){setProtoStart("");svProtoStart("");}} onClose={function(){setStartCalOpen(false);}}/>}
+
+      <div style={{background:S.card,borderTop:"1px solid "+S.border,padding:"10px 16px",position:"sticky",bottom:0,zIndex:10}}>
+        <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:6}}>
+          <div style={{fontSize:11,color:S.muted}}>{today}</div>
+          <div style={{display:"flex",alignItems:"center",gap:6}}><span>{"⚡"}</span><span style={{fontSize:13,fontWeight:500}}>{str}d streak</span></div>
+          <div style={{fontSize:13,color:pc(tPct),fontWeight:600}}>{tPct}%</div>
+        </div>
+        <div style={{height:3,background:S.border,borderRadius:2}}><div style={{height:"100%",width:tPct+"%",background:pc(tPct),borderRadius:2,transition:"width 0.3s"}}/></div>
+      </div>
     </div>
   );
 }
 
-ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+ReactDOM.createRoot(document.getElementById("root")).render(React.createElement(App));
 </script>
 
 </body>
